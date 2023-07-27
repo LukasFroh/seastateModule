@@ -16,4 +16,9 @@ Hier befinden sich die erstellten Matlab [Skripte](https://gitlab.projekt.uni-ha
 - Zum Kompilieren liegt das Skript [compileSeastateMasterFnc](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/20_matlab/10_scripts/compileSeastateMasterFnc.m) vor. Nach Anpassen des _scriptPath_ (lokaler Pfad des Matlab-Skripts), _fnctPath_ (lokaler Pfad zu Matlab-Funktionen), _outputFolder_ (Verzeichnis, in dem .exe erstellt werden soll),_outputName_ (Name der .exe), wird das _Seegangsmodul_ mit dem _mcc_ Befehl kompiliert.
 - Das Skript [testSeastateMasterFnc](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/20_matlab/10_scripts/testSeastateMasterFnc.m) dient zum Testen und Debuggen des _Seegangsmoduls_ in der Matlab-Application Umgebung.
 
+### 30_execution
+Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) und das Batch-Skript [seastateInput.bat](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/30_execution/seastateInput.bat). Über die Batch werden die notwendigen Input-Parameter definiert und die kompilierte .exe gestartet. 
+
+#### Batch-Input
+
 
