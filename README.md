@@ -12,4 +12,4 @@ Hier sind die notwendigen Input-Dateien zu insitu Header-Informationen (DWR_GPS,
 
 ### 20_matlab
 Hier befinden sich die erstellten Matlab [Skripte](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/tree/master/20_matlab/10_scripts) und die ausgelagerten [Funktionen](https://gitlab.uni-hannover.de/lufi_ag_offshore/seegangsmodul/-/tree/main/10_matlab/20_functions). 
-Das erstellte Seegangsmodul 
+Das erstellte _Seegangsmodul_ 
