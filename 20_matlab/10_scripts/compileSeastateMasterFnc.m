@@ -17,3 +17,5 @@ restoredefaultpath
 addpath(fnctPath)
 
 eval(['mcc -mv ' scriptName ' -o ' outputName ' -d ' outputFolder])
+
+
