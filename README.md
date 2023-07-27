@@ -35,6 +35,10 @@ Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) u
 - [ ] Seegangsmodul kompilieren. _[compileSeastateMasterFnc](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/20_matlab/10_scripts/compileSeastateMasterFnc.m) entsprechend anpassen und .exe erstellen und testen. 
 - [ ] Automatische 30minütige Ausführung für Testbetrieb aufsetzen. 
 
-
+## To Dos Entwicklung LuFI
+- Dokumentation erstellen/verbessern
+- Readme + Dokumentation ins Englische übersetzen
+- Vorgehen bei neu dazukommenden / wegfallenden Standorten dokumentieren
+- ...
 
 
