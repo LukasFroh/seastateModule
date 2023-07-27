@@ -29,7 +29,8 @@ Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) u
 ## To Dos zur Test-Implementierung am BSH:
 
 - [ ] Ordnerstruktur vorbereiten:
-- Insitu-Daten müssen in folgender Verzeichnis-Struktur vorliegen: _dataPath/Site/Sensor/*.dat_ Mögliche Sensoren sind _dwr_, _radac_, _radacSingle_. Für _Site_ werden die Kürzel aus drei Ziffern (z.B. FN1 für FINO1) verwendet. Die erste Parameter in der Batch-Datei verweist auf das _dataPath_ Verzeichnis.
+- Insitu-Daten müssen in folgender Verzeichnis-Struktur vorliegen: _dataPath/Site/Sensor/*.dat_. Mögliche Sensoren sind _dwr_, _radac_, _radacSingle_. Für _Site_ werden die Kürzel aus drei Ziffern (z.B. FN1 für FINO1) verwendet. Die erste Parameter in der Batch-Datei verweist auf das _dataPath_ Verzeichnis.
+- WAM-Files (*.nc) müssen in folgender Verzeichnis-Struktur vorliegen: _wamPath/wamType/*.nc_. Mögliche _wamType_ sind _cwam_ oder _ewam_. Der entsprechende Pfad in der Batch-Datei verweist auf das Verzeichnis _wamPath_.
 
 
 
