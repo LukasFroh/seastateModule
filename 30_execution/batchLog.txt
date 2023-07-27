@@ -1,0 +1,14 @@
+Current time: 2023-07-27 12:17:12
+Seastate map creation for time: 2023-07-26 12:00:00
+Chosen numerical forecast model: CWAM
+Following insitu sites are considered:
+    {'AV0'}    {'BUD'}    {'ELB'}    {'FN1'}    {'FN3'}    {'HEL'}    {'HEO'}    {'LTH'}    {'NO1'}    {'NOR'}    {'NOO'}
+
+No data available for sites:
+    {'AV0'}    {'NO1'}    {'NOR'}    {'NOO'}
+
+Chosen plotting options:
+Plot type: <adjInfo>
+Parameter range: <fixed>
+File <20230726_1200_data.mat> exported.
+Elapsed time is 25.293355 seconds.
