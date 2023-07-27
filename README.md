@@ -19,8 +19,16 @@ Hier befinden sich die erstellten Matlab [Skripte](https://gitlab.projekt.uni-ha
 ### 30_execution
 Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) und das Batch-Skript [seastateInput.bat](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/30_execution/seastateInput.bat). Über die Batch werden die notwendigen Input-Parameter definiert und die kompilierte .exe gestartet. 
 
-#<details><summary>Click to expand</summary>
-
-</details>### Batch-Input
+### Batch-Input
+- Set Paths:
+adflkj
+- Insitu settings:
+asldk
+- Spatial settings:
+asdf
+- Figure settings:
+asdf
+- LuFI testing:
+afkj
 
 
