@@ -20,11 +20,11 @@ Hier befinden sich die erstellten Matlab [Skripte](https://gitlab.projekt.uni-ha
 Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) und das Batch-Skript [seastateInput.bat](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/30_execution/seastateInput.bat). Über die Batch werden die notwendigen Input-Parameter definiert und die kompilierte .exe gestartet. 
 
 ### Batch-Input
-- Set Paths: Die Input-Pfade müssen für das lokale System angepasst werden. Initial sind hier die LuFI-Pfade hinterlegt. Die Matlab-Funktion _seastateMasterFnc_ wurde so programmiert, dass die Pfade in der Batch-Datei im Matlab Cellstring-Format {'...'} definiert werden müssen.
-- Insitu settings: Wahl der zu berücksichtigen Messstandorte, Hs-Parameternamen, WAM-Modell
-- Spatial settings: Wahl der lon/lat Grenzen und Auflösung für die flächige 2D-Matrix und dessen Visualisierung. Es können die default Einstellungen für cwam bzw. ewam durch Kommentieren/Auskommentieren der entsprechenden Zeilen übernommen werden.
-- Figure settings: Wahl von Figure-Typ, Colorbar-Typ, Dateityp für Export und Auflösung.
-- LuFI testing: Lediglich für Testbetrieb am LuFI notwendig, da hier die aktuellsten insitu Daten nur für den Vortag vorliegen. Das Seegangsmodul ermittelt den aktuellen Ausführungszeitpunkt und rundet die Uhrzeit auf die nächste halbe Stunde ab (18:03 wird z.B. 18:00 Uhr). Durch den in diesem Abschnitt definierten _manuellen Timeshift_ kann der Untersuchungszeitpunkt um X Stunden in die Vergangenheit verschoben werden.
+- **Set Paths**: Die Input-Pfade müssen für das lokale System angepasst werden. Initial sind hier die LuFI-Pfade hinterlegt. Die Matlab-Funktion _seastateMasterFnc_ wurde so programmiert, dass die Pfade in der Batch-Datei im Matlab Cellstring-Format {'...'} definiert werden müssen.
+- **Insitu settings**: Wahl der zu berücksichtigen Messstandorte, Hs-Parameternamen, WAM-Modell
+- **Spatial settings**: Wahl der lon/lat Grenzen und Auflösung für die flächige 2D-Matrix und dessen Visualisierung. Es können die default Einstellungen für cwam bzw. ewam durch Kommentieren/Auskommentieren der entsprechenden Zeilen übernommen werden.
+- **Figure settings**: Wahl von Figure-Typ, Colorbar-Typ, Dateityp für Export und Auflösung.
+- **LuFI testing**: Lediglich für Testbetrieb am LuFI notwendig, da hier die aktuellsten insitu Daten nur für den Vortag vorliegen. Das Seegangsmodul ermittelt den aktuellen Ausführungszeitpunkt und rundet die Uhrzeit auf die nächste halbe Stunde ab (18:03 wird z.B. 18:00 Uhr). Durch den in diesem Abschnitt definierten _manuellen Timeshift_ kann der Untersuchungszeitpunkt um X Stunden in die Vergangenheit verschoben werden.
 
 
 
