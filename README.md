@@ -29,6 +29,7 @@ Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) u
 ## To Dos zur Test-Implementierung am BSH:
 
 - [ ] Ordnerstruktur vorbereiten:
+- Verzeichnis für [inputFiles](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/tree/master/10_inputFiles) anlegen und entsprechende Daten aus dem Repository laden (und später in der Batch-Datei auf diese lokalen Verzeichnisse verweisen). In der aktuellen Version liegen drei Verzeichnisse vor. Es kann lokal aber auch nur ein Verzeichnis verwendet und immer auf dieses verwiesen werden.
 - Insitu-Daten müssen in folgender Verzeichnis-Struktur vorliegen: _dataPath/Site/Sensor/*.dat_. Mögliche Sensoren sind _dwr_, _radac_, _radacSingle_. Für _Site_ werden die Kürzel aus drei Ziffern (z.B. FN1 für FINO1) verwendet. Die erste Parameter in der Batch-Datei verweist auf das _dataPath_ Verzeichnis.
 - WAM-Files (*.nc) müssen in folgender Verzeichnis-Struktur vorliegen: _wamPath/wamType/*.nc_. Mögliche _wamType_ sind _cwam_ oder _ewam_. Der entsprechende Pfad in der Batch-Datei verweist auf das Verzeichnis _wamPath_.
 - Lokale Output-Folder anlegen. In der Batch-Datei werden drei Output-Pfade definiert für _log folder_, _figure folder_ und _exportData folder_. Im lokalen System müssen entsprechende Output-Verzeichnisse angelegt werden und in der Batch-Datei darauf verwiesen werden (Es kann auch dasselbe Verzeichnis für alle drei Outputs angegeben werden).
