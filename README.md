@@ -27,7 +27,7 @@ Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) u
 - **LuFI testing**: Lediglich für Testbetrieb am LuFI notwendig, da hier die aktuellsten insitu Daten nur für den Vortag vorliegen. Das Seegangsmodul ermittelt den aktuellen Ausführungszeitpunkt und rundet die Uhrzeit auf die nächste halbe Stunde ab (18:03 wird z.B. 18:00 Uhr). Durch den in diesem Abschnitt definierten _manuellen Timeshift_ kann der Untersuchungszeitpunkt um X Stunden in die Vergangenheit verschoben werden.
 
 ## To Dos zur Test-Implementierung am BSH:
-1. Insitu-Daten müssen in folgender Verzeichnis-Struktur vorliegen: <dataPath>/<Site>/<Sensor>/<*.dat>
+1. Insitu-Daten müssen in folgender Verzeichnis-Struktur vorliegen: dataPath/Site/Sensor/<*.dat>
 
 
 
