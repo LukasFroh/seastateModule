@@ -20,8 +20,7 @@ Hier befinden sich die erstellten Matlab [Skripte](https://gitlab.projekt.uni-ha
 Hier befindet sich die bereits kompilierte .exe (für die Ausführung am LuFI) und das Batch-Skript [seastateInput.bat](https://gitlab.projekt.uni-hannover.de/lufi-openrave/seegangsmodul/-/blob/master/30_execution/seastateInput.bat). Über die Batch werden die notwendigen Input-Parameter definiert und die kompilierte .exe gestartet. 
 
 ### Batch-Input
-- Set Paths:
-adflkj
+- Set Paths: Die Input-Pfade müssen für das lokale System angepasst werden. Initial sind hier die LuFI-Pfade hinterlegt. Die Matlab-Funktion _seastateMasterFnc_ wurde so programmiert, dass die Pfade in der Batch-Datei im Matlab Cellstring-Format {'...'} definiert werden müssen.
 - Insitu settings:
 asldk
 - Spatial settings:
