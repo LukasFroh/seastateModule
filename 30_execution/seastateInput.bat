@@ -85,7 +85,7 @@ SET f5=on
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
 :: Leave default value "0" for normal use
-SET l1="24" 
+SET l1="0" 
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution

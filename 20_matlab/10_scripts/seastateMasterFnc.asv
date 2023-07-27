@@ -42,7 +42,7 @@ eval(['var2ScaleInsitu  =' var2ScaleInsitu ';'])
 eval(['var2ScaleWam  =' var2ScaleWam ';'])
 % eval(['interpLineLength =' interpLineLength ';'])
 interpLineLength        = str2double(interpLineLength);
-eval(['GSHHG.filename = char(' gshhgInputFile ');'])
+eval(['GSHHG.filename = char(' gshhgInputFile ');']) 
 figRes                  = str2double(figRes);
 timeShift               = str2double(timeShift);
 
@@ -88,12 +88,12 @@ fileTimesMR             = [siteData(:).timeMostRecent];
 mostRecentTime          = max(fileTimesMR);
 disp(['Current time: ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
 disp(['Seastate map creation for time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
-timeGap             = mostRecentTime - tNowShifted;
-disp(['Time to most recent insitu files: '])
-disp(timeGap)
-% Stop script and give error message in case now seastate data is available for the last 30 minutes
-if timeGap < -duration(minutes(30))
-    error(['Execution stopped. No insitu seastate data for the last 30 minutes available. Time to most recent insitu files: ' num2str(hours(timeGap)) 'h.' ])
+    timeGap             = mostRecentTime - tNowShifted;
+    disp(['Time to most recent insitu files: '])
+    disp(timeGap)
+    if (tNowShifted - mostRecentTime) > duration(minutes(30))
+        error(['No data for last 30 minutes available. Time to most recent insitu files: ' datestr(timeGap)])
+
 end
 
 % Display which WAM model is used
@@ -125,7 +125,7 @@ end
 
 %% :::::::::| Calculate scale data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Calculate scale data for each site and connection lines with interpolated scale values
-siteData                = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleInsitu,var2ScaleWam);
+siteData                = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleInsitu,var2ScaleWam);    
 % Calculate scale matrix for whole area
 spatialData         = OR_CalculateScaleMatrix(spatialData,siteData,GSHHG);
 % Create scaled griddata for chosen variable

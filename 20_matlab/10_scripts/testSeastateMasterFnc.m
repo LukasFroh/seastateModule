@@ -44,7 +44,7 @@ pltType             = 'adjInfo';
 figRes              = "150";
 figType             = '.png';
 gridType            = 'on';
-timeShift           = "24";
+timeShift           = "0";
 
 %% execution
 addpath(genpath('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\20_matlab'))
