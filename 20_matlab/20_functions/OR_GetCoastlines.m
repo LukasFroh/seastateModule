@@ -4,30 +4,30 @@ function [Coastlines,latTotal,lonTotal] = OR_GetCoastlines(pathDir,filename,latl
 % Only possible when Mapping Toolbox is available
 fullPath                                            = [pathDir filename];                                                                % full path to file
 
-% if license('test','MAP_Toolbox')
-% 
-%     % Mapping toolbox available at LuFI. When .mat file is defined as Input, switch filename to original input files
-%     if strcmp(filename(end-3:end),'.mat')
-%         filename = 'gshhs_f.b';
-%         fullPath = [pathDir filename];      
-%     end
-% 
-%     % List available files
-%     dataDir                                             = dir([pathDir '*.i']);
-% 
-%     if ~any(strcmp({dataDir.name},strrep(filename,'.b','.i')))                                                                                     % If index file is not yet available
-%         indexfilename                                    = gshhs(fullPath, 'createindex');
-%     end
-% 
-%     GSHHG                                               = gshhs(fullPath, latlim,lonlim);                                                               % Import data
-% else
+if license('test','MAP_Toolbox')
+
+    % Mapping toolbox available at LuFI. When .mat file is defined as Input, switch filename to original input files
+    if strcmp(filename(end-3:end),'.mat')
+        filename = 'gshhs_f.b';
+        fullPath = [pathDir filename];      
+    end
+
+    % List available files
+    dataDir                                             = dir([pathDir '*.i']);
+
+    if ~any(strcmp({dataDir.name},strrep(filename,'.b','.i')))                                                                                     % If index file is not yet available
+        indexfilename                                    = gshhs(fullPath, 'createindex');
+    end
+
+    GSHHG                                               = gshhs(fullPath, latlim,lonlim);                                                               % Import data
+else
     % Instead: Load already imported GSHHG struct:
     s = load(fullPath);
     % Name of imported struct;
     sFN = fieldnames(s);
     % Set GSHHG as struct name
     GSHHG = s.(sFN{1});
-% end
+end
 
 
 % Identify land entries

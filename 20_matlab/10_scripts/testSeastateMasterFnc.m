@@ -36,7 +36,7 @@ elseif strcmp(wamModel2Eval,'ewam')
     rasterSizeLon   = "36";
 end
 
-gshhgInputFile      = char("{'gshhs_f.b'}");
+gshhgInputFile      = char("{'GSHHG.mat'}");
 var2ScaleInsitu     = char("{'VHM0'}");
 var2ScaleWam        = char("{'sign_whight'}");
 interpLineLength    = "1";
