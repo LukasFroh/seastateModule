@@ -6,18 +6,18 @@ opts        = detectImportOptions(fileName);
 hline       = opts.VariableNamesLine;
 
 % Seastate data types
-dataTypes = {'_HIS_','_HIW_','_GPS_','_RADAC_','_RADAC_SINGLE_'};
+dataTypes = {'_HIS','_HIW','_GPS','_RADAC_','_RADAC_SINGLE_'};
 
 % Loop over all available dataTypes
 for i = 1:numel(dataTypes)
 
     if contains(fileName,dataTypes(i))
         switch dataTypes{i}
-            case '_HIS_'
+            case '_HIS'
                 headerFileName = 'DWR_HISHeader.mat';
-            case '_HIW_'
+            case '_HIW'
                 headerFileName = 'DWR_HIWHeader.mat';
-            case '_GPS_'
+            case '_GPS'
                 headerFileName = 'DWR_GPSHeader.mat';
             case '_RADAC_'
                 headerFileName = 'RADAC_Header.mat';
@@ -81,6 +81,7 @@ timeDateTime                        = datetime(string(importTable.Time),'InputFo
 importTable.Time                    = [];
 
 importTimeTable                     = table2timetable(importTable,'RowTimes',timeDateTime);
+importTimeTable.Time.TimeZone       = 'UTC';
 
 
 % Timeshift for dwrHIS datasets
