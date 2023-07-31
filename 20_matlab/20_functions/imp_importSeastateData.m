@@ -5,8 +5,6 @@ opts        = detectImportOptions(fileName);
 % Find line where variable names are located in file
 hline       = opts.VariableNamesLine;
 
-
-
 % Seastate data types
 dataTypes = {'_HIS_','_HIW_','_GPS_','_RADAC_','_RADAC_SINGLE_'};
 

@@ -3,7 +3,8 @@
 clear,clc,close all
 restoredefaultpath
 
-dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\00_NewStructure\'}");
+% dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\00_NewStructure\'}");
+dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");
 headerPath          = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}");
 coastlinePath       = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\20_coastlineFiles\'}");
 wamDataPath         = char("{'D:\OpenRAVE_DWD_WAM_Forecast\'}");
@@ -44,10 +45,13 @@ pltType             = 'adjInfo';
 figRes              = "150";
 figType             = '.png';
 gridType            = 'on';
-timeShift           = "0";
+timeShift           = "24";
 
 %% execution
+% Add path to functions
 addpath(genpath('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\20_matlab'))
+
+% Execution of master function
 seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, ... % Path input
     site2Imp, seastateVars2Eval, minQF,... % Seastate input
     wamModel2Eval, wamVars, ... % WAM input

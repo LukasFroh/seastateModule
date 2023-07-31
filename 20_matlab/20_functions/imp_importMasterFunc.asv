@@ -35,13 +35,13 @@ for i = 1:numel(input.site2imp)
                 data(i).dwr = struct;
             end
             % Create fileList for his data
-           [data(i).dwr.hisFileList] = imp_createFileList(currDataPath,'*HIS*');
+           [data(i).dwr.hisFileList, data(i).dwr.hisLatestTime] = imp_createFileList(input,currDataPath,'*HIS*');
+           % Increase counter
+           mrtCounter = mrtCounter + 1;
+           latestTime(mrtCounter) = data(i).dwr.hisLatestTime;
             % Import, clean and interpolate data
             [data(i).dwr.hisRaw, data(i).dwr.hisCleaned, data(i).finalSensorTT.('dwrHIS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hisFileList,paths.headerPath,input);
-            % Increase counter
-           mrtCounter = mrtCounter + 1;
-           latestTime(mrtCounter) = data(i).dwr.hisRaw.Time(end);
         end
 
         % HIW Data
@@ -51,13 +51,13 @@ for i = 1:numel(input.site2imp)
                 data(i).dwr = struct;
             end
             % Create fileList for hiw data
-            [data(i).dwr.hiwFileList] = imp_createFileList(currDataPath,'*HIW*');
-                        % Import, clean and interpolate data
-            [data(i).dwr.hiwRaw, data(i).dwr.hiwCleaned, data(i).finalSensorTT.('dwrHIW')] = ...
-                imp_importCleanInterpSeastateData(data(i).dwr.hiwFileList,paths.headerPath,input);
+            [data(i).dwr.hiwFileList, data(i).dwr.hiwLatestTime] = imp_createFileList(input,currDataPath,'*HIW*');
             % Increase counter
             mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).dwr.hiwRaw.Time(end);
+            latestTime(mrtCounter) = data(i).dwr.hiwLatestTime;
+            % Import, clean and interpolate data
+            [data(i).dwr.hiwRaw, data(i).dwr.hiwCleaned, data(i).finalSensorTT.('dwrHIW')] = ...
+                imp_importCleanInterpSeastateData(data(i).dwr.hiwFileList,paths.headerPath,input);
         end
 
         % GPS Data
@@ -67,13 +67,13 @@ for i = 1:numel(input.site2imp)
                 data(i).dwr = struct;
             end
             % Create fileList for gps data
-            [data(i).dwr.gpsFileList] = imp_createFileList(currDataPath,'*GPS*');
+            [data(i).dwr.gpsFileList] = imp_createFileList(input,currDataPath,'*GPS*');
+            % Increase counter
+            mrtCounter = mrtCounter + 1;
+            latestTime(mrtCounter) = data(i).dwr.gpsLatestTime;
             % Import, clean and interpolate data
             [data(i).dwr.gpsRaw, data(i).dwr.gpsCleaned, data(i).finalSensorTT.('dwrGPS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.gpsFileList,paths.headerPath,input);
-            % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).dwr.gpsRaw.Time(end);
         end
     end
 
@@ -83,7 +83,7 @@ for i = 1:numel(input.site2imp)
             currDataPath                    = fullfile(paths.dataPath,currSite,'radac');
             data(i).radac                   = struct;
             % Create fileList for radac data
-            [data(i).radac.fileList] = imp_createFileList(currDataPath,'');
+            [data(i).radac.fileList] = imp_createFileList(input,currDataPath,'');
             % Import, clean and interpolate data
             [data(i).radac.raw, data(i).radac.cleaned, data(i).finalSensorTT.('radac')] = ...
                 imp_importCleanInterpSeastateData(data(i).radac.fileList,paths.headerPath,input);
