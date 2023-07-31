@@ -4,7 +4,7 @@ echo off
 :::::::::::::: Set Paths ::::::::::::::::::::
 :: Paths must be specified in the format {'...'}
 :: Path to insitu files
-SET p1={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\00_NewStructure\'}
+SET p1={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}
 :: Path to Header files
 Set p2={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}
 :: Path to GSHHG files
@@ -85,7 +85,7 @@ SET f5=on
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
 :: Leave default value "0" for normal use
-SET l1="0" 
+SET l1="24" 
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution

@@ -54,7 +54,7 @@ bools.boolRadac         = true;
 bools.boolRadacSingle   = true;
 
 % Current date and time
-tNow                    = datetime;
+tNow                    = datetime('now','TimeZone','UTC');
 tNowShifted             = dateshift(tNow,'start','hour');
 if minute(tNow) > 30
     tNowShifted         = tNowShifted + minutes(30);
