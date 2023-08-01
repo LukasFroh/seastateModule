@@ -59,7 +59,8 @@ SET i11=240
 ::SET i11=41
 :: GSHHG Coastline dataset. Choose between <'gshhs_c.b'> (crude), <'gshhs_l.b'> (low), <'gshhs_i.b'> (intermediate), <'gshhs_h.b'> (high), <'gshhs_f.b'> (full, default option)
 :: Wessel, P., & Smith, W. H. F. (1996). A global, self-consistent, hierarchical, high-resolution shoreline database. In Journal of Geophysical Research: Solid Earth (Vol. 101, Issue B4, pp. 8741–8743). American Geophysical Union (AGU). https://doi.org/10.1029/96jb00104
-SET i12={'gshhs_f.b'}
+:: Mapping Toolbox available? SET i12={'gshhs_f.b'}
+SET i12={'GSHHG.mat'}
 
 :::::::::::::: Spatial settings ::::::::::::::::::::
 :: Hs insitu parameter name
@@ -85,7 +86,7 @@ SET f5=on
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
 :: Leave default value "0" for normal use
-SET l1="24" 
+SET l1="0" 
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
