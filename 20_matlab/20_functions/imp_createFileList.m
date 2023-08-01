@@ -21,7 +21,4 @@ if ~isempty(zeroByteIdx)
     currDataList(zeroByteIdx)  = [];
 end
 
-
-
-
 end
