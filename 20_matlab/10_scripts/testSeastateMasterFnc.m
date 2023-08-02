@@ -14,7 +14,7 @@ figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibl
 expDataPath         = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}");
 seastateVars2Eval   = char("{'VHM0'}");
 minQF               = "1";
-wamModel2Eval       = 'ewam';
+wamModel2Eval       = 'cwam';
 wamVars             = char("{'sign_whight'}");
 % site2Imp            = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'WES', 'NOR', 'NOO','BO1'}");
 
