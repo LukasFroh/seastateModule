@@ -85,8 +85,8 @@ siteData                = imp_importMasterFunc(paths,input,bools);
 % Check most recent file times
 fileTimesMR             = [siteData(:).timeMostRecent];
 mostRecentTime          = max(fileTimesMR);
-disp(['Current time: ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
-disp(['Seastate map creation for time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
+disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
+disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
 timeGap             = mostRecentTime - tNowShifted;
 disp(['Time to most recent insitu files: '])
 disp(timeGap)
