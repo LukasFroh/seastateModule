@@ -58,6 +58,8 @@ tNowShifted             = dateshift(tNow,'start','hour');
 if minute(tNow) > 30
     tNowShifted         = tNowShifted + minutes(30);
 end
+% Evaluate at mid of measurement time window. DWR meas. duration 30min --> Substract 15 min (Radac is available every 1 min and can be chosen for this time as well)
+tNowShifted             = tNowShifted - minutes(15);
 
 % Manual adjustment (newest files only up to 23:59 of day before)
 tNowShifted             = tNowShifted - hours(timeShift);
@@ -89,7 +91,14 @@ disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
 disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
 timeGap             = mostRecentTime - tNowShifted;
 disp(['Time to most recent insitu files: '])
-disp(timeGap)
+% Display most recent times for each site
+for mri = 1:numel(siteData)
+    currSite    = siteData(mri).name;
+    currSensor  = siteData(mri).chosenSensor;
+    currMRT     = siteData(mri).timeMostRecent;
+    disp([currSite{:} ' (' currSensor '): ' datestr(currMRT,'yyyy-mm-dd HH:MM:SS') ' --> Diff. to time2Eval: ' num2str( minutes(currMRT-tNowShifted) ) ' Minutes.'])
+end
+
 
 % Stop script and give error message in case now seastate data is available for the last 30 minutes
 if timeGap < -duration(minutes(30))
