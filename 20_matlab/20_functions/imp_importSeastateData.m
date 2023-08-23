@@ -87,7 +87,7 @@ importTimeTable.Time.TimeZone       = 'UTC';
 % Timeshift for dwrHIS datasets
 if exist('headerField','var') &&  strcmp(headerField,'DWR_HISHeader')
     importTimeTable.Time.Minute      = 30 * floor(importTimeTable.Time.Minute / 30);
-    importTimeTable.Time             = importTimeTable.Time - duration([00 30 00]);
+    importTimeTable.Time             = importTimeTable.Time - duration([00 15 00]);
 end
 
 
