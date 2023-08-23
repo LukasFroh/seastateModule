@@ -90,6 +90,15 @@ if exist('headerField','var') &&  strcmp(headerField,'DWR_HISHeader')
     importTimeTable.Time             = importTimeTable.Time - duration([00 15 00]);
 end
 
+% Timeshift for dwrGPS datasets
+if exist('headerField','var') &&  strcmp(headerField,'DWR_GPSHeader')
+    importTimeTable.Time.Minute      = 30 * floor(importTimeTable.Time.Minute / 30);
+    importTimeTable.Time             = importTimeTable.Time - duration([00 15 00]);
+end
 
+% Timeshift for dwrGPS datasets
+if exist('headerField','var') &&  strcmp(headerField,'DWR_HIWHeader')
+    importTimeTable.Time             = importTimeTable.Time + duration([00 15 00]);
+end
 
 end
