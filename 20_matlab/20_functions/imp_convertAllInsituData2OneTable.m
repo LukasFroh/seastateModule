@@ -20,13 +20,17 @@ for iField = 1:numel(sites)
             currFields                                          = fieldnames(siteDataIn(iField).(finalSensorStructName));
             % Set dwr > radac > radacSingle priority when creating the final timetable an
             if ismember('dwrHIS',currFields) && ismember('dwrHIW',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS')) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIW'))
-                siteDataOut(iField).(finalTTName)                  = [siteDataIn(iField).(finalSensorStructName).dwrHIS, siteDataIn(iField).(finalSensorStructName).dwrHIW];
+                siteDataOut(iField).(finalTTName)                   = [siteDataIn(iField).(finalSensorStructName).('dwrHIS'), siteDataIn(iField).(finalSensorStructName).('dwrHIW')];
+                siteDataOut(iField).('chosenSensor')                = 'dwr';
             elseif ismember('dwrHIS',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS'))
-                siteDataOut(iField).(finalTTName)                  = [siteDataIn(iField).(finalSensorStructName).dwrHIS];
+                siteDataOut(iField).(finalTTName)                   = [siteDataIn(iField).(finalSensorStructName).('dwrHIS')];
+                siteDataOut(iField).('chosenSensor')                = 'dwr';
             elseif ismember('radac',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('radac'))
-                siteDataOut(iField).(finalTTName)                  = siteDataIn(iField).(finalSensorStructName).radac;
+                siteDataOut(iField).(finalTTName)                   = siteDataIn(iField).(finalSensorStructName).('radac');
+                siteDataOut(iField).('chosenSensor')                = 'radac';
             elseif ismember('radacSingle',currFields) && ~ismember('dwrHIS',currFields) && ~ismember('radac',currFields)
-                siteDataOut(iField).(finalTTName)                  = siteDataIn(iField).(finalSensorStructName).radacSingle;
+                siteDataOut(iField).(finalTTName)                   = siteDataIn(iField).(finalSensorStructName).('radacSingle');
+                siteDataOut(iField).('chosenSensor')                = 'radacSingle';
             end
 
             % Replace field with nan timetable in case it is empty
