@@ -90,6 +90,14 @@ mostRecentTime          = max(fileTimesMR);
 disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
 disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
 timeGap             = mostRecentTime - tNowShifted;
+
+% Display which insitu sites are considered
+disp('Following insitu sites are considered:')
+disp(input.site2imp)
+disp('No data available for sites:')
+disp(input.site2imp(fileTimesMR < tNowShifted))
+
+
 disp(['Time to most recent insitu files: '])
 % Display most recent times for each site
 for mri = 1:numel(siteData)
@@ -107,12 +115,6 @@ end
 
 % Display which WAM model is used
 disp(['Chosen numerical forecast model: ' upper(input.wamModel2Eval) ])
-
-% Display which insitu sites are considered
-disp('Following insitu sites are considered:')
-disp(input.site2imp)
-disp('No data available for sites:')
-disp(input.site2imp(fileTimesMR < tNowShifted))
 
 %% :::::::::| Import GSHHG data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Load already imported GSHHG struct:
