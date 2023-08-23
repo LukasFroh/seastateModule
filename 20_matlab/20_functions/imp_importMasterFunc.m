@@ -55,9 +55,9 @@ for i = 1:numel(input.site2imp)
                         % Import, clean and interpolate data
             [data(i).dwr.hiwRaw, data(i).dwr.hiwCleaned, data(i).finalSensorTT.('dwrHIW')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hiwFileList,paths.headerPath,input);
-            % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).dwr.hiwRaw.Time(end);
+            % % Increase counter
+            % mrtCounter = mrtCounter + 1;
+            % latestTime(mrtCounter) = data(i).dwr.hiwRaw.Time(end);
         end
 
         % GPS Data
@@ -71,9 +71,9 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).dwr.gpsRaw, data(i).dwr.gpsCleaned, data(i).finalSensorTT.('dwrGPS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.gpsFileList,paths.headerPath,input);
-            % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).dwr.gpsRaw.Time(end);
+            % % Increase counter
+            % mrtCounter = mrtCounter + 1;
+            % latestTime(mrtCounter) = data(i).dwr.gpsRaw.Time(end);
         end
     end
 
@@ -88,8 +88,8 @@ for i = 1:numel(input.site2imp)
             [data(i).radac.raw, data(i).radac.cleaned, data(i).finalSensorTT.('radac')] = ...
                 imp_importCleanInterpSeastateData(data(i).radac.fileList,paths.headerPath,input);
             % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).radac.raw.Time(end);
+            % mrtCounter = mrtCounter + 1;
+            % latestTime(mrtCounter) = data(i).radac.raw.Time(end);
         end
     end
 
@@ -104,15 +104,15 @@ for i = 1:numel(input.site2imp)
             [data(i).radacSingle.raw, data(i).radacSingle.cleaned, data(i).finalSensorTT.('radacSingle')] = ...
                 imp_importCleanInterpSeastateData(data(i).radacSingle.fileList,paths.headerPath,input);
             % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).radacSingle.raw.Time(end);
+            % mrtCounter = mrtCounter + 1;
+            % latestTime(mrtCounter) = data(i).radacSingle.raw.Time(end);
         end
     end
 
-    % Set most recent time
-    data(i).timeMostRecent = max(latestTime);
-    clear latestTime
-    mrtCounter = 0;
+    % % Set most recent time
+    % data(i).timeMostRecent = max(latestTime);
+    % clear latestTime
+    % mrtCounter = 0;
 
 end
 
@@ -125,5 +125,17 @@ finalTTName             = 'finalLiveData';
 % Priority DWR > RADAC > RADAC_Single for final timetable
 data = imp_convertAllInsituData2OneTable(data,finalSensorStructName,finalTTName);
 
+for ii = 1:numel(input.site2imp)
+    % Chosen Sensor
+    cS = data(ii).chosenSensor;
+    % For dwr sensors
+    if strcmpi(cS,'dwr')
+        data(ii).timeMostRecent = data(ii).(cS).('hisCleaned').Time(end);
+    % For radac and radacSingle
+    else
+        data(ii).timeMostRecent = data(ii).(cS).('cleaned').Time(end);
+    end
+
+end
 
 end
