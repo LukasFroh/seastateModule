@@ -37,7 +37,6 @@ input.rasterSize        = [str2double(rasterSizeLon),str2double(rasterSizeLat)];
 
 % GSHHG Coastline dataset. Choose between <'gshhs_c.b'> (crude), <'gshhs_l.b'> (low), <'gshhs_i.b'> (intermediate), <'gshhs_h.b'> (high), <'gshhs_f.b'> (full, default option)
 % Wessel, P., & Smith, W. H. F. (1996). A global, self-consistent, hierarchical, high-resolution shoreline database. In Journal of Geophysical Research: Solid Earth (Vol. 101, Issue B4, pp. 8741–8743). American Geophysical Union (AGU). https://doi.org/10.1029/96jb00104
-GSHHG.filename          = gshhgInputFile;
 eval(['var2ScaleInsitu  =' var2ScaleInsitu ';'])
 eval(['var2ScaleWam  =' var2ScaleWam ';'])
 % eval(['interpLineLength =' interpLineLength ';'])
@@ -59,6 +58,8 @@ tNowShifted             = dateshift(tNow,'start','hour');
 if minute(tNow) > 30
     tNowShifted         = tNowShifted + minutes(30);
 end
+% Evaluate at mid of measurement time window. DWR meas. duration 30min --> Substract 15 min (Radac is available every 1 min and can be chosen for this time as well)
+tNowShifted             = tNowShifted - minutes(15);
 
 % Manual adjustment (newest files only up to 23:59 of day before)
 tNowShifted             = tNowShifted - hours(timeShift);
@@ -86,10 +87,18 @@ siteData                = imp_importMasterFunc(paths,input,bools);
 % Check most recent file times
 fileTimesMR             = [siteData(:).timeMostRecent];
 mostRecentTime          = max(fileTimesMR);
-disp(['Current time: ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
-disp(['Seastate map creation for time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
+disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
+disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
 timeGap             = mostRecentTime - tNowShifted;
 disp(['Time to most recent insitu files: '])
+
+for mri = 1:numel(siteData)
+    currSite    = siteData(mri).name;
+    currSensor  = siteData(mri).chosenSensor;
+    currMRT     = siteData(mri).timeMostRecent;
+    disp([currSite{:} ' (' currSensor '): ' datestr(currMRT,'yyyy-mm-dd HH:MM:SS') ' --> Diff. to time2Eval: ' num2str( minutes(currMRT-tNowShifted) ) ' Minutes.'])
+end
+
 disp(timeGap)
 
 % Stop script and give error message in case now seastate data is available for the last 30 minutes
@@ -107,26 +116,17 @@ disp('No data available for sites:')
 disp(input.site2imp(fileTimesMR < tNowShifted))
 
 %% :::::::::| Import GSHHG data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-% Access to mapping toolbox 
-if license('test','MAP_Toolbox')
-    [GSHHG.sets, GSHHG.lat, GSHHG.lon] = OR_GetCoastlines(paths.coastlinePath,GSHHG.filename,input.latLim,input.lonLim);                                  % Function to import
-    % Create cellstr with fieldnames
-    GSHHG.clFieldnames                 = fieldnames(GSHHG.sets);
-    % No access to mapping toolbox
-else
-    % Instead: Load already imported GSHHG struct:
-    s                   = load(fullfile(paths.coastlinePath,GSHHG.filename));
-    % Name of imported struct;
-    sFN                 = fieldnames(s);
-    % Set GSHHG as struct name
-    GSHHG               = s.(sFN{1});
-end
+% Load already imported GSHHG struct:
+s                   = load(fullfile(paths.coastlinePath,GSHHG.filename));
+% Name of imported struct;
+sFN                 = fieldnames(s);
+% Set GSHHG as struct name
+GSHHG               = s.(sFN{1});
 
 %% :::::::::| Import wam data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Create lon/lat vector and grid
-input.evalLonVec        = linspace(input.lonLim(1),input.lonLim(end),input.rasterSize(1));
-input.evalLatVec        = linspace(input.latLim(1),input.latLim(end),input.rasterSize(2));
+input.evalLonVec    = linspace(input.lonLim(1),input.lonLim(end),input.rasterSize(1));
+input.evalLatVec    = linspace(input.latLim(1),input.latLim(end),input.rasterSize(2));
 [input.evalLonGrid,input.evalLatGrid]  = meshgrid(input.evalLonVec,input.evalLatVec);
 % Import wam files
 [spatialData.wamfileList,spatialData.gridData,spatialData.wamRawParameters,spatialData.wamInterpParameters] = wamImport(input,paths);
@@ -138,7 +138,7 @@ end
 
 %% :::::::::| Calculate scale data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Calculate scale data for each site and connection lines with interpolated scale values
-siteData                = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleInsitu,var2ScaleWam);
+siteData            = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleInsitu,var2ScaleWam);
 % Calculate scale matrix for whole area
 spatialData         = OR_CalculateScaleMatrix(spatialData,siteData,GSHHG);
 % Create scaled griddata for chosen variable

@@ -1,0 +1,12 @@
+Current time: 2023-08-22 12:49:13
+Seastate map creation for time: 2023-08-21 12:30:00
+Time to most recent insitu files: 
+   11:34:00
+
+Chosen numerical forecast model: CWAM
+Following insitu sites are considered:
+    {'AV0'}    {'BUD'}    {'ELB'}    {'FN1'}    {'FN3'}    {'HEL'}    {'HEO'}    {'LTH'}    {'NO1'}    {'NOR'}    {'NOO'}
+
+No data available for sites:
+    {'AV0'}    {'NO1'}    {'NOR'}    {'NOO'}
+
