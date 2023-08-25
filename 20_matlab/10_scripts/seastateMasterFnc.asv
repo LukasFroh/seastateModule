@@ -10,7 +10,7 @@ function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, sit
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...   % Spatial settings
     gshhgInputFile, ...                                                             % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                            % Scale settings
-    cbType, pltType, figRes, figType, gridType, ...                                 % Plot settings
+    cbType, pltType, figRes, figType, gridType, cmName, ...                                 % Plot settings
     timeShift )                                                                     % Manual time shift in hours as double (only for LuFI testing purposes)
 
 tic
@@ -44,6 +44,7 @@ interpLineLength        = str2double(interpLineLength);
 eval(['GSHHG.filename = char(' gshhgInputFile ');'])
 figRes                  = str2double(figRes);
 timeShift               = str2double(timeShift);
+eval(['cmName =' char()])
 
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;
@@ -90,8 +91,16 @@ mostRecentTime          = max(fileTimesMR);
 disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
 disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
 timeGap             = mostRecentTime - tNowShifted;
-disp(['Time to most recent insitu files: '])
 
+% Display which insitu sites are considered
+disp('Following insitu sites are considered:')
+disp(input.site2imp)
+disp('No data available for sites:')
+disp(input.site2imp(fileTimesMR < tNowShifted))
+
+
+disp(['Time to most recent insitu files: '])
+% Display most recent times for each site
 for mri = 1:numel(siteData)
     currSite    = siteData(mri).name;
     currSensor  = siteData(mri).chosenSensor;
@@ -99,7 +108,6 @@ for mri = 1:numel(siteData)
     disp([currSite{:} ' (' currSensor '): ' datestr(currMRT,'yyyy-mm-dd HH:MM:SS') ' --> Diff. to time2Eval: ' num2str( minutes(currMRT-tNowShifted) ) ' Minutes.'])
 end
 
-disp(timeGap)
 
 % Stop script and give error message in case now seastate data is available for the last 30 minutes
 if timeGap < -duration(minutes(30))
@@ -108,12 +116,6 @@ end
 
 % Display which WAM model is used
 disp(['Chosen numerical forecast model: ' upper(input.wamModel2Eval) ])
-
-% Display which insitu sites are considered
-disp('Following insitu sites are considered:')
-disp(input.site2imp)
-disp('No data available for sites:')
-disp(input.site2imp(fileTimesMR < tNowShifted))
 
 %% :::::::::| Import GSHHG data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Load already imported GSHHG struct:
@@ -149,7 +151,7 @@ spatialData         = OR_ScaleWAMdata(spatialData,var2ScaleWam);
 disp('Chosen plotting options:')
 disp(['Plot type: <', pltType, '>'])
 disp(['Parameter range: <', cbType, '>'])
-[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,cbType,gridType);
+[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,cbType,gridType,cmName);
 
 % Safe figure
 figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];

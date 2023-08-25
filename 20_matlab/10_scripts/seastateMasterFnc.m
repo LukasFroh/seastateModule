@@ -4,13 +4,13 @@
 %   Master script
 %  ###########################################################################################################################
 
-function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, ... % Path input
+function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, cmPath, ... % Path input
     site2Imp, seastateVars2Eval, minQF,...                                          % Seastate input
     wamModel2Eval, wamVars, ...                                                     % WAM input
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...   % Spatial settings
     gshhgInputFile, ...                                                             % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                            % Scale settings
-    cbType, pltType, figRes, figType, gridType, ...                                 % Plot settings
+    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, ...                  % Plot settings
     timeShift )                                                                     % Manual time shift in hours as double (only for LuFI testing purposes)
 
 tic
@@ -25,6 +25,7 @@ eval(['paths.siteOverviewPath = char(' siteOverviewPath ');'])  % Path to siteOv
 eval(['paths.logPath = char(' logPath ');'])                    % Path to log files
 eval(['paths.figPath = char(' figPath ');'])                    % Path to figure folder
 eval(['paths.expDataPath = char(' expDataPath ');'])            % Path to export folder
+eval(['paths.cmPath = char(' cmPath ');'])                      % Path to colormap folder
 % Input
 eval(['input.site2imp   =' site2Imp ';'])                       % Which insitu sites should be considered?
 eval(['input.seastateVars2Eval =' seastateVars2Eval ';'])       % Which insitu seaste variable should be imported (as Cellstring, default: 'VHM0')
@@ -44,6 +45,7 @@ interpLineLength        = str2double(interpLineLength);
 eval(['GSHHG.filename = char(' gshhgInputFile ');'])
 figRes                  = str2double(figRes);
 timeShift               = str2double(timeShift);
+eval(['cmName = char(' cmName ');'])
 
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;
@@ -150,7 +152,7 @@ spatialData         = OR_ScaleWAMdata(spatialData,var2ScaleWam);
 disp('Chosen plotting options:')
 disp(['Plot type: <', pltType, '>'])
 disp(['Parameter range: <', cbType, '>'])
-[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,cbType,gridType);
+[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,cbType,gridType,paths.cmPath,cmName,cmFlip);
 
 % Safe figure
 figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];

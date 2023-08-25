@@ -19,6 +19,8 @@ SET p6={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seega
 SET p7={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\20_figures'}
 :: Path to exportData folder
 SET p8={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}
+:: Path to colormap folder
+SET p9={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps'}
 
 :::::::::::::: Insitu settings ::::::::::::::::::::
 :: Define sites that should be considered as cellstring (Matlab format). This input is initially recorded as 'char' in Matlab and converted to a cellstring in the Matlab function
@@ -82,12 +84,16 @@ SET f3=150
 SET f4=.png
 :: Visualisation of lat/lon grid. Choose between <on> and <off>
 SET f5=on
+:: Choose sequential "scientific colormap" by Fabio Crameri , https://www.fabiocrameri.ch/colourmaps/
+SET f6={'bamako'}
+:: Flip colormap order upside down? Choose between <flip> and <noFlip>
+SET f7=noFlip
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
 :: Leave default value "0" for normal use
-SET l1="0" 
+SET l1="24" 
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
-.\seastateModule_v1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%l1%" > batchLog.txt
+.\seastateModule_v1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%l1%" > batchLog.txt

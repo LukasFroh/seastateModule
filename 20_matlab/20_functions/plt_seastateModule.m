@@ -1,4 +1,4 @@
-function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input,GSHHG,spatialData,siteData,plotType,cbType,gridType)
+function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input,GSHHG,spatialData,siteData,plotType,cbType,gridType,cmPath,cmName,cmFlip)
 %% :::::::::| Description |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Function to create adjusted seastate overview maps based on wam and insitu data
 % Only for one timestep possible, video creation disabled
@@ -120,11 +120,29 @@ else
     nLevels                         = length(cfLevels);
 end
 
-% Define Colormap settings
-cmDeepInit                          = cmocean('deep');
-% cmDeepInit                          = cmocean('rain');
-cmDeep                              = cmDeepInit( round(linspace(1, size(cmDeepInit,1), nLevels-1)), : );
+%% Colormap settings
+% Import "scientific colormap" from Crameri et al. (2020), https://www.fabiocrameri.ch/colourmaps/
+% or use colormaps from cmocean toolbox http://dx.doi.org/10.5670/oceanog.2016.66
 
+% cmocean toolbox
+if strcmp(cmName,'deep')
+    % Define Colormap settings
+    cmInit                          = cmocean(cmName);
+    % cmDeepInit                          = cmocean('rain');
+
+    % Scientific colormaps
+else
+    cmStruct                        = load(fullfile(cmPath,[cmName '.mat']));
+    cmFN                            = fieldnames(cmStruct);
+    cmInit                          = cmStruct.(cmFN{1});
+end
+
+% Final colormap
+cmFin                               = cmInit( round(linspace(1, size(cmInit,1), nLevels-1)), : );
+% Flip colormap?
+if strcmpi(cmFlip,'flip')
+    cmFin                           = flipud(cmFin);
+end
 
 % Initialize parameters
 [sitesWam, sitesInsitu, nearIdxWAM, nearIdxInsitu] = deal( zeros(length(validSitesIdx),1) );
@@ -166,7 +184,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmDeep,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title([upper(input.wamModel2Eval) ' | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -177,7 +195,7 @@ switch plotType
         nexttile
         hold on
         ax2 = gca;
-        ax2 = plt_spatialPlot(ax2,input,cmDeep,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        ax2 = plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -190,7 +208,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmDeep,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title([upper(input.wamModel2Eval) ' | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
         %% --------- Adjusted  ----------------------------------------------------------------------------------------------------------
@@ -198,7 +216,7 @@ switch plotType
         hold on
         ax2 = gca;
         % Spatial plot
-        plt_spatialPlot(ax2,input,cmDeep,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -209,7 +227,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmDeep,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorWAM,fsAxis)
         % Set title
@@ -224,7 +242,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmDeep,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
         % Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorInsitu,fsSites)
         % Set title

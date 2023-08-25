@@ -12,6 +12,7 @@ siteOverviewPath    = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibl
 logPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\10_logs'}");
 figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\20_figures'}");
 expDataPath         = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}");
+cmPath              = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps'}");
 seastateVars2Eval   = char("{'VHM0'}");
 minQF               = "1";
 wamModel2Eval       = 'cwam';
@@ -44,6 +45,8 @@ cbType              = 'fixed';
 pltType             = 'adjInfo';
 figRes              = "150";
 figType             = '.png';
+cmName              = char("{'lipari'}");
+cmFlip              = 'flip';
 gridType            = 'on';
 timeShift           = "24";
 
@@ -52,11 +55,11 @@ timeShift           = "24";
 addpath(genpath('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\20_matlab'))
 
 % Execution of master function
-seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, ... % Path input
-    site2Imp, seastateVars2Eval, minQF,... % Seastate input
-    wamModel2Eval, wamVars, ... % WAM input
-    latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ... % Spatial settings
-    gshhgInputFile, ... % Coastline settings
-    var2ScaleInsitu, var2ScaleWam, interpLineLength, ... % Scale settings
-    cbType, pltType, figRes, figType, gridType, ...   % Plot settings
-    timeShift )
+seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, cmPath, ... % Path input
+    site2Imp, seastateVars2Eval, minQF,...                                          % Seastate input
+    wamModel2Eval, wamVars, ...                                                     % WAM input
+    latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...   % Spatial settings
+    gshhgInputFile, ...                                                             % Coastline settings
+    var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                            % Scale settings
+    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, ...                 % Plot settings
+    timeShift )                                                                     % Manual time shift in hours as double (only for LuFI testing purposes)
