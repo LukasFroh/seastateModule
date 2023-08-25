@@ -85,9 +85,9 @@ SET f4=.png
 :: Visualisation of lat/lon grid. Choose between <on> and <off>
 SET f5=on
 :: Choose sequential "scientific colormap" by Fabio Crameri , https://www.fabiocrameri.ch/colourmaps/
-SET f6={'bamako'}
+SET f6={'lipari'}
 :: Flip colormap order upside down? Choose between <flip> and <noFlip>
-SET f7=noFlip
+SET f7=flip
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.

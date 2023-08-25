@@ -1,4 +1,4 @@
-Current time (UTC): 2023-08-25 11:18:48
+Current time (UTC): 2023-08-25 11:26:35
 Seastate map creation for UTC time: 2023-08-24 10:45:00
 Following insitu sites are considered:
     {'AV0'}    {'BUD'}    {'ELB'}    {'FN1'}    {'FN3'}    {'HEL'}    {'HEO'}    {'LTH'}    {'NO1'}    {'NOR'}    {'NOO'}
@@ -23,4 +23,4 @@ Chosen plotting options:
 Plot type: <adjInfo>
 Parameter range: <fixed>
 File <20230824_1045_data.mat> exported.
-Elapsed time is 31.044147 seconds.
+Elapsed time is 30.344933 seconds.

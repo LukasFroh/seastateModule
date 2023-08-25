@@ -124,8 +124,11 @@ end
 % Import "scientific colormap" from Crameri et al. (2020), https://www.fabiocrameri.ch/colourmaps/
 % or use colormaps from cmocean toolbox http://dx.doi.org/10.5670/oceanog.2016.66
 
+% Names of sequential cm of cmOcean toolbox
+cmOceanSequentialNames = {'thermal','haline','solar','ice','gray','oxy','deep','dense','algae','matter','turbid','speed','amp','tempo','rain'};
+
 % cmocean toolbox
-if strcmp(cmName,'deep')
+if ismember(cmName,cmOceanSequentialNames)
     % Define Colormap settings
     cmInit                          = cmocean(cmName);
     % cmDeepInit                          = cmocean('rain');
