@@ -143,6 +143,11 @@ for l = 1 : numel(fileList)
         latCount                                                = fileList(l).latIdx(2) - latStart +1;
         timeCount                                               = fileList(l).importTimeIdx(2) - timeStart +1;
 
+        % timeCount = 0 leads to error. Check if this is the case and if yes, set it to 1.
+        if timeCount == 0
+            timeCount = 1;
+        end
+
         fileList(l).(vars2Import{ll})                            = double(ncread(currFile,currVar2Import,[lonStart,latStart,timeStart],[lonCount,latCount,timeCount]));
     end
 end
