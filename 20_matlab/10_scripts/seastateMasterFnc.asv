@@ -46,9 +46,7 @@ eval(['GSHHG.filename = char(' gshhgInputFile ');'])
 figRes                  = str2double(figRes);
 timeShift               = str2double(timeShift);
 eval(['cmName = char(' cmName ');'])
-input.fsAxis            = str2double(fsAxis);                   % Font size axes object
-input.fsSites           = str2double(fsSites);                  % Font size site text
-input.fsTitle           = str2double(fsTitle);                  % Font size title
+input.fsAxis            = str2double(fsAxis);                   % Minimum final quality flag for insitu seastate data (Default: 1)
 
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;

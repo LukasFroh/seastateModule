@@ -84,10 +84,17 @@ SET f3=150
 SET f4=.png
 :: Visualisation of lat/lon grid. Choose between <on> and <off>
 SET f5=on
-:: Choose sequential "scientific colormap" by Fabio Crameri , https://www.fabiocrameri.ch/colourmaps/
+:: Choose sequential "scientific colormap" by Fabio Crameri, https://www.fabiocrameri.ch/colourmaps/
 SET f6={'lipari'}
 :: Flip colormap order upside down? Choose between <flip> and <noFlip>
 SET f7=flip
+:: Set general fontsize of axes object (ticks, ticklabel, x- & y-label)
+Set f8=25
+:: Set fontsize for site text at each location in plot, respectively
+Set f9=14
+:: Set fontsize for plot title (date)
+Set f10=40
+
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
@@ -96,4 +103,4 @@ SET l1="24"
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
-.\seastateModule_v1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%l1%" > batchLog.txt
+.\seastateModule_v1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%l1%" > batchLog.txt

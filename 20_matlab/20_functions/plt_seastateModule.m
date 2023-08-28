@@ -26,16 +26,16 @@ smoothFactor                        = 0.05;
 fig1.Color                          = [1,1,1];
 edgeColor                           = [0,0,0];
 coastColor                          = [0.25, 0.25, 0.25];
-% siteTextColorA                      = [0,0,0];
-siteTextColorA                      = [178,24,43]/255;
+siteTextColorA                      = [0,0,0];
+% siteTextColorA                      = [178,24,43]/255;
 siteTextColorB                      = [1,1,1];
 siteMarkerSize                      = 50;
 % Fontsize axis 
-fsAxis                              = 20;
+fsAxis                              = input.fsAxis;
 % Fontsize site text
-fsSites                             = 14;
+fsSites                             = input.fsSites;
 % Fontsize title
-fsTitle                             = 40;
+fsTitle                             = input.fsTitle;
 
 
 %% :::::::::| Identify input parameters |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -48,6 +48,9 @@ figType             = '.png';
 cmName              = char("{'lipari'}");
 cmFlip              = 'flip';
 gridType            = 'on';
+fsAxis              = "20";                  % Font size axes object
+fsSites             = "14";                  % Font size site text
+fsTitle             = "40";                  % Font size title
 timeShift           = "24";
 
 %% execution
@@ -56,10 +59,10 @@ addpath(genpath('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitL
 
 % Execution of master function
 seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, cmPath, ... % Path input
-    site2Imp, seastateVars2Eval, minQF,...                                          % Seastate input
-    wamModel2Eval, wamVars, ...                                                     % WAM input
-    latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...   % Spatial settings
-    gshhgInputFile, ...                                                             % Coastline settings
-    var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                            % Scale settings
-    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, ...                 % Plot settings
-    timeShift )                                                                     % Manual time shift in hours as double (only for LuFI testing purposes)
+    site2Imp, seastateVars2Eval, minQF,...                                                      % Seastate input
+    wamModel2Eval, wamVars, ...                                                                 % WAM input
+    latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...               % Spatial settings
+    gshhgInputFile, ...                                                                         % Coastline settings
+    var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
+    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
+    timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
