@@ -151,25 +151,16 @@ if strcmpi(cmFlip,'flip')
 end
 
 % Identify site colors
+cfIdx           = zeros(length(insituVars),1);
 insituColors    = zeros(length(insituVars),3);
-wamColors       = zeros(length(wamVars),3);
-
 for sci = 1:numel(insituVars)
-    currInsituIdx   = find(insituVars(sci) < cfLevels);
-    currWamIdx      = find(wamVars(sci) < cfLevels);
-    % Insitu
-    if isempty(currInsituIdx)
+    currIdx    = find(insituVars(sci) < cfLevels);
+    
+    if isempty(currIdx)
         insituColors(sci,:) = cmFin(end,:);
     else
-        cfIdx = currInsituIdx(1);
-        insituColors(sci,:) = cmFin(cfIdx,:);
-    end
-    % Wam
-    if isempty(currWamIdx)
-        wamColors(sci,:) = cmFin(end,:);
-    else
-        cfIdx = currWamIdx(1);
-        wamColors(sci,:) = cmFin(cfIdx,:);
+        cfIdx(sci) = currIdx(1);
+        insituColors(sci,:) = cmFin(cfIdx(sci),:);
     end
 end
     
@@ -279,7 +270,7 @@ switch plotType
         % title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
         title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
         % Plot statistics from insitu / Wam comparison (3 free tiles in tiled layout mandatory)
-        plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx,wamColors,insituColors);
+        plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx);
         
 end
 

@@ -1,4 +1,4 @@
-function [ax2,ax3,ax4] = plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx  )
+function [ax2,ax3,ax4] = plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx,wamColors,insituColors  )
 
 %% Site Overview with paramater values as bar plot
 nexttile
@@ -59,13 +59,15 @@ for j = validSitesIdx
 
     bp                                      = bar(ax2,categorical(currSite),[currLive,currWam]);
     % Barplot settings
-    bp(1).FaceColor                         = [222,235,247]/255;
-    bp(1).LineWidth                         = 1;
+    % bp(1).FaceColor                         = [222,235,247]/255;
+    bp(1).FaceColor                         = insituColors(j,:);
+    bp(1).LineWidth                         = 2;
     bp(1).EdgeColor                         = [1 1 1];
     % Barplot wamdata settings
-    bp(2).FaceColor                         = [49,130,189]/255;
-    bp(2).LineWidth                         = 1;
-    bp(2).EdgeColor                         = [1 1 1];
+    % bp(2).FaceColor                         = [49,130,189]/255;
+    bp(2).FaceColor                         = wamColors(j,:);
+    bp(2).LineWidth                         = 2;
+    bp(2).EdgeColor                         = [.5,.5,.5];
 
     if currDelta > 0
         deltaColor                          = [0.8902, 0.2902, 0.2000];

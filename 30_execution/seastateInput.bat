@@ -89,9 +89,9 @@ SET f6={'lipari'}
 :: Flip colormap order upside down? Choose between <flip> and <noFlip>
 SET f7=flip
 :: Set general fontsize of axes object (ticks, ticklabel, x- & y-label)
-Set f8=25
+Set f8=20
 :: Set fontsize for site text at each location in plot, respectively
-Set f9=14
+Set f9=15
 :: Set fontsize for plot title (date)
 Set f10=40
 
