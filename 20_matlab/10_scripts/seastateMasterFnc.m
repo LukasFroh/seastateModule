@@ -155,7 +155,7 @@ spatialData         = OR_ScaleWAMdata(spatialData,var2ScaleWam);
 disp('Chosen plotting options:')
 disp(['Plot type: <', pltType, '>'])
 disp(['Parameter range: <', cbType, '>'])
-[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,cbType,gridType,paths.cmPath,cmName,cmFlip);
+[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(paths,input,GSHHG,spatialData,siteData,pltType,cbType,gridType,paths.cmPath,cmName,cmFlip);
 
 % Safe figure
 figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];
