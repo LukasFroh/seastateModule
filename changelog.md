@@ -15,7 +15,7 @@ _Data import:_
 
 
 _Visualization:_
-- Added scientific colormaps (https://www.fabiocrameri.ch/colourmaps/) and option to flip colormaps upside down
+- Added scientific colormaps (https://www.fabiocrameri.ch/colourmaps/) and option to flip colormaps upside down. New Default: lipari (flipped)
 - removed circles 'o' for site location
 - New default site indication color: Green. Grey if no data is available.
 
