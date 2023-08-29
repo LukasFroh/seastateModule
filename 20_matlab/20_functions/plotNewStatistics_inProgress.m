@@ -8,9 +8,18 @@ load("vik.mat")
 %% Measurements
 outTable = array2table([insituVars;wamVars],'VariableNames',validSiteNames,'RowNames',{'insitu','wam'});
 nexttile([2 1])
-h1 = heatmap([insituVars;wamVars]);
+h1 = heatmap(round([insituVars;wamVars],2));
 h1.FontSize = 15;
-h1.Colormap = cmFin;
+h1.Colormap = ones(size( h1.Colormap));
+h1.XDisplayLabels = validSiteNames;
+h1.YDisplayLabels = {'insitu','wam'};
+h1.ColorbarVisible = 'off';
+% axs1 = struct(gca);
+% axs1.Colorbar.Ticks = cfLevels;
+% axs1.Colorbar.Limits = [cfLevels(1),cfLevels(end)];
+
+clim([0,10])
+
 
 %% Deltas
 nexttile([1 1])
@@ -33,7 +42,8 @@ axs.NodeChildren(1).TickLabelInterpreter = 'latex';
 clim(lims)
 h.FontSize = 15;
 h.XDisplayLabels = validSiteNames;
-h.Title = '$\Delta$Hs [m]';
+h.YDisplayLabels = {''};
+h.Title = '$\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
 
 %% Scale
 nexttile([1 1])
@@ -57,6 +67,7 @@ clim(lims)
 h.FontSize = 15;
 h.XDisplayLabels = validSiteNames;
 h.Title =  ['$\frac{Hs_{insitu}}{Hs_{WAM}}$ [ ]'];
+h.YDisplayLabels = {''};
 
 
 end
