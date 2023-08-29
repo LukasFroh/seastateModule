@@ -1,4 +1,4 @@
-function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input,GSHHG,spatialData,siteData,plotType,cbType,gridType,cmPath,cmName,cmFlip)
+function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(paths,input,GSHHG,spatialData,siteData,plotType,cbType,gridType,cmPath,cmName,cmFlip)
 %% :::::::::| Description |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Function to create adjusted seastate overview maps based on wam and insitu data
 % Only for one timestep possible, video creation disabled
@@ -12,6 +12,8 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+% Add paths
+addpath(genpath(paths.cmPath))
 % Open figure and suppress graphical output
 fig1                                = figure('visible','off');
 % fig1                                = figure('visible','on');
@@ -64,6 +66,8 @@ wamVars                             = [wamVarsInit{:}];
 % Delta and Scale values
 siteDeltas                          = cellfun( @(site) site.delta,siteCell(validSitesIdx));
 siteScales                          = cellfun( @(site) site.scale,siteCell(validSitesIdx));
+siteDeltasRel                       = cellfun( @(site) 1-site.scale,siteCell(validSitesIdx));
+siteDeltasProz                      = cellfun( @(site) (1-site.scale)*100,siteCell(validSitesIdx));
 
 %% Prepare plotting data
 % Identify index of struct array for given wam-parameter (in case multiple parameter
@@ -279,7 +283,7 @@ switch plotType
         % title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
         title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
         % Plot statistics from insitu / Wam comparison (3 free tiles in tiled layout mandatory)
-        plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx,wamColors,insituColors);
+        plt_insitu_wam_Statistics2(coastColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
         
 end
 
