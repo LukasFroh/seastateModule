@@ -51,7 +51,7 @@ gridType            = 'on';
 fsAxis              = "20";                  % Font size axes object
 fsSites             = "15";                  % Font size site text
 fsTitle             = "40";                  % Font size title
-timeShift           = "24";
+timeShift           = "14";
 
 %% execution
 % Add path to functions
