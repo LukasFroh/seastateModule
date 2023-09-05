@@ -282,8 +282,11 @@ switch plotType
         % Set title
         % title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
         title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
+        % Set Background color for statistics
+        backGroundColor = [1, 1 ,1];
         % Plot statistics from insitu / Wam comparison (3 free tiles in tiled layout mandatory)
-        plt_insitu_wam_Statistics2(coastColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
+        plt_insitu_wam_Statistics3(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
+        % plt_insitu_wam_Statistics2(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors);
         
 end
 

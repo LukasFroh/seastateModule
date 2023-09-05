@@ -1,5 +1,89 @@
-function [ax2,ax3,ax4] = plt_insitu_wam_Statistics2(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu)
+function [ax2,ax3,ax4] = plt_insitu_wam_Statistics3(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu)
 
+
+% What to do?
+% BackGround: White (or gray?)
+% Bars Hs in black/grey for insitu/wam
+% Implement 4 scales: [0,2], [0,4], [0,6], [0,8], [0,10]
+% Absolute and prozentuale Abweichungen
+% Abs/Proz als Bar Plot oder Heatmap
+
+% set(gcf,'Visible','on')
+
+
+%% ------ Identify Hs limits for y-axis -----
+maxVar  = max([insituVars,wamVars]);
+nTicks  = 5;
+
+if maxVar < 2
+    varYTicks = linspace(0,2,nTicks);
+elseif maxVar >= 2 & maxVar < 4
+    varYTicks = linspace(0,4,nTicks);
+elseif maxVar >= 4 & maxVar < 6
+    varYTicks = linspace(0,6,nTicks);
+elseif maxVar >= 6 & maxVar < 8
+    varYTicks = linspace(0,8,nTicks);
+elseif maxVar >= 8
+    varYTicks = linspace(0,10,nTicks);
+end
+
+
+gridColor = [0,0,0];
+
+
+%% ------ Axes settings Hs barplot insitu/wam -----
+nexttile
+ax2                                         = gca;
+hold on
+ax2.Color                                   = backGroundColor;
+ax2.FontSize                                = fsAxis;
+ax2.YGrid                                   = 'on';
+ax2.YLim                                    = [varYTicks(1),varYTicks(end)];
+ax2.YTick                                   = varYTicks;
+ax2.GridColor                               = gridColor;
+ax2.XLabel.Interpreter                      = 'latex';
+ax2.XAxis.TickLabelInterpreter              = 'latex';
+ax2.YLabel.Interpreter                      = 'latex';
+ax2.YAxis.TickLabelInterpreter              = 'latex';
+
+%% ------ Axes settings Absolute Hs differences -----
+nexttile
+ax3                                         = gca;
+hold on
+ax3.Color                                   = backgroundColor;
+ax3.FontSize                                = fsAxis;
+ax3.YGrid                                   = 'on';
+ax3.GridColor                               = gridColor;
+ax3.YLim                                    = [-maxDeltaLim, maxDeltaLim];
+ax3.YTick                                   = round(linspace(-maxDeltaLim, maxDeltaLim,5),2);
+ax3.XLabel.Interpreter                      = 'latex';
+ax3.XAxis.TickLabelInterpreter              = 'latex';
+ax3.YLabel.Interpreter                      = 'latex';
+ax3.YAxis.TickLabelInterpreter              = 'latex';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%% -.-.-.-.-.-.-.-.-.-.-.-.-. Old Version -.-.-.-.-.-.-.-.-.--.-.-.-..-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
 % Fixed Limits for absolute and relative delta plots
 % Y-axis limit for absolute delta:
