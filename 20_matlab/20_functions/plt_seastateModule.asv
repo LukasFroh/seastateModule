@@ -66,8 +66,8 @@ wamVars                             = [wamVarsInit{:}];
 % Delta and Scale values
 siteDeltas                          = cellfun( @(site) site.delta,siteCell(validSitesIdx));
 siteScales                          = cellfun( @(site) site.scale,siteCell(validSitesIdx));
-siteDeltasRel                       = cellfun( @(site) 1-site.scale^-1,siteCell(validSitesIdx));
-siteDeltasPercentages               = cellfun( @(site) (1-site.scale^-1)*100,siteCell(validSitesIdx));
+siteDeltasRel                       = cellfun( @(site) 1-site.scale,siteCell(validSitesIdx));
+siteDeltasPercentages               = cellfun( @(site) (1-site.scale)*100,siteCell(validSitesIdx));
 
 %% Prepare plotting data
 % Identify index of struct array for given wam-parameter (in case multiple parameter
@@ -293,11 +293,11 @@ switch plotType
         nexttile
         % Y-Limits 
         yLims           = [-0.5,0.5];
-        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,'barplot');
+        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,'heatmap');
         %% Relative Differences
         yLimsPerc       = yLims*100;
         nexttile    
-        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,'barplot');
+        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,'heatmap');
         % plt_insitu_wam_Statistics3(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
         % plt_insitu_wam_Statistics2(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors);
         
