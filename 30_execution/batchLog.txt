@@ -1,0 +1,27 @@
+Current time (UTC): 2023-09-07 14:58:25
+Seastate map creation for UTC time: 2023-09-06 14:15:00
+Following insitu sites are considered:
+    {'AV0'}    {'BUD'}    {'ELB'}    {'FN1'}    {'FN3'}    {'HEL'}    {'HEO'}    {'LTH'}    {'NO1'}    {'NOR'}    {'NOO'}
+
+No data available for sites:
+    {'NOO'}
+
+Time to most recent insitu files: 
+AV0 (radacSingle): 2023-09-07 00:00:00 --> Diff. to time2Eval: 585 Minutes.
+BUD (radac): 2023-09-07 00:00:00 --> Diff. to time2Eval: 585 Minutes.
+ELB (dwr): 2023-09-06 23:45:00 --> Diff. to time2Eval: 570 Minutes.
+FN1 (dwr): 2023-09-06 23:45:00 --> Diff. to time2Eval: 570 Minutes.
+FN3 (dwr): 2023-09-07 00:15:00 --> Diff. to time2Eval: 600 Minutes.
+HEL (dwr): 2023-09-06 23:45:00 --> Diff. to time2Eval: 570 Minutes.
+HEO (dwr): 2023-09-06 23:45:00 --> Diff. to time2Eval: 570 Minutes.
+LTH (dwr): 2023-09-06 23:45:00 --> Diff. to time2Eval: 570 Minutes.
+NO1 (radac): 2023-09-07 00:00:00 --> Diff. to time2Eval: 585 Minutes.
+NOR (radac): 2023-09-07 00:00:00 --> Diff. to time2Eval: 585 Minutes.
+NOO (radac): 2023-09-06 07:39:00 --> Diff. to time2Eval: -396 Minutes.
+Chosen numerical forecast model: CWAM
+Chosen plotting options:
+Plot type: <adjInfo>
+Statistic type: <heatmap>
+Parameter range: <fixed>
+File <20230906_1415_data.mat> exported.
+Elapsed time is 33.842863 seconds.
