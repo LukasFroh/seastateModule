@@ -1,17 +1,20 @@
-function [ax2,ax3,ax4] = plt_insitu_wam_Statistics(coastColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx,wamColors,insituColors  )
+function [ax2,ax3,ax4] = plt_insitu_wam_Statistics(backgroundColor,fsAxis,maxVarLim,maxDeltaLim,siteData,maxScaleLim,validSitesIdx,wamColors,insituColors  )
 
 %% Site Overview with paramater values as bar plot
 nexttile
 
+% Set grid color
+gridColor                                   = [0, 0, 0];
+
 % Axes settings
 ax2 = gca;
 hold on
-ax2.Color                                   = coastColor;
+ax2.Color                                   = backgroundColor;
 ax2.FontSize                                = fsAxis;
 ax2.YGrid                                   = 'on';
 ax2.YLim                                    = [0 maxVarLim];
 ax2.YTick                                   = [0:1:maxVarLim];
-ax2.GridColor                               = [1 1 1];
+ax2.GridColor                               = gridColor;
 ax2.XLabel.Interpreter                      = 'latex';
 ax2.XAxis.TickLabelInterpreter              = 'latex';
 ax2.YLabel.Interpreter                      = 'latex';
@@ -20,10 +23,10 @@ ax2.YAxis.TickLabelInterpreter              = 'latex';
 nexttile
 ax3 = gca;
 hold on
-ax3.Color                                   = coastColor;
+ax3.Color                                   = backgroundColor;
 ax3.FontSize                                = fsAxis;
 ax3.YGrid                                   = 'on';
-ax3.GridColor                               = [1 1 1];
+ax3.GridColor                               = gridColor;
 ax3.YLim                                    = [-maxDeltaLim, maxDeltaLim];
 ax3.YTick                                   = round(linspace(-maxDeltaLim, maxDeltaLim,5),2);
 ax3.XLabel.Interpreter                      = 'latex';
@@ -34,11 +37,11 @@ ax3.YAxis.TickLabelInterpreter              = 'latex';
 nexttile
 ax4 = gca;
 hold on
-ax4.Color                                   = coastColor;
+ax4.Color                                   = backgroundColor;
 ax4.FontSize                                = fsAxis;
 ax4.YGrid                                   = 'on';
 ax4.YLabel.String                           = ['$\frac{Hs_{insitu}}{Hs_{WAM}}$ [ ]'];
-ax4.GridColor                               = [1 1 1];
+ax4.GridColor                               = gridColor;
 ax4.YLim                                    = [0, maxScaleLim];
 ax4.YTick                                   = 0:0.5:maxScaleLim;
 ax4.XLabel.Interpreter                      = 'latex';
@@ -105,7 +108,7 @@ ax3.YLabel.String                           = ['$\Delta$Hs [m]'];
 % Legend settings
 leg1                                         = legend(ax2,bp(1:2),{'Insitu','WAM'});
 leg1.TextColor                               = [1 1 1];
-leg1.Color                                   = coastColor;
+leg1.Color                                   = backgroundColor;
 leg1.LineWidth                               = 1;
 leg1.Location                                = 'eastoutside';
 

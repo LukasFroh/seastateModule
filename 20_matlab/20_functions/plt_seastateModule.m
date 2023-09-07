@@ -1,4 +1,4 @@
-function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(paths,input,GSHHG,spatialData,siteData,plotType,cbType,gridType,cmPath,cmName,cmFlip)
+function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input,GSHHG,spatialData,siteData,plotType,statType,cbType,gridType,cmPath,cmName,cmStatsName,cmFlip)
 %% :::::::::| Description |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Function to create adjusted seastate overview maps based on wam and insitu data
 % Only for one timestep possible, video creation disabled
@@ -13,7 +13,7 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(paths
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 % Add paths
-addpath(genpath(paths.cmPath))
+% addpath(genpath(paths.cmPath))
 % Open figure and suppress graphical output
 fig1                                = figure('visible','off');
 % fig1                                = figure('visible','on');
@@ -27,7 +27,7 @@ inpaintNANmethod                    = 4;
 smoothFactor                        = 0.05;
 fig1.Color                          = [1,1,1];
 edgeColor                           = [0,0,0];
-coastColor                          = [0.25, 0.25, 0.25];
+coastColor                          = [0.65, 0.65, 0.65];
 siteTextColorA                      = [35,132,67]/255;
 % siteTextColorA                      = [0,0,0];
 % siteTextColorA                      = [178,24,43]/255;
@@ -66,8 +66,8 @@ wamVars                             = [wamVarsInit{:}];
 % Delta and Scale values
 siteDeltas                          = cellfun( @(site) site.delta,siteCell(validSitesIdx));
 siteScales                          = cellfun( @(site) site.scale,siteCell(validSitesIdx));
-siteDeltasRel                       = cellfun( @(site) 1-site.scale,siteCell(validSitesIdx));
-siteDeltasProz                      = cellfun( @(site) (1-site.scale)*100,siteCell(validSitesIdx));
+siteDeltasRel                       = cellfun( @(site) 1-site.scale^-1,siteCell(validSitesIdx));
+siteDeltasPercentages               = cellfun( @(site) (1-site.scale^-1)*100,siteCell(validSitesIdx));
 
 %% Prepare plotting data
 % Identify index of struct array for given wam-parameter (in case multiple parameter
@@ -176,7 +176,11 @@ for sci = 1:numel(insituVars)
         wamColors(sci,:) = cmFin(cfIdx,:);
     end
 end
-    
+
+%% Load colormap for visualization of statistics
+cmStatsStruct   = load(fullfile(cmPath,[cmStatsName '.mat']));
+cmStatsFN       = fieldnames(cmStatsStruct);
+cmStats         = cmStatsStruct.(cmStatsFN{1});
 
 % Initialize parameters
 [sitesWam, sitesInsitu, nearIdxWAM, nearIdxInsitu] = deal( zeros(length(validSitesIdx),1) );
@@ -275,15 +279,31 @@ switch plotType
         nexttile([3 1])
         hold on
         ax1 = gca;
-        % Spatial plot
+        %% Spatial plot
         plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
-        % Plot site indication
+        %% Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorInsitu,siteTextColorNoData,fsSites,siteScales)
-        % Set title
-        % title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
-        title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
-        % Plot statistics from insitu / Wam comparison (3 free tiles in tiled layout mandatory)
-        plt_insitu_wam_Statistics2(coastColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
+        %% Set title
+        title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM') ' (UTC)'],'FontSize',fsTitle,'Interpreter','latex')
+        %% Set infobox
+        plt_infoBox(ax1,input)
+        
+        %% Barplot Hs insitu/wam (black/white)
+        % Set Background color for statistics
+        backGroundColor = [1,1,1];
+        nexttile
+        plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars);
+
+        %% Absolute Differences
+        cmDeltas        = cmStats;
+        nexttile
+        % Y-Limits 
+        yLims           = [-0.5,0.5];
+        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,statType);
+        %% Relative Differences
+        yLimsPerc       = yLims*100;
+        nexttile    
+        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
         
 end
 

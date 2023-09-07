@@ -212,10 +212,22 @@ for si = 1:numel(vars2Import)
             endIdx      = ii * interpLim;
         end
         % Interpolate current data part
-        interpCell{ii} =                                  ...
-            interp3(rawParameters(si).latGrid,rawParameters(si).lonGrid,rawParameters(si).timeGrid,     ... % (Input: Y,X,Z)
-            rawParameters(si).raw,                                                                      ... % (Var2Interpolate)
-            interpParameters(si).latGrid(:,:,startIdx:endIdx),interpParameters(si).lonGrid(:,:,startIdx:endIdx),interpParameters(si).timeGrid(:,:,startIdx:endIdx));       % (Output: Y,X,Z)
+        % InputParameters
+        inputX = rawParameters(si).latGrid;
+        inputY = rawParameters(si).lonGrid;
+        inputZ = rawParameters(si).timeGrid;
+        inputVar = rawParameters(si).raw;
+        % OutputParameters
+        outputX = interpParameters(si).latGrid(:,:,startIdx:endIdx);
+        outputY = interpParameters(si).lonGrid(:,:,startIdx:endIdx);
+        outputZ = interpParameters(si).timeGrid(:,:,startIdx:endIdx);
+
+        interpCell{ii} = interp3(inputX, inputY, inputZ, inputVar, outputX, outputY, outputZ);
+
+        % interpCell{ii} =                                  ...
+            % interp3(rawParameters(si).latGrid,rawParameters(si).lonGrid,rawParameters(si).timeGrid,     ... % (Input: Y,X,Z)
+            % rawParameters(si).raw,                                                                      ... % (Var2Interpolate)
+            % interpParameters(si).latGrid(:,:,startIdx:endIdx),interpParameters(si).lonGrid(:,:,startIdx:endIdx),interpParameters(si).timeGrid(:,:,startIdx:endIdx));       % (Output: Y,X,Z)
 
     end
 

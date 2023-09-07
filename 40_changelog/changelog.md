@@ -18,9 +18,18 @@ _Visualization:_
 - Added scientific colormaps (https://www.fabiocrameri.ch/colourmaps/) and option to flip colormaps upside down. New Default: lipari (flipped)
 - removed circles 'o' for site location
 - New default site indication color: Green. Grey if no data is available.
+- Added small infobox with creation time and title "Insitu adjusted DWD XWAM Forecast."
+- White Background for Barplots and Black/Grey bars for insitu/wam data
+- Lighter gray for coastal areas
+- Grey site indication if no data is available
+- yLimits for Hs barplot based on max value. Different intervals possible ([0,2], [0,4], [0,6], [0,8], [0,10])
 
 _Batch:_
-- Added f6 to choose colormaps
-- Added f7 to flip colormaps
-- Added f8,f9,f10 to set fontsize for axes, site indication and title (date)
+- Added f7,f8 to choose colormaps for spatial seastate plot and statistics
+- Added f9 to flip colormap for spatial plot
+- Added f10,f11,f12 to set fontsize for axes, site indication and title (date)
+- Added f3 to choose between heatmap/barplot for statistics visualization 
+
+_Scripts:_
+- New Script for log file evaluation: _evalLogFiles.m_
  
