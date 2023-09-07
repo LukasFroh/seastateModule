@@ -1,0 +1,35 @@
+**Version 1.01**
+
+_Bug fixes:_
+- fixed wamImport Bug _"Error using ncread
+Expected count to be positive."_ by implementing if-condition to increase timecount to 1 in case its 0.
+
+_Log File:_
+- Display UTC time 
+- Display which sensor is used for each site
+- Display mostRecentTime for each site
+
+_Data import:_
+- Timestamp for all insitu files describing mid of measuring time window. HIS and GPS data from dwr are timeshifted by -15min.
+- Time2eval is now additionally timeshifted by 15min to match adjusted dwr timestamps
+
+
+_Visualization:_
+- Added scientific colormaps (https://www.fabiocrameri.ch/colourmaps/) and option to flip colormaps upside down. New Default: lipari (flipped)
+- removed circles 'o' for site location
+- New default site indication color: Green. Grey if no data is available.
+- Added small infobox with creation time and title "Insitu adjusted DWD XWAM Forecast."
+- White Background for Barplots and Black/Grey bars for insitu/wam data
+- Lighter gray for coastal areas
+- Grey site indication if no data is available
+- yLimits for Hs barplot based on max value. Different intervals possible ([0,2], [0,4], [0,6], [0,8], [0,10])
+
+_Batch:_
+- Added f7,f8 to choose colormaps for spatial seastate plot and statistics
+- Added f9 to flip colormap for spatial plot
+- Added f10,f11,f12 to set fontsize for axes, site indication and title (date)
+- Added f3 to choose between heatmap/barplot for statistics visualization 
+
+_Scripts:_
+- New Script for log file evaluation: _evalLogFiles.m_
+ 
