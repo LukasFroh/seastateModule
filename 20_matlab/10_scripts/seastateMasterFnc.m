@@ -10,7 +10,7 @@ function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, sit
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...               % Spatial settings
     gshhgInputFile, ...                                                                         % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
-    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
+    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
     timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
 
 tic
@@ -46,6 +46,7 @@ eval(['GSHHG.filename = char(' gshhgInputFile ');'])
 figRes                  = str2double(figRes);
 timeShift               = str2double(timeShift);
 eval(['cmName = char(' cmName ');'])
+eval(['cmStatsName = char(' cmStatsName ');'])
 input.fsAxis            = str2double(fsAxis);                   % Font size axes object
 input.fsSites           = str2double(fsSites);                  % Font size site text
 input.fsTitle           = str2double(fsTitle);                  % Font size title
@@ -75,6 +76,7 @@ input.timestep          = minutes(120);
 input.time2Eval         = tNowShifted;
 input.timeThresh        = 120;
 input.interpMethod      = 'linear';
+input.timeNow           = tNow;
 
 %% :::::::::| Initialize log file |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 logFileName             = strcat(datestr(tNowShifted,'yyyy_mm_dd_HH_MM_SS'),'_log.out');
@@ -154,8 +156,9 @@ spatialData         = OR_ScaleWAMdata(spatialData,var2ScaleWam);
 % Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType>
 disp('Chosen plotting options:')
 disp(['Plot type: <', pltType, '>'])
+disp(['Statistic type: <', statType '>'])
 disp(['Parameter range: <', cbType, '>'])
-[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(paths,input,GSHHG,spatialData,siteData,pltType,cbType,gridType,paths.cmPath,cmName,cmFlip);
+[lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,statType,cbType,gridType,paths.cmPath,cmName,cmStatsName,cmFlip);
 
 % Safe figure
 figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];

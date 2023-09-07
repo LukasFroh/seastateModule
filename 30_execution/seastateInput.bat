@@ -53,8 +53,8 @@ SET i8=6.1736112
 :: Maximum longitude limit (Default values | CWAM: 8.9930553, EWAM: 9)
 SET i9=8.9930553
 ::SET i9=9
-:: Resolution Longitude vector (Default values | CWAM: 204, EWAM: 36)
-SET i10=204
+:: Resolution Longitude vector (Default values | CWAM: 203, EWAM: 36)
+SET i10=203
 ::SET i10=36
 :: Resolution Latitude vector (Default values | CWAM: 240, EWAM: 41)
 SET i11=240
@@ -78,22 +78,26 @@ Set s3=1
 SET f1=fixed
 :: Choose plot type between: <'wam'> (only WAM), <'adj'> (only adjusted)', <'both'>, <'wamInfo'>, <'adjInfo'> (default: adjInfo)
 SET f2=adjInfo
+:: Choose type for visualizing absolute/relative deviation. Choose between <'heatmap'> and <'barplot'>
+SET f3=heatmap
 :: Choose figure resolution (dpi)
-SET f3=150
+SET f4=150
 :: Choose figure type (only Image, vector output not yet included)
-SET f4=.png
+SET f5=.png
 :: Visualisation of lat/lon grid. Choose between <on> and <off>
-SET f5=on
-:: Choose sequential "scientific colormap" by Fabio Crameri, https://www.fabiocrameri.ch/colourmaps/
-SET f6={'lipari'}
+SET f6=on
+:: Choose sequential "scientific colormap" for seastate map visualization by Fabio Crameri, https://www.fabiocrameri.ch/colourmaps/
+SET f7={'lipari'}
+:: Choose diverging "scientific colormap" for statistics visualization by Fabio Crameri, https://www.fabiocrameri.ch/colourmaps/
+Set f8={'bam'}
 :: Flip colormap order upside down? Choose between <flip> and <noFlip>
-SET f7=flip
+SET f9=flip
 :: Set general fontsize of axes object (ticks, ticklabel, x- & y-label)
-Set f8=20
+Set f10=18
 :: Set fontsize for site text at each location in plot, respectively
-Set f9=15
+Set f11=15
 :: Set fontsize for plot title (date)
-Set f10=40
+Set f12=40
 
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
@@ -103,4 +107,4 @@ SET l1="24"
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
-.\seastateModule_v1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%l1%" > batchLog.txt
+.\seastateModule_v1_1.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%f11%" "%f12%" "%l1%" > batchLog.txt

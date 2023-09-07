@@ -2,6 +2,7 @@ function ax = plt_siteDeltasAbsolute(backGroundColor,cm,fsAxis,validSiteNames,si
 
 %% ------ Colormap settings -----
 nColors                                         = 11;
+fsTitle                                         = fsAxis + 5;
 cmAdj                                           = cm(round(linspace(1,size(cm,1),nColors)),:);
 % Grid color barplot
 gridColor                                       = [0,0,0];
@@ -18,7 +19,6 @@ if strcmpi(plotType,'heatmap')
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
     h.Title                                         = 'Absolute Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
-
     %% ------ Axes settings ------
     warning off
     axs                                             = struct(gca);
@@ -30,6 +30,7 @@ if strcmpi(plotType,'heatmap')
     axs.NodeChildren(3).Title.Interpreter           = 'latex';
     axs.NodeChildren(2).TickLabelInterpreter        = 'latex';
     axs.NodeChildren(1).TickLabelInterpreter        = 'latex';
+    axs.Axes.Title.FontSize                         = fsAxis + 5;
     clim(yLims)
 
     pause(0.01)
@@ -54,6 +55,7 @@ elseif strcmpi(plotType,'barplot')
     ax.YAxis.TickLabelInterpreter               = 'latex';
     ax.TickDir                                  = 'none';
     ax.Title.String                             = 'Absolute Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
+    ax.Title.FontSize                           = fsTitle;
     % Array CM <-> deltaLims
     cmDelta                                     = linspace(yLims(1),yLims(end),size(cmAdj,1))';
     cmDeltaLength                               = numel(cmDelta);

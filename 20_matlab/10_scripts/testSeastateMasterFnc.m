@@ -25,8 +25,8 @@ if strcmp(wamModel2Eval,'cwam')
     latLimMax       = "55.2458344";
     lonLimMin       = "6.1736112";
     lonLimMax       = "8.9930553";
-    rasterSizeLat   = "204";
-    rasterSizeLon   = "240";
+    rasterSizeLat   = "240";
+    rasterSizeLon   = "203";
 elseif strcmp(wamModel2Eval,'ewam')
     site2Imp        = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO','BO1'}");
     latLimMin       = "53.25";
@@ -43,15 +43,17 @@ var2ScaleWam        = char("{'sign_whight'}");
 interpLineLength    = "1";
 cbType              = 'fixed';
 pltType             = 'adjInfo';
+statType            = 'heatmap';
 figRes              = "150";
 figType             = '.png';
 cmName              = char("{'lipari'}");
+cmStatsName         = char("{'bam'}");
 cmFlip              = 'flip';
 gridType            = 'on';
 fsAxis              = "18";                  % Font size axes object
 fsSites             = "15";                  % Font size site text
 fsTitle             = "40";                  % Font size title
-timeShift           = "15";
+timeShift           = "24";
 
 %% execution
 % Add path to functions
@@ -64,5 +66,5 @@ seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverview
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...               % Spatial settings
     gshhgInputFile, ...                                                                         % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
-    cbType, pltType, figRes, figType, gridType, cmName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
+    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
     timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)

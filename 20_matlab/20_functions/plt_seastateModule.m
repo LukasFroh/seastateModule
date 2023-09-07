@@ -1,4 +1,4 @@
-function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(paths,input,GSHHG,spatialData,siteData,plotType,cbType,gridType,cmPath,cmName,cmFlip)
+function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input,GSHHG,spatialData,siteData,plotType,statType,cbType,gridType,cmPath,cmName,cmStatsName,cmFlip)
 %% :::::::::| Description |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Function to create adjusted seastate overview maps based on wam and insitu data
 % Only for one timestep possible, video creation disabled
@@ -13,7 +13,7 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(paths
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 % Add paths
-addpath(genpath(paths.cmPath))
+% addpath(genpath(paths.cmPath))
 % Open figure and suppress graphical output
 fig1                                = figure('visible','off');
 % fig1                                = figure('visible','on');
@@ -176,7 +176,11 @@ for sci = 1:numel(insituVars)
         wamColors(sci,:) = cmFin(cfIdx,:);
     end
 end
-    
+
+%% Load colormap for visualization of statistics
+cmStatsStruct   = load(fullfile(cmPath,[cmStatsName '.mat']));
+cmStatsFN       = fieldnames(cmStatsStruct);
+cmStats         = cmStatsStruct.(cmStatsFN{1});
 
 % Initialize parameters
 [sitesWam, sitesInsitu, nearIdxWAM, nearIdxInsitu] = deal( zeros(length(validSitesIdx),1) );
@@ -280,7 +284,10 @@ switch plotType
         %% Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorInsitu,siteTextColorNoData,fsSites,siteScales)
         %% Set title
-        title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle,'Interpreter','latex')
+        title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM') ' (UTC)'],'FontSize',fsTitle,'Interpreter','latex')
+        %% Set infobox
+        plt_infoBox(ax1,input)
+        
         %% Barplot Hs insitu/wam (black/white)
         % Set Background color for statistics
         backGroundColor = [1,1,1];
@@ -288,18 +295,15 @@ switch plotType
         plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars);
 
         %% Absolute Differences
-        load bam.mat
-        cmDeltas        = bam;
+        cmDeltas        = cmStats;
         nexttile
         % Y-Limits 
         yLims           = [-0.5,0.5];
-        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,'barplot');
+        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,statType);
         %% Relative Differences
         yLimsPerc       = yLims*100;
         nexttile    
-        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,'barplot');
-        % plt_insitu_wam_Statistics3(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors,textColorInsitu);
-        % plt_insitu_wam_Statistics2(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars,siteDeltas,siteDeltasProz,wamColors,insituColors);
+        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
         
 end
 
