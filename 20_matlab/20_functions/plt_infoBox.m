@@ -15,7 +15,7 @@ str2Plot    = {['Insitu data adjusted ' wamModel ' Forecast'], ['Generated at ' 
 a           = annotation('textbox',[figPosX + startWidth figPosY finWidth figHeight/20],'String', str2Plot,'FitBoxToText','on','BackgroundColor',[0.25,0.25,0.25],'EdgeColor',[.1,.1,.1],'Color',[1,1,1],'FontSize',legFS);
 % Set textbox position to bottom left corner
 % Pause mandatory, since axes need update due to heatmap plots
-pause(0.2)
+pause(0.5)
 a.Position(1) = ax.Position(1) + ax.Position(3) - a.Position(3);
 a.Position(2) = ax.Position(2);
 
