@@ -35,13 +35,13 @@ for i = 1:numel(input.site2imp)
                 data(i).dwr = struct;
             end
             % Create fileList for his data
-           [data(i).dwr.hisFileList] = imp_createFileList(currDataPath,'*HIS*');
+            [data(i).dwr.hisFileList] = imp_createFileList(currDataPath,'*HIS*');
             % Import, clean and interpolate data
             [data(i).dwr.hisRaw, data(i).dwr.hisCleaned, data(i).finalSensorTT.('dwrHIS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hisFileList,paths.headerPath,input);
             % Increase counter
-           mrtCounter = mrtCounter + 1;
-           latestTime(mrtCounter) = data(i).dwr.hisRaw.Time(end);
+            mrtCounter = mrtCounter + 1;
+            latestTime(mrtCounter) = data(i).dwr.hisRaw.Time(end);
         end
 
         % HIW Data
@@ -52,7 +52,7 @@ for i = 1:numel(input.site2imp)
             end
             % Create fileList for hiw data
             [data(i).dwr.hiwFileList] = imp_createFileList(currDataPath,'*HIW*');
-                        % Import, clean and interpolate data
+            % Import, clean and interpolate data
             [data(i).dwr.hiwRaw, data(i).dwr.hiwCleaned, data(i).finalSensorTT.('dwrHIW')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hiwFileList,paths.headerPath,input);
             % % Increase counter
@@ -130,10 +130,24 @@ for ii = 1:numel(input.site2imp)
     cS = data(ii).chosenSensor;
     % For dwr sensors
     if strcmpi(cS,'dwr')
-        data(ii).timeMostRecent = data(ii).(cS).('hisCleaned').Time(end);
-    % For radac and radacSingle
+        % Current cleaned dataset without nan values
+        seastateVarIdx              = find(ismember(data(ii).(cS).('hisCleaned').Properties.VariableNames,input.seastateVars2Eval));
+        currWOnanIdx                = find(all(~isnan(data(ii).(cS).('hisCleaned'){:,seastateVarIdx}),2));
+        if ~isempty(currWOnanIdx)
+            data(ii).timeMostRecent = data(ii).(cS).('hisCleaned').Time(currWOnanIdx(end));
+        else
+            data(ii).timeMostRecent = data(ii).(cS).('hisCleaned').Time(end);
+        end
+        % For radac and radacSingle
     else
-        data(ii).timeMostRecent = data(ii).(cS).('cleaned').Time(end);
+        % Current cleaned dataset without nan values
+        seastateVarIdx              = find(ismember(data(ii).(cS).('cleaned').Properties.VariableNames,input.seastateVars2Eval));
+        currWOnanIdx                = find(all(~isnan(data(ii).(cS).('cleaned'){:,seastateVarIdx}),2));
+        if ~isempty(currWOnanIdx)
+            data(ii).timeMostRecent = data(ii).(cS).('cleaned').Time(currWOnanIdx(end));
+        else
+            data(ii).timeMostRecent = data(ii).(cS).('cleaned').Time(end);
+        end
     end
 
 end
