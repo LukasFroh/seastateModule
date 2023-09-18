@@ -16,9 +16,9 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 % addpath(genpath(paths.cmPath))
 % Open figure and suppress graphical output
 fig1                                = figure('visible','off');
+% fig1                                = figure('visible','on');
 % Maximize figure
 set(gcf,'units','normalized','outerposition',[0 0 1 1])
-% fig1                                = figure('visible','on');
 
 % inpaint_nans function interpoaltes & extrapolates nan elements in 2d array
 % Method <5>: Average of the 8 nearest neighbours to any element
@@ -287,9 +287,7 @@ switch plotType
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorInsitu,siteTextColorNoData,fsSites,siteScales)
         %% Set title
         title([datestr(input.time2Eval,'yyyy-mm-dd HH:MM') ' (UTC)'],'FontSize',fsTitle,'Interpreter','latex')
-        %% Set infobox
-        plt_infoBox(ax1,input)
-        
+
         %% Barplot Hs insitu/wam (black/white)
         % Set Background color for statistics
         backGroundColor = [1,1,1];
@@ -306,9 +304,10 @@ switch plotType
         yLimsPerc       = yLims*100;
         nexttile    
         plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
-        
-end
+        %% Set infobox
+        [~] = plt_infoBox(ax1,input);
 
+end
 
 
 end

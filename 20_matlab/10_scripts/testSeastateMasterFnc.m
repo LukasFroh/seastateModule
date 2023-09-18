@@ -3,6 +3,10 @@
 clear,clc,close all
 restoredefaultpath
 
+for ti = 24
+
+
+
 % dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\00_NewStructure\'}");
 dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");
 headerPath          = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}");
@@ -11,6 +15,7 @@ wamDataPath         = char("{'D:\OpenRAVE_DWD_WAM_Forecast\'}");
 siteOverviewPath    = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\30_siteOverview\'}");
 logPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\10_logs'}");
 figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\20_figures'}");
+% figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\40_testFigures'}");
 expDataPath         = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}");
 cmPath              = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps'}");
 seastateVars2Eval   = char("{'VHM0'}");
@@ -53,7 +58,8 @@ gridType            = 'on';
 fsAxis              = "18";                  % Font size axes object
 fsSites             = "15";                  % Font size site text
 fsTitle             = "40";                  % Font size title
-timeShift           = "24";
+% timeShift           = "24";
+timeShift           = string(ti);
 
 %% execution
 % Add path to functions
@@ -68,3 +74,5 @@ seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverview
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
     cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
     timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
+
+end
