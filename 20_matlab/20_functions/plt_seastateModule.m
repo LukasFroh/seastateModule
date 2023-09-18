@@ -16,6 +16,8 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 % addpath(genpath(paths.cmPath))
 % Open figure and suppress graphical output
 fig1                                = figure('visible','off');
+% Maximize figure
+set(gcf,'units','normalized','outerposition',[0 0 1 1])
 % fig1                                = figure('visible','on');
 
 % inpaint_nans function interpoaltes & extrapolates nan elements in 2d array
@@ -307,7 +309,6 @@ switch plotType
         
 end
 
-    % Maximize figure
-    set(gcf,'units','normalized','outerposition',[0 0 1 1])
+
 
 end
