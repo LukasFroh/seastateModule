@@ -6,7 +6,9 @@ nTicks  = 5;
 fsTitle = fsAxis + 5;
 
 
-if maxVar < 2
+if maxVar < 1
+    varYTicks = linspace(0,1,nTicks);
+elseif maxVar >= 1 && maxVar < 2
     varYTicks = linspace(0,2,nTicks);
 elseif maxVar >= 2 && maxVar < 4
     varYTicks = linspace(0,4,nTicks);
