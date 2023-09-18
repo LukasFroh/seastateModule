@@ -18,7 +18,7 @@ if strcmpi(plotType,'heatmap')
     h.FontSize                                      = fsAxis;
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
-    h.Title                                         = 'Absolute Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
+    h.Title                                         = 'Absolute Deviation: $Hs_{insitu}$ - $Hs_{wam}$ [m]';
     %% ------ Axes settings ------
     warning off
     axs                                             = struct(gca);
@@ -54,7 +54,7 @@ elseif strcmpi(plotType,'barplot')
     ax.YLabel.Interpreter                       = 'latex';
     ax.YAxis.TickLabelInterpreter               = 'latex';
     ax.TickDir                                  = 'none';
-    ax.Title.String                             = 'Absolute Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
+    ax.Title.String                             = 'Absolute Deviation: $Hs_{insitu}$ - $Hs_{wam}$ [m]';
     ax.Title.FontSize                           = fsTitle;
     % Array CM <-> deltaLims
     cmDelta                                     = linspace(yLims(1),yLims(end),size(cmAdj,1))';

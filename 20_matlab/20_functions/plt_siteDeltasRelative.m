@@ -19,7 +19,7 @@ if strcmpi(plotType,'heatmap')
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
     % h.Title                                         = 'Relative Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
-    h.Title                                         =  ['Relative Deviation $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
+    h.Title                                         =  ['Relative Deviation: $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
 
     %% ------ Axes settings ------
     warning off
@@ -56,7 +56,7 @@ elseif strcmpi(plotType,'barplot')
     ax.YLabel.Interpreter                       = 'latex';
     ax.YAxis.TickLabelInterpreter               = 'latex';
     ax.TickDir                                  = 'none';
-    ax.Title.String                             = ['Relative Deviation $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
+    ax.Title.String                             = ['Relative Deviation: $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
     ax.Title.FontSize                           = fsTitle;
     % Array CM <-> deltaLims
     cmDelta                                     = linspace(yLims(1),yLims(end),size(cmAdj,1))';
