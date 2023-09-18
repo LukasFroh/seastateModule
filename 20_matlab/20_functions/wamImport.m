@@ -98,22 +98,52 @@ end
 % Identify unique time indexes for different wam datasets
 for k = 1: numel(fileList)
 
-    if k == 1
+    % If there is only one file in fileList
+    if k == 1 && k == numel(fileList)
         [~,fileList(k).importTimeIdx(1)]                         = min(abs(fileList(k).wamTimeNum - date_in) );
 
         if fileList(k).importTimeIdx(1) > 1
-            fileList(k).importTimeIdx(1)                         = fileList(k).importTimeIdx(1) -1;
+            fileList(k).importTimeIdx(1)                         = fileList(k).importTimeIdx(1) - 1;
+        end
+
+        [~,fileList(k).importTimeIdx(2)]                         = min(abs(fileList(k).wamTimeNum - date_out) );
+        if fileList(k).importTimeIdx(2) < numel(fileList(k).wamTimeNum)
+            fileList(k).importTimeIdx(2)                        = fileList(k).importTimeIdx(2) + 1;
         end
 
     end
 
-    if k > 1
-        [~,fileList(k-1).importTimeIdx(2)]                       = min(abs(fileList(k-1).wamTimeNum - fileList(k).wamTimeNum(1) ) );
-        fileList(k-1).importTimeIdx(2)                           = fileList(k-1).importTimeIdx(2) - 1;
-        fileList(k).importTimeIdx(1)                             = 1;
+    % If there are multiple files in fileList and k == 1
+    if k == 1 && ~(k == numel(fileList))
+        [~,fileList(k).importTimeIdx(1)]                         = min(abs(fileList(k).wamTimeNum - date_in) );
+
+        % Identify if nearest indx of timestep is equal to first timestep of next file
+        [~,nearestInNextK]                                       = min(abs(fileList(k).wamTimeNum - fileList(k+1).wamTimeNum(1)) );
+
+        if isequal(fileList(k).wamTimeNum(nearestInNextK), fileList(k+1).wamTimeNum(1))
+            fileList(k).importTimeIdx(1)                        = fileList(k).importTimeIdx(1) - 2;
+            fileList(k).importTimeIdx(2)                        = nearestInNextK - 1;
+        else
+            fileList(k).importTimeIdx(1)                        = fileList(k).importTimeIdx(1) - 1;
+            fileList(k).importTimeIdx(2)                        = nearestInNextK;
+        end
+
+        if fileList(k).importTimeIdx(1) < 1
+            fileList(k).importTimeIdx(1)                         = 1;
+            fileList(k).importTimeIdx(1)                         = 1;
+        end
+
     end
 
-    if k == numel(fileList)
+    % If there are multiple files in fileList and k is >1 and not last file
+    if k > 1 && ~(k == numel(fileList))
+        fileList(k).importTimeIdx(1)                             = 1;
+        fileList(k).importTimeIdx(2)                             = min(abs(fileList(k).wamTimeNum - fileList(k+1).wamTimeNum(1)) );
+    end
+
+    % If there are multiple files in fileList and k is >1 and last file
+    if k > 1 && k == numel(fileList)
+        fileList(k).importTimeIdx(1)                             = 1;
         [~,fileList(k).importTimeIdx(2)]                         = min(abs(fileList(k).wamTimeNum - date_out ) );
 
         if fileList(k).importTimeIdx(2) < numel(fileList(k).wamTimeNum)
