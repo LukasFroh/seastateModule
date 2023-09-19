@@ -96,32 +96,43 @@ fileTimesMR             = [siteData(:).timeMostRecent];
 mostRecentTime          = max(fileTimesMR);
 disp(['Current time (UTC): ' datestr(tNow,'yyyy-mm-dd HH:MM:SS')])
 disp(['Seastate map creation for UTC time: ',datestr(tNowShifted,'yyyy-mm-dd HH:MM:SS')])
-timeGap             = mostRecentTime - tNowShifted;
+% Display which WAM model is used
+disp(['Chosen numerical forecast model: ' upper(input.wamModel2Eval) ])
+timeGap                 = mostRecentTime - tNowShifted;
 
 % Display which insitu sites are considered
-disp('Following insitu sites are considered:')
+disp([newline 'Following insitu sites are considered:'])
 disp(input.site2imp)
-disp('No data available for sites:')
-disp(input.site2imp(fileTimesMR < tNowShifted))
+notValidIdx = isnat(fileTimesMR) | fileTimesMR < tNowShifted;
+if any(notValidIdx)
+    disp('No valid data available for sites:')
+    disp(input.site2imp(notValidIdx))
+    disp('')
+else
+    disp('Valid data for all sites available.')
+    disp('')
+end
 
-
-disp(['Time to most recent insitu files: '])
 % Display most recent times for each site
+disp(['Time to most recent insitu files: '])
+
 for mri = 1:numel(siteData)
     currSite    = siteData(mri).name;
     currSensor  = siteData(mri).chosenSensor;
     currMRT     = siteData(mri).timeMostRecent;
-    disp([currSite{:} ' (' currSensor '): ' datestr(currMRT,'yyyy-mm-dd HH:MM:SS') ' --> Diff. to time2Eval: ' num2str( minutes(currMRT-tNowShifted) ) ' Minutes.'])
-end
 
+    if isnat(currMRT)
+        disp([currSite{:} ' (' currSensor '): No data available.'])
+    else
+        disp([currSite{:} ' (' currSensor '): ' datestr(currMRT,'yyyy-mm-dd HH:MM:SS') ' --> Diff. to time2Eval: ' num2str( minutes(currMRT-tNowShifted) ) ' Minutes.'])
+    end
+
+end
 
 % Stop script and give error message in case now seastate data is available for the last 30 minutes
 if timeGap < -duration(minutes(30))
     error(['Execution stopped. No insitu seastate data for the last 30 minutes available. Time to most recent insitu files: ' num2str(hours(timeGap)) 'h.' ])
 end
-
-% Display which WAM model is used
-disp(['Chosen numerical forecast model: ' upper(input.wamModel2Eval) ])
 
 %% :::::::::| Import GSHHG data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Load already imported GSHHG struct:
@@ -153,11 +164,14 @@ spatialData         = OR_CalculateScaleMatrix(spatialData,siteData,GSHHG);
 spatialData         = OR_ScaleWAMdata(spatialData,var2ScaleWam);
 
 %% :::::::::| Plot Seastate |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-% Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType>
-disp('Chosen plotting options:')
+% Display plotting settings
+disp([newline 'Chosen plotting settings:'])
 disp(['Plot type: <', pltType, '>'])
 disp(['Statistic type: <', statType '>'])
 disp(['Parameter range: <', cbType, '>'])
+
+
+% Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType> 
 [lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,statType,cbType,gridType,paths.cmPath,cmName,cmStatsName,cmFlip);
 
 % Safe figure
@@ -167,19 +181,20 @@ exportgraphics(gcf,fullfile(paths.figPath,figName),'Resolution',figRes)
 
 %% :::::::::| Save output |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Export adjusted spatial data
-expData.date = input.time2Eval;
-expData.lonGrid = lonGrid;
-expData.latGrid = latGrid;
-expData.adjVarGrid = adjVarGrid;
-
-expFileName = [datestr(input.time2Eval,'yyyymmdd_HHMM'),'_data.mat'];
+expData.date        = input.time2Eval;
+expData.lonGrid     = lonGrid;
+expData.latGrid     = latGrid;
+expData.adjVarGrid  = adjVarGrid;
+% Filename for export .mat file
+expFileName         = [datestr(input.time2Eval,'yyyymmdd_HHMM'),'_data.mat'];
 save(fullfile(paths.expDataPath,expFileName),"expData")
-disp(['File <', expFileName, '> exported.'])
+
+disp([newline 'File <', expFileName, '> exported.'])
 
 close all
 
-% End time tracking
-toc
+% Stop time tracking
+disp(['Execution time: ' num2str(round(toc,2)) 's.'])
 
 diary off
 
