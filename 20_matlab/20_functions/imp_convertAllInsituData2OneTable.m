@@ -17,15 +17,18 @@ for iField = 1:numel(sites)
 
         % Get all data names in current final live data struct
         try
-            currFields                                          = fieldnames(siteDataIn(iField).(finalSensorStructName));
+            currFields                                              = fieldnames(siteDataIn(iField).(finalSensorStructName));
             % Set dwr > radac > radacSingle priority when creating the final timetable an
-            if ismember('dwrHIS',currFields) && ismember('dwrHIW',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS')) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIW'))
+            % if ismember('dwrHIS',currFields) && ismember('dwrHIW',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS')) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIW'))
+            if ismember('dwrHIS',currFields) && ismember('dwrHIW',currFields) 
                 siteDataOut(iField).(finalTTName)                   = [siteDataIn(iField).(finalSensorStructName).('dwrHIS'), siteDataIn(iField).(finalSensorStructName).('dwrHIW')];
                 siteDataOut(iField).('chosenSensor')                = 'dwr';
-            elseif ismember('dwrHIS',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS'))
+            % elseif ismember('dwrHIS',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('dwrHIS'))
+            elseif ismember('dwrHIS',currFields) 
                 siteDataOut(iField).(finalTTName)                   = [siteDataIn(iField).(finalSensorStructName).('dwrHIS')];
                 siteDataOut(iField).('chosenSensor')                = 'dwr';
-            elseif ismember('radac',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('radac'))
+            % elseif ismember('radac',currFields) && ~isempty(siteDataIn(iField).(finalSensorStructName).('radac'))
+            elseif ismember('radac',currFields)
                 siteDataOut(iField).(finalTTName)                   = siteDataIn(iField).(finalSensorStructName).('radac');
                 siteDataOut(iField).('chosenSensor')                = 'radac';
             elseif ismember('radacSingle',currFields) && ~ismember('dwrHIS',currFields) && ~ismember('radac',currFields)

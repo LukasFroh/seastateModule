@@ -3,8 +3,6 @@ function [data] = imp_importMasterFunc(paths,input,bools)
 % Initialize struct
 data                    = struct('name',{},'lat',{},'lon',{},'depth',{},'time',{},'dwr',{},'radac',{},'radacSingle',{},'finalSensorTT',{});
 
-% Counter for most recent time (mrt)
-mrtCounter              = 0;
 %% --- Loop over all sites ------------------------------------------
 
 for i = 1:numel(input.site2imp)
@@ -39,9 +37,6 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).dwr.hisRaw, data(i).dwr.hisCleaned, data(i).finalSensorTT.('dwrHIS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hisFileList,paths.headerPath,input);
-            % Increase counter
-            mrtCounter = mrtCounter + 1;
-            latestTime(mrtCounter) = data(i).dwr.hisRaw.Time(end);
         end
 
         % HIW Data
@@ -55,9 +50,6 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).dwr.hiwRaw, data(i).dwr.hiwCleaned, data(i).finalSensorTT.('dwrHIW')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.hiwFileList,paths.headerPath,input);
-            % % Increase counter
-            % mrtCounter = mrtCounter + 1;
-            % latestTime(mrtCounter) = data(i).dwr.hiwRaw.Time(end);
         end
 
         % GPS Data
@@ -71,9 +63,6 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).dwr.gpsRaw, data(i).dwr.gpsCleaned, data(i).finalSensorTT.('dwrGPS')] = ...
                 imp_importCleanInterpSeastateData(data(i).dwr.gpsFileList,paths.headerPath,input);
-            % % Increase counter
-            % mrtCounter = mrtCounter + 1;
-            % latestTime(mrtCounter) = data(i).dwr.gpsRaw.Time(end);
         end
     end
 
@@ -87,9 +76,6 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).radac.raw, data(i).radac.cleaned, data(i).finalSensorTT.('radac')] = ...
                 imp_importCleanInterpSeastateData(data(i).radac.fileList,paths.headerPath,input);
-            % Increase counter
-            % mrtCounter = mrtCounter + 1;
-            % latestTime(mrtCounter) = data(i).radac.raw.Time(end);
         end
     end
 
@@ -103,17 +89,8 @@ for i = 1:numel(input.site2imp)
             % Import, clean and interpolate data
             [data(i).radacSingle.raw, data(i).radacSingle.cleaned, data(i).finalSensorTT.('radacSingle')] = ...
                 imp_importCleanInterpSeastateData(data(i).radacSingle.fileList,paths.headerPath,input);
-            % Increase counter
-            % mrtCounter = mrtCounter + 1;
-            % latestTime(mrtCounter) = data(i).radacSingle.raw.Time(end);
         end
     end
-
-    % % Set most recent time
-    % data(i).timeMostRecent = max(latestTime);
-    % clear latestTime
-    % mrtCounter = 0;
-
 end
 
 
@@ -130,6 +107,13 @@ for ii = 1:numel(input.site2imp)
     cS = data(ii).chosenSensor;
     % For dwr sensors
     if strcmpi(cS,'dwr')
+        
+        % If no data is imported, set timeMostRecent to not a time NaT
+        if isempty(data(ii).(cS).('hisCleaned'))
+            data(ii).timeMostRecent = datetime(NaT,"TimeZone","UTC");
+            continue
+        end
+
         % Current cleaned dataset without nan values
         seastateVarIdx              = find(ismember(data(ii).(cS).('hisCleaned').Properties.VariableNames,input.seastateVars2Eval));
         currWOnanIdx                = find(all(~isnan(data(ii).(cS).('hisCleaned'){:,seastateVarIdx}),2));
@@ -140,6 +124,13 @@ for ii = 1:numel(input.site2imp)
         end
         % For radac and radacSingle
     else
+
+        % If no data is imported, set timeMostRecent to not a time NaT
+        if isempty(data(ii).(cS).('cleaned'))
+            data(ii).timeMostRecent = datetime(NaT,"TimeZone","UTC");
+            continue
+        end
+
         % Current cleaned dataset without nan values
         seastateVarIdx              = find(ismember(data(ii).(cS).('cleaned').Properties.VariableNames,input.seastateVars2Eval));
         currWOnanIdx                = find(all(~isnan(data(ii).(cS).('cleaned'){:,seastateVarIdx}),2));
