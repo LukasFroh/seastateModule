@@ -10,9 +10,8 @@ FS = 20;
 nColors = 15;
 
 % Load colormap
+addpath(cmPath)
 load vik.mat
-
-
 
 warning off
 
@@ -59,6 +58,11 @@ for i = 1:numel(logDateien)
             delta = str2double(minutesStr(strStart:strEnd));
             timeDelta.([site,'_Sensor']){i} = sensor;
             timeDelta.([site,'_Delta'])(i) = delta;
+        elseif contains(zeile,'No data available.')
+            [siteStr, minutesStr] = strtok(zeile, ':');
+            [site,sensor] = strtok(siteStr,' ');
+            timeDelta.([site,'_Sensor']){i} = sensor;
+            timeDelta.([site,'_Delta'])(i) = NaN;
         end
 
        
@@ -66,7 +70,6 @@ for i = 1:numel(logDateien)
     
     % Close log file
     fclose(logDatei);
-   
  
 end
 
