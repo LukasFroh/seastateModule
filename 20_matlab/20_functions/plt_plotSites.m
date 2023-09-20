@@ -14,9 +14,9 @@ for i = 1:numel(validSitesIdx)
     end
 
     if isnan(siteScales(i))
-        scatter(lon(i),lat(i),siteMarkerSize,siteTextColorNoData,'x','LineWidth',1)                               % Marker I 
+        scatter(lon(i),lat(i),siteMarkerSize,siteTextColorNoData(i,:),'x','LineWidth',1)                               % Marker I 
         % scatter(lon(i),lat(i),siteMarkerSize,siteTextColor,'o','LineWidth',1)                             % Marker II
-        text(lon(i)+horizDispl,lat(i),['$\it{' names{i} '}$'],'FontSize',fsAxis,'Color',siteTextColorNoData,'FontWeight','bold','Interpreter','latex')  % Site text
+        text(lon(i)+horizDispl,lat(i),['$\it{' names{i} '}$'],'FontSize',fsAxis,'Color',siteTextColorNoData(i,:),'FontWeight','bold','Interpreter','latex')  % Site text
     else
         scatter(lon(i),lat(i),siteMarkerSize,siteTextColor(i,:),'x','LineWidth',1)                               % Marker I 
         % scatter(lon(i),lat(i),siteMarkerSize,siteTextColor,'o','LineWidth',1)                             % Marker II
