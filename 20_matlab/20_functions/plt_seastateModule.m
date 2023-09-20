@@ -31,11 +31,13 @@ fig1.Color                          = [1,1,1];
 edgeColor                           = [0,0,0];
 coastColor                          = [0.65, 0.65, 0.65];
 siteTextColorA                      = [35,132,67]/255;
+% siteTextColorA                      = [166,217,106]/255;
 % siteTextColorA                      = [0,0,0];
 % siteTextColorA                      = [178,24,43]/255;
 % siteTextColorB                      = [1,1,1];
-siteTextColorB                      = [35,132,67]/255;
-siteTextColorNoData                 = [0.4,0.4,0.4];
+siteTextColorB                      = [166,217,106]/255;
+siteTextColorNoDataA                = [0.4,0.4,0.4];
+siteTextColorNoDataB                = [0.8,0.8,0.8];
 siteMarkerSize                      = 50;
 % Fontsize axis 
 fsAxis                              = input.fsAxis;
@@ -186,7 +188,7 @@ cmStats         = cmStatsStruct.(cmStatsFN{1});
 
 % Initialize parameters
 [sitesWam, sitesInsitu, nearIdxWAM, nearIdxInsitu] = deal( zeros(length(validSitesIdx),1) );
-[textColorWAM,textColorInsitu] = deal( zeros(length(validSitesIdx),3) );
+[textColorWAM,textColorInsitu,siteTextColorNoData] = deal( zeros(length(validSitesIdx),3) );
 
 for si = 1:length(validSitesIdx)
     % Identify parameter values for sites (WAM & insitu)
@@ -198,17 +200,22 @@ for si = 1:length(validSitesIdx)
     [~,nearIdxInsitu(si)] = min(abs(cfLevels - sitesInsitu(si)));
 
     % Set text color for first half of colormap to black and for second half to white
-    if nearIdxWAM(si) > round(numel(cfLevels)/2)
+    if nearIdxWAM(si) > round(numel(cfLevels)/3)
         textColorWAM(si,:) = siteTextColorB;
-    elseif nearIdxWAM(si) <= round(numel(cfLevels)/2)
+        % NoData color based on wam, since no insitu data to be ordered
+        siteTextColorNoData(si,:) = siteTextColorNoDataB;
+    elseif nearIdxWAM(si) <= round(numel(cfLevels)/3)
         textColorWAM(si,:) = siteTextColorA;
+        siteTextColorNoData(si,:) = siteTextColorNoDataA;
     end
 
-    if nearIdxInsitu(si) > round(numel(cfLevels)/2)
+    if nearIdxInsitu(si) > round(numel(cfLevels)/3)
         textColorInsitu(si,:) = siteTextColorB;
-    elseif nearIdxInsitu(si) <= round(numel(cfLevels)/2)
+    elseif nearIdxInsitu(si) <= round(numel(cfLevels)/3)
         textColorInsitu(si,:) = siteTextColorA;
     end
+
+
 
 end
 
