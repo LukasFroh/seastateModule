@@ -45,7 +45,8 @@ ax.XAxis.TickLabelInterpreter               = 'latex';
 ax.YLabel.Interpreter                       = 'latex';
 ax.YAxis.TickLabelInterpreter               = 'latex';
 ax.TickDir                                  = 'none';
-ax.Title.String                             = 'Measured / Forecasted wave height Hs [m]';
+ax.Title.String                             = 'Measured / Forecasted Wave Height $H_s$ [m]';
+ax.Title.Interpreter                        = 'latex';
 ax.Title.FontSize                           = fsTitle;
 
 %% ------ Barplot: Loop over every site  -----
@@ -85,6 +86,7 @@ leg1.TextColor                              = gridColor;
 leg1.Color                                  = backGroundColor;
 leg1.LineWidth                              = 1;
 leg1.Location                               = 'eastoutside';
+leg1.Interpreter                            = 'latex';
 
 if ax.XTickLabelRotation > 0
     ax.XTickLabelRotation                   = 90;

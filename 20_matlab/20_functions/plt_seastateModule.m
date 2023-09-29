@@ -284,8 +284,9 @@ switch plotType
 
     case 'adjInfo'
         %% :::::::::| Scaled with detailed information |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        tiledlayout(3,2);
-        nexttile([3 1])
+        % tiledlayout(3,2);
+        % nexttile([3 1])
+        subplot(3,2,[1,5])
         hold on
         ax1 = gca;
         %% Spatial plot
@@ -298,22 +299,34 @@ switch plotType
         %% Barplot Hs insitu/wam (black/white)
         % Set Background color for statistics
         backGroundColor = [1,1,1];
-        nexttile
+        % nexttile
+        subplot(3,2,2)
         plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars);
-
+        ax2             = gca;
         %% Absolute Differences
         cmDeltas        = cmStats;
-        nexttile
+        % nexttile
+        subplot(3,2,4)
         % Y-Limits 
         yLims           = [-0.5,0.5];
         plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,statType);
+        ax3             = gca;
         %% Relative Differences
         yLimsPerc       = yLims*100;
-        nexttile    
+        % nexttile    
+        subplot(3,2,6)
         plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
+        ax4             = gca;
+
+        %% Set figure position
+        fig1.Position   = [1.0000    0.0370    1.0000    0.8917];
+        ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
+        ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
+        ax3.Position    = [0.5190    0.4185    0.3801    0.1817];
+        ax4.Position    = [0.5190    0.1100    0.3801    0.1817];
+
         %% Set infobox
         [~] = plt_infoBox(ax1,input);
-
 end
 
 

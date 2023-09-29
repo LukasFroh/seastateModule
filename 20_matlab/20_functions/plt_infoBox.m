@@ -11,7 +11,7 @@ finWidth    = figWidth - startWidth;
 wamModel    = upper(input.wamModel2Eval);
 timeCreated = input.timeNow;
 legFS       = input.fsSites;
-str2Plot    = {['Insitu data adjusted ' wamModel ' Forecast'], ['Generated at ' datestr(timeCreated,'yyyy-mm-dd HH:MM') ' (UTC)']};
+str2Plot    = {['Insitu-data-adjusted ' wamModel ' Forecast'], ['Generated at ' datestr(timeCreated,'yyyy-mm-dd HH:MM') ' (UTC)']};
 a           = annotation('textbox',[figPosX + startWidth figPosY finWidth figHeight/20],'String', str2Plot,'FitBoxToText','on','BackgroundColor',[0.25,0.25,0.25],'EdgeColor',[.1,.1,.1],'Color',[1,1,1],'FontSize',legFS);
 % Set textbox position to bottom left corner
 % Pause mandatory, since axes need update due to heatmap plots

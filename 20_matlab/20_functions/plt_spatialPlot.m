@@ -74,7 +74,7 @@ hOut                            = contourfnu(lonInput,latInput,varInput,cfLevels
 hOut.hc.Label.FontSize          = fsAxis;
 hOut.hc.Label.Interpreter       = 'latex';
 hOut.hc.TickLabelInterpreter    = 'latex';
-hOut.hc.Label.String            = 'Signicant wave height Hs [m]';
+hOut.hc.Label.String            = 'Signicant Wave Height $H_s$ [m]';
 
 lat_lon_proportions(ax)
 

@@ -1,21 +1,19 @@
 function [fileList,gridData,rawParameters,interpParameters] = wamImport(input,paths)
 
 
-% Set Variables
-
+%% :::::::::| Set intermediate variables |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 time2Eval                                                       = input.time2Eval;
 wamDataPath                                                     = paths.wamDataPath;
 model2Eval                                                      = input.wamModel2Eval;
-date_in                                                         = input.dateIn;
-date_out                                                        = input.dateOut;
+dateIn                                                          = input.dateIn;
+dateOut                                                         = input.dateOut;
 lonLim                                                          = input.lonLim;
 latLim                                                          = input.latLim;
 evalLatVec                                                      = input.evalLatVec;
 evalLonVec                                                      = input.evalLonVec;
 vars2Import                                                     = input.wamVars;
 
-%% :::::::::| Import wam data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
+%% :::::::::| Create fileList to import |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 fileList                                                        = dir([wamDataPath model2Eval '\*.nc']);
 fileList                                                        = rmfield(fileList,{'date','bytes','isdir','datenum'});
 
@@ -25,54 +23,38 @@ for i = 1:numel(fileList)
     fileList(i).fileTimeNum                                     = datenum(fileList(i).fileTime);
 end
 
-invalidAfter                                                    = find([fileList(:).fileTimeNum] > date_out);
-invalidBefore                                                   = find([fileList(:).fileTimeNum] < date_in);
+% Identify invalid files
+invalidAfter                                                    = find([fileList(:).fileTimeNum] > dateOut);
+invalidBefore                                                   = find([fileList(:).fileTimeNum] <= dateIn);
+files2Exlude                                                    = [invalidBefore,invalidAfter];
 
-
-% Create counter
-counter = 0;
-
-% Für historische CWAM DAten 2021
-if ~isempty(invalidBefore)
-
-    % Ausschließen, wenn es nicht exakt Inputzeit ist, damit auf jeden Fall gültiger Datensatz vorhanden ist
-    if ~(fileList(invalidBefore(end)).fileTimeNum == date_in)
-        invalidBefore(end)                                          = [];
-        counter                                                     = counter + 1;
-    elseif strcmpi(model2Eval,'cwam') && fileList(invalidBefore(end)).fileTimeNum == date_in
-        invalidBefore(end)                                          = [];
-        counter                                                     = counter + 1;
-    end
-
-    files2Exlude                                                    = [invalidBefore,invalidAfter];
-
-    % If sum of files2Exlude is equal to amount of available files, include last file in "invalidBefore"
-    if numel([invalidBefore,invalidAfter]) == (numel(fileList) - counter)
-        AdjFileIdx                                                  = find([fileList(:).fileTimeNum] <= date_in );
-        AdjFileIdx                                                  = AdjFileIdx(end);
-
-        % CWAM due to timeshift has no data from 0-1 and 12-13 (if dataset starts there)
-        if strcmpi(model2Eval,'cwam') && hour(date_in) >= 0 && hour(date_in) <= 1.0
-            AdjFileIdx                                                  = AdjFileIdx - 1;
-        elseif strcmpi(model2Eval,'cwam') && hour(date_in) >= 12 && hour(date_in) <= 13.0
-            AdjFileIdx                                                  = AdjFileIdx - 1;
-        end
-
-        notExludeIdx                                                = find(files2Exlude == AdjFileIdx);
-        files2Exlude(notExludeIdx)                                  = [];
-
-    end
-
-    % Für CWAM2021 ausschließlich files2Exlude ermitteln
-else
-    files2Exlude                                                    = [invalidBefore,invalidAfter];
+% If no files before dateIn are available, stop function
+if isempty(invalidBefore)
+    error('No WAM data for chosen time available')
 end
 
+% If number of available files is equal to invalid files, keep the most recent one
+if numel(files2Exlude) == numel(fileList)
+    AdjFileIdx                                                  = find([fileList(:).fileTimeNum] < dateIn );
+    AdjFileIdx                                                  = AdjFileIdx(end);
+    notExludeIdx                                                = find(files2Exlude == AdjFileIdx);
+    files2Exlude(notExludeIdx)                                  = [];
+end
 
-% Nicht benötigte Files ausschließen
-fileList(files2Exlude)                                          = [];
+% First entry of CWAM files (0-1 & 12-13 o'clock) are empty. Check if dateIn is in this range
+if hour(dateIn) >= 0 && hour(dateIn) <= 1 || hour(dateIn) >= 12 && hour(dateIn) <= 13
 
-% Set general information
+    % Consider one more past file
+    AdjFileIdxII                                                = find([fileList(:).fileTimeNum] < dateIn );
+    AdjFileIdxII                                                = AdjFileIdxII(end-1);
+    notExludeIdxII                                              = find(files2Exlude == AdjFileIdxII);
+    files2Exlude(notExludeIdxII)                                = [];
+end
+
+% Exlude not needed files
+fileList(files2Exlude) = [];
+
+%% :::::::::| Set general data for files |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 for e = 1:numel(fileList)
     currFile                                                    = [fileList(e).folder '\' fileList(e).name];
     fileList(e).ncInfo                                          = ncinfo(currFile);
@@ -95,65 +77,44 @@ for e = 1:numel(fileList)
 
 end
 
-% Identify unique time indexes for different wam datasets
-for k = 1: numel(fileList)
+%% :::::::::| Identify unique time indexes |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    % If there is only one file in fileList
-    if k == 1 && k == numel(fileList)
-        [~,fileList(k).importTimeIdx(1)]                         = min(abs(fileList(k).wamTimeNum - date_in) );
-
-        if fileList(k).importTimeIdx(1) > 1
-            fileList(k).importTimeIdx(1)                         = fileList(k).importTimeIdx(1) - 1;
-        end
-
-        [~,fileList(k).importTimeIdx(2)]                         = min(abs(fileList(k).wamTimeNum - date_out) );
-        if fileList(k).importTimeIdx(2) < numel(fileList(k).wamTimeNum)
-            fileList(k).importTimeIdx(2)                        = fileList(k).importTimeIdx(2) + 1;
-        end
-
+% If there are multiple files in fileList
+if numel(fileList) > 1
+    for k  = 1:numel(fileList)-1
+        % Which timesteps are not included in following file?
+        uniqIdx = find(~ismember(fileList(k).wamTime,fileList(k+1).wamTime));
+        fileList(k).importTimeIdx(1)                            = uniqIdx(end-1);
+        fileList(k).importTimeIdx(2)                            = uniqIdx(end);
     end
 
-    % If there are multiple files in fileList and k == 1
-    if k == 1 && ~(k == numel(fileList))
-        [~,fileList(k).importTimeIdx(1)]                         = min(abs(fileList(k).wamTimeNum - date_in) );
+    % For last file in List
+    fileList(end).importTimeIdx(1)                              = 1;
+    [~,outIdx]                                                  = min(abs(fileList(end).wamTimeNum - dateOut) );
+    fileList(end).importTimeIdx(2)                              = outIdx + 1;
 
-        % Identify if nearest indx of timestep is equal to first timestep of next file
-        [~,nearestInNextK]                                       = min(abs(fileList(k).wamTimeNum - fileList(k+1).wamTimeNum(1)) );
+    % If there is exactly one file in fileList
+elseif numel(fileList) == 1
+    % Set ind and Out time index
+    [~,inIdx]                                                   = min(abs(fileList(1).wamTimeNum - dateIn) );
+    [~,outIdx]                                                  = min(abs(fileList(1).wamTimeNum - dateOut) );
 
-        if isequal(fileList(k).wamTimeNum(nearestInNextK), fileList(k+1).wamTimeNum(1))
-            fileList(k).importTimeIdx(1)                        = fileList(k).importTimeIdx(1) - 2;
-            fileList(k).importTimeIdx(2)                        = nearestInNextK - 1;
-        else
-            fileList(k).importTimeIdx(1)                        = fileList(k).importTimeIdx(1) - 1;
-            fileList(k).importTimeIdx(2)                        = nearestInNextK;
-        end
-
-        if fileList(k).importTimeIdx(1) < 1
-            fileList(k).importTimeIdx(1)                         = 1;
-            fileList(k).importTimeIdx(1)                         = 1;
-        end
-
+    % Check if its second entry. If not consider one more timestep
+    if inIdx > 2
+        fileList(1).importTimeIdx(1)                            = inIdx - 1;
+    else
+        fileList(1).importTimeIdx(1)                            = inIdx;
+    end
+    % Check if last first entry. If not consider one more timestep
+    if outIdx < numel(fileList(1).wamTime)
+        fileList(1).importTimeIdx(2)                            = outIdx + 1;
+    else
+        fileList(1).importTimeIdx(2)                            = outIdx;
     end
 
-    % If there are multiple files in fileList and k is >1 and not last file
-    if k > 1 && ~(k == numel(fileList))
-        fileList(k).importTimeIdx(1)                             = 1;
-        fileList(k).importTimeIdx(2)                             = min(abs(fileList(k).wamTimeNum - fileList(k+1).wamTimeNum(1)) );
-    end
-
-    % If there are multiple files in fileList and k is >1 and last file
-    if k > 1 && k == numel(fileList)
-        fileList(k).importTimeIdx(1)                             = 1;
-        [~,fileList(k).importTimeIdx(2)]                         = min(abs(fileList(k).wamTimeNum - date_out ) );
-
-        if fileList(k).importTimeIdx(2) < numel(fileList(k).wamTimeNum)
-            fileList(k).importTimeIdx(2)                         = fileList(k).importTimeIdx(2) + 1;
-        end
-
-    end
 end
 
-% Imported specified times
+%% :::::::::| Import data from .nc files |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 for l = 1 : numel(fileList)
     currFile                                                    = [fileList(l).folder '\' fileList(l).name];
 
@@ -164,11 +125,11 @@ for l = 1 : numel(fileList)
     % Funktion, um Rohdaten einzuladen und zu croppen
     for ll = 1:numel(vars2Import)
         currVar2Import                                          = vars2Import{ll};
-
+        % Set start idx
         lonStart                                                = fileList(l).lonIdx(1);
         latStart                                                = fileList(l).latIdx(1);
         timeStart                                               = fileList(l).importTimeIdx(1);
-
+        % Set count idx
         lonCount                                                = fileList(l).lonIdx(2) - lonStart +1;
         latCount                                                = fileList(l).latIdx(2) - latStart +1;
         timeCount                                               = fileList(l).importTimeIdx(2) - timeStart +1;
@@ -178,12 +139,14 @@ for l = 1 : numel(fileList)
             timeCount = 1;
         end
 
+        % Import data as double
         fileList(l).(vars2Import{ll})                            = double(ncread(currFile,currVar2Import,[lonStart,latStart,timeStart],[lonCount,latCount,timeCount]));
     end
 end
 
 %% :::::::::| Final WAM information |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+% Set gridData settings
 gridData                                                  = struct;
 gridData.wamTime                                          = cat(1,fileList(:).adjTime);
 gridData.evalTime                                         = time2Eval;
@@ -194,9 +157,7 @@ gridData.wamLat                                           = fileList(1).lat;
 gridData.evalLon                                          = evalLonVec;
 gridData.evalLat                                          = evalLatVec;
 
-% [gridData.wamLatGrid, gridData.wamLonGrid, gridData.wamTimeGrid] = ...
-%     meshgrid(gridData.wamLat, gridData.wamLon, gridData.wamTime);
-
+% Initialize initial and result grids
 [gridData.wamLatGrid, gridData.wamLonGrid, gridData.wamTimeNumGrid] = ...
     meshgrid(gridData.wamLat, gridData.wamLon, gridData.wamTimeNum);
 
@@ -251,13 +212,8 @@ for si = 1:numel(vars2Import)
         outputX = interpParameters(si).latGrid(:,:,startIdx:endIdx);
         outputY = interpParameters(si).lonGrid(:,:,startIdx:endIdx);
         outputZ = interpParameters(si).timeGrid(:,:,startIdx:endIdx);
-
+        % 3D interpolation
         interpCell{ii} = interp3(inputX, inputY, inputZ, inputVar, outputX, outputY, outputZ);
-
-        % interpCell{ii} =                                  ...
-            % interp3(rawParameters(si).latGrid,rawParameters(si).lonGrid,rawParameters(si).timeGrid,     ... % (Input: Y,X,Z)
-            % rawParameters(si).raw,                                                                      ... % (Var2Interpolate)
-            % interpParameters(si).latGrid(:,:,startIdx:endIdx),interpParameters(si).lonGrid(:,:,startIdx:endIdx),interpParameters(si).timeGrid(:,:,startIdx:endIdx));       % (Output: Y,X,Z)
 
     end
 
@@ -267,4 +223,4 @@ for si = 1:numel(vars2Import)
 end
 
 
-
+end
