@@ -13,8 +13,8 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 % Open figure and suppress graphical output
-fig1                                = figure('visible','off');
-% fig1                                = figure('visible','on');
+% fig1                                = figure('visible','off');
+fig1                                = figure('visible','on');
 % Maximize figure
 set(gcf,'units','normalized','outerposition',[0 0 1 1])
 % Set figure units to pixels
