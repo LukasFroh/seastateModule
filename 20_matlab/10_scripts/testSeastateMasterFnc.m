@@ -3,7 +3,7 @@
 clear,clc,close all
 restoredefaultpath
 
-% for ti = 14:0.5:120
+% for ti = 12:0.5:72
 for ti = 24
 
 dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");

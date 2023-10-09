@@ -27,7 +27,7 @@ gridColor   = [0,0,0];
 fcInsitu    = [0,0,0];
 fcWam       = [0.5,0.5,0.5];
 % Linewidth bars
-lwBar       = 1;
+lwBar       = 0.5;
 
 
 %% ------ Axes settings Hs barplot insitu/wam -----
