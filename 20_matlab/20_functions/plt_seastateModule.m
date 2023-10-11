@@ -25,7 +25,7 @@ fig1                                = figure('visible','off');
 % fig1                                = figure('visible','on');
 % Maximize figure
 % set(gcf,'units','normalized','outerposition',[0 0 1 1])
-set(gcf,'units','centimeters','outerposition',lufiCM)
+set(fig1,'units','centimeters','outerposition',lufiCM)
 pause(0.01)
 
 % % Set figure units to pixels
