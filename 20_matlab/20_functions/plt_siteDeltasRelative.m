@@ -18,6 +18,9 @@ if strcmpi(plotType,'heatmap')
     h.FontSize                                      = fsAxis;
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
+    h.Interpreter                                   = 'latex';
+    % CellLabel Format with width of 6 signs
+    h.CellLabelFormat                               = '%.2f';
     % h.Title                                         = 'Relative Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
     h.Title                                         =  ['Relative Deviation: $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
 

@@ -18,7 +18,11 @@ if strcmpi(plotType,'heatmap')
     h.FontSize                                      = fsAxis;
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
+    h.Interpreter                                   = 'latex';
+    % CellLabel Format with width of 6 signs
+    h.CellLabelFormat                               = '%.2f';
     h.Title                                         = 'Absolute Deviation: $Hs_{insitu}$ - $Hs_{wam}$ [m]';
+
     %% ------ Axes settings ------
     warning off
     axs                                             = struct(gca);
