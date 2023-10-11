@@ -10,7 +10,7 @@ function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, sit
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...               % Spatial settings
     gshhgInputFile, ...                                                                         % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
-    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, ...   % Plot settings
+    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, siteMarkerSize, ...   % Plot settings
     timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
 
 tic
@@ -50,6 +50,7 @@ eval(['cmStatsName = char(' cmStatsName ');'])
 input.fsAxis            = str2double(fsAxis);                   % Font size axes object
 input.fsSites           = str2double(fsSites);                  % Font size site text
 input.fsTitle           = str2double(fsTitle);                  % Font size title
+input.siteMarkerSize    = str2double(siteMarkerSize);           % Marker size for site indication
 
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;
