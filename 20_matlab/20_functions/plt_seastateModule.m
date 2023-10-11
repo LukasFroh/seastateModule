@@ -66,7 +66,7 @@ siteTextColorA                      = [35,132,67]/255;
 siteTextColorB                      = [166,217,106]/255;
 siteTextColorNoDataA                = [0.4,0.4,0.4];
 siteTextColorNoDataB                = [0.8,0.8,0.8];
-siteMarkerSize                      = 50;
+siteMarkerSize                      = input.siteMarkerSize;
 % Fontsize axis 
 fsAxis                              = input.fsAxis;
 % Fontsize site text
