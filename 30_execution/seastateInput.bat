@@ -109,4 +109,4 @@ SET l1="24"
 
 
 :: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
-.\seastateModule_v1_2.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%f11%" "%f12%" "%f13%" "%l1%" > batchLog.txt
+.\seastateModule_v1_3.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%f11%" "%f12%" "%f13%" "%l1%" > batchLog.txt
