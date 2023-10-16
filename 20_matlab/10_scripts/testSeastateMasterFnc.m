@@ -23,7 +23,7 @@ wamVars             = char("{'sign_whight'}");
 % site2Imp            = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'WES', 'NOR', 'NOO','BO1'}");
 
 if strcmp(wamModel2Eval,'cwam')
-    site2Imp        = char("{'AV0', 'BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO'}");
+    site2Imp        = char("{'AV0', 'BUD', 'ELB', 'FN1', 'FN3', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO'}");
     latLimMin       = "53.2541695";
     latLimMax       = "55.2458344";
     lonLimMin       = "6.1736112";
@@ -31,7 +31,7 @@ if strcmp(wamModel2Eval,'cwam')
     rasterSizeLat   = "240";
     rasterSizeLon   = "203";
 elseif strcmp(wamModel2Eval,'ewam')
-    site2Imp        = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO','BO1'}");
+    site2Imp        = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO','BO1'}");
     latLimMin       = "53.25";
     latLimMax       = "55.25";
     lonLimMin       = "5.5";
