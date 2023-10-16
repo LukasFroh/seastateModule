@@ -372,6 +372,11 @@ switch plotType
         %% Set infobox
         pause(0.5)
         [~] = plt_infoBox(ax1,input);
+        % 
+        % ax2.PlotBoxAspectRatioMode  = 'auto';
+        % ax2.DataAspectRatioMode     = 'auto';
+        % ax2.PlotBoxAspectRatio      = [4.171428571428572,1,1];
+        % ax2.DataAspectRatio         = [1.318493150684931,2,1];
 end
 
 

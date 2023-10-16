@@ -18,7 +18,10 @@ if strcmpi(plotType,'heatmap')
     h.FontSize                                      = fsAxis;
     h.XDisplayLabels                                = validSiteNames;
     h.YDisplayLabels                                = {''};
-    h.Interpreter                                   = 'latex';
+    % Interpreter property available since Matlab 2023b
+    if ~verLessThan('matlab', '9.15')
+        h.Interpreter                               = 'latex';
+    end
     % CellLabel Format with width of 6 signs
     h.CellLabelFormat                               = '%.2f';
     % h.Title                                         = 'Relative Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
