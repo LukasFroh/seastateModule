@@ -3,8 +3,8 @@
 clear,clc,close all
 restoredefaultpath
 
-% for ti = 24:0.5:36
-for ti = 24
+% for ti = 24:0.5:72
+for ti = 28
 
 dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");
 headerPath          = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}");
@@ -57,6 +57,10 @@ fsAxis              = "18";                 % Font size axes object
 fsSites             = "15";                 % Font size site text
 fsTitle             = "40";                 % Font size title
 siteMarkerSize      = "50";                 % Marker size for site indication
+% fsAxis              = "14";                 % Font size axes object
+% fsSites             = "14";                 % Font size site text
+% fsTitle             = "20";                 % Font size title
+% siteMarkerSize      = "50";                 % Marker size for site indication
 timeShift           = string(ti);
 
 %% execution
