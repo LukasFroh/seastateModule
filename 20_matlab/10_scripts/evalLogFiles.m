@@ -1,17 +1,35 @@
-clear, clc, close all
+%% ###########################################################################################################################
+%   repository: seastate module
+%   author: ©Lukas Froehling (froehling@lufi.uni-hannover.de)
+%   log-file evaluation
+%  ###########################################################################################################################
 
-% Set Paths
-logPath = 'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\50_logEvaluation_2023-10-12/';
+
+clear
+clc
+close all
+
+%% :::::::::| Input |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+% Path logfiles
+% logPath = 'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\50_logEvaluation_2023-10-12/';
+logPath = 'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\Evaluation_LogFiles\10_data\20231114_10_logs\';
+% Path colormaps
 cmPath = 'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps';
+% Path figure output
 figurePath = 'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\Evaluation_LogFiles\30_figures';
+
+addpath('C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\40_Bearbeitung\10_Matlab\20_Funktionen')
+
+
 % Fontsize
 FS = 20;
 % Amount colors Colormap
-nColors = 15;
+nColors = 10;
 
 % Load colormap
 addpath(cmPath)
 load vik.mat
+load bilbao.mat
 
 warning off
 
@@ -27,7 +45,6 @@ for i = 1:numel(logDateien)
 
     % Open current file
     logDatei = fopen(logDateiPfad, 'r');
-
 
     % read every line of current file
     while ~feof(logDatei)
@@ -69,12 +86,11 @@ for i = 1:numel(logDateien)
             timeDelta.([site,'_Delta2ExecTime'])(i) = NaN;
         end
 
-       
     end
-    
+
     % Close log file
     fclose(logDatei);
- 
+
 end
 
 %% :::::::::| Plot probabilities |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -114,7 +130,7 @@ if 1
 end
 
 %% :::::::::| Plot FN1/FN3/ELB history |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-idx2Eval = [12,15,18]; 
+idx2Eval = [12,15,18];
 siteNames2Eval = {'ELB','FN1','FN3'};
 figure(5),clf
 tiledlayout('flow')
@@ -139,20 +155,38 @@ deltaNames = varNames(deltaIdx);
 siteNames = strtok(deltaNames,'_');
 time2evalVec = timeDelta.time2Eval;
 
+countDeltaMtx = 0;
 
-for j = 1:numel(deltaNames)
-    deltaMtx(j,:) = timeDelta.(deltaNames{j});
+% colormap containing only red and green
+cmRG = linspecer(2,'sequential');
+
+
+for j = 2:2:numel(deltaNames)
+    countDeltaMtx = countDeltaMtx + 1;
+    deltaMtx(countDeltaMtx,:) = timeDelta.(deltaNames{j});
 end
 
 maxDelta = max(abs(deltaMtx),[],'all');
-vikAdj = vik(round(linspace(1,256,nColors)),:);
+% maxDelta = 120;
+
+if maxDelta <= 1000
+    maxDeltaRounded = ceil(maxDelta / 100) * 100;
+elseif maxDelta > 1000
+    maxDeltaRounded = ceil(maxDelta / 1000) * 1000;
+end
+
+% maxDeltaRounded = 120;
+deltaTicks = linspace(0,maxDeltaRounded,11);
+
+cmAdj = flipud(bilbao(round(linspace(1,256,nColors)),:));
 
 figure(1),clf
 
-h = heatmap(deltaMtx,'YDisplayLabels',siteNames);
-h.Title = 'Difference: mostRecent site time - time2Eval (Blue: No data available / Red: Data available)';
+h = heatmap(deltaMtx,'YDisplayLabels',siteNames(2:2:end));
+h.Title = ['Delta2ExecutionTime ' startTime ' - ' endTime ];
+h.Interpreter = 'latex';
 hStr = struct(h);
-hStr.Colorbar.Ticks = linspace(-maxDelta,maxDelta,nColors+1);
+hStr.Colorbar.Ticks = deltaTicks;
 hStr.Colorbar.TickLabels = round(hStr.Colorbar.Ticks,2);
 hStr.Colorbar.Label.String = 'Time delta in minutes';
 ax = gca;
@@ -162,18 +196,31 @@ showtickCell = repmat({''},1,numel(time2evalVec));
 % showtickCell(showTickIdx) = {''};
 showtickCell(showTickIdx) = arrayfun(@(c) datestr(c,'mm/dd HH:MM'),time2evalVec(showTickIdx),'UniformOutput',false);
 h.XDisplayLabels = showtickCell;
+colormap(cmAdj)
 
 
-
-colormap(vikAdj)
-clim([-maxDelta,maxDelta])
 
 timeIn = datestr(time2evalVec(1),'yyyymmdd_HHMM');
 timeOut = datestr(time2evalVec(end),'yyyymmdd_HHMM');
 exportFileName = strcat(timeIn,'_',timeOut,'logfileHeatmap.png');
 exportgraphics(gcf,fullfile(figurePath,exportFileName))
 
+%% :::::::::| Plot Availability threshold heatmap |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+if 0
+    colorThresh = 180;
+    colormap(cmRG)
+    clim([0,colorThresh*2])
+    hStr.Colorbar.Ticks = [0,colorThresh,deltaTicks(end)];
+    hStr.Colorbar.TickLabels = round(hStr.Colorbar.Ticks,2);
+    h.Title = ['Availability for timeshift = ' num2str(colorThresh) 'min between ' startTime ' - ' endTime ];
+
+    timeIn = datestr(time2evalVec(1),'yyyymmdd_HHMM');
+    timeOut = datestr(time2evalVec(end),'yyyymmdd_HHMM');
+    exportFileName = strcat(timeIn,'_',timeOut,'_AvailabilityThreshold_',num2str(colorThresh),'min.png');
+    exportgraphics(gcf,fullfile(figurePath,exportFileName))
+end
 
 warning on
 
-% clearvars -except timeDelta 
+% clearvars -except timeDelta
