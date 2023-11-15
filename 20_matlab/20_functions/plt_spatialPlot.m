@@ -75,12 +75,14 @@ hOut.hc.Label.FontSize          = fsAxis;
 hOut.hc.Label.Interpreter       = 'latex';
 hOut.hc.TickLabelInterpreter    = 'latex';
 hOut.hc.Label.String            = 'Signicant Wave Height $H_s$ [m]';
-
+hOut.h.LineStyle                = ':';
 lat_lon_proportions(ax)
+% LineWdith for coastlines and plot frame
+lw                              = 1;
 
 % Plot coastlines
 for cli = 1:numel(GSHHG.clFieldnames)
-    patch(ax,GSHHG.sets.(GSHHG.clFieldnames{cli}).lon,GSHHG.sets.(GSHHG.clFieldnames{cli}).lat,coastColor,'EdgeColor',edgeColor)
+    patch(ax,GSHHG.sets.(GSHHG.clFieldnames{cli}).lon,GSHHG.sets.(GSHHG.clFieldnames{cli}).lat,coastColor,'EdgeColor',edgeColor,'LineWidth',lw)
 end
 
 % if ax.XTickLabelRotation > 0
@@ -95,5 +97,12 @@ if strcmpi(gridType,'on')
     % out.YTick = ax.YTick;
     % save('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\out.mat','out')
 end
+
+% Plot frame
+yline(ax.YLim(1),'LineWidth',lw)
+yline(ax.YLim(2),'LineWidth',lw)
+xline(ax.XLim(1),'LineWidth',lw)
+xline(ax.XLim(2),'LineWidth',lw)
+
 
 end

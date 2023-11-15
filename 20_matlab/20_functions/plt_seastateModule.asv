@@ -11,40 +11,41 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 
 
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-%% BSH positions
-% Normalized
-bshNorm = [0.0015625   0.0027778     0.99688     0.97639];
-bshPix = [5     5  2552  1406];
-bshCM = [0.105833     0.105833      67.5217      37.2004];
-
-% Screensize LuFI
-lufiPix = [1          41        1920         963];
+%% BSH screensize
+% bshNorm = [0.0015625   0.0027778     0.99688     0.97639];
+% bshPixOld  = [5     5  2552  1406]; % Wilms Monitor
+% bshCMOld   = [0.105833     0.105833      67.5217      37.2004];
+bshPix    = [5     5  1016   734];
+bshCM     = [0.105833     0.105833      26.8817      19.4204];
+%% Screensize LuFI
+% lufiPix = [1          41        1920         963];
 lufiCM  = [0    1.0583   50.8000   25.4794];
 
 % Open figure and suppress graphical output
-% fig1                                = figure('visible','off');
-fig1                                = figure('visible','on');
+fig1                                = figure('visible','off');
+% fig1                                = figure('visible','on');
 % Maximize figure
 % set(gcf,'units','normalized','outerposition',[0 0 1 1])
+set(fig1,'units','centimeters','outerposition',bshCM*10)
 pause(0.01)
 
-set(gcf,'units','centimeters','outerposition',bshCM)
-% % Set figure units to pixels
-% fig1.Units                          = 'pixels';
-% fig1.Position                       = bshPix;
-% % Get figSize in 'pixels'
-% figSize                             = fig1.Position;
-% % Get monitor proportion (width/height)
-% figProp                             = figSize(3) / figSize(4);
-% % Ideal proportion (dev environment)
+% Set figure units to pixels
+fig1.Units                          = 'pixels';
+fig1.Position                       = bshPix;
+% Get figSize in 'pixels'
+figSize                             = fig1.Position;
+% Get monitor proportion (width/height)
+figProp                             = figSize(3) / figSize(4);
+% Ideal proportion (dev environment)
 % propIdeal                           = 1.829;
-% % If figProp is not between 1.9290 and 1.9292, adjust proportions!
-% if ~(figProp > 0.99*propIdeal && figProp < 1.01*propIdeal)
-%     figSize(3) = figSize(4) * propIdeal;
-% end
+propIdeal                           = 1.9938;
+% If figProp is not between 99% - 101% of propIdeal, adjust proportions!
+if ~(figProp > 0.99*propIdeal && figProp < 1.01*propIdeal)
+    figSize(3) = figSize(4) * propIdeal;
+end
 
 % Set adjusted figSize
-% fig1.Position                       = figSize;
+fig1.Position                       = figSize;
 
 % Set figure units back to normalized
 fig1.Units                          = 'normalized';
@@ -67,7 +68,7 @@ siteTextColorA                      = [35,132,67]/255;
 siteTextColorB                      = [166,217,106]/255;
 siteTextColorNoDataA                = [0.4,0.4,0.4];
 siteTextColorNoDataB                = [0.8,0.8,0.8];
-siteMarkerSize                      = 50;
+siteMarkerSize                      = input.siteMarkerSize;
 % Fontsize axis 
 fsAxis                              = input.fsAxis;
 % Fontsize site text
@@ -316,8 +317,8 @@ switch plotType
         %% :::::::::| Scaled with detailed information |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
         % tiledlayout(3,2);
         % nexttile([3 1])
-        % subplot(3,2,[1,5])
-        subplot(3,5,[1,13])
+        subplot(3,2,[1,5])
+        % subplot(3,5,[1,13])
         hold on
         ax1 = gca;
         %% Spatial plot
@@ -331,14 +332,15 @@ switch plotType
         % Set Background color for statistics
         backGroundColor = [1,1,1];
         % nexttile
-        % subplot(3,2,2)
-        subplot(3,5,[])
+        subplot(3,2,2)
+        % subplot(3,5,[4,5])
         plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars);
         ax2             = gca;
         %% Absolute Differences
         cmDeltas        = cmStats;
         % nexttile
         subplot(3,2,4)
+        % subplot(3,5,[9,10])
         % Y-Limits 
         yLims           = [-0.5,0.5];
         plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,statType);
@@ -347,22 +349,36 @@ switch plotType
         yLimsPerc       = yLims*100;
         % nexttile    
         subplot(3,2,6)
+        % subplot(3,5,[14,15])
         plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
         ax4             = gca;
 
         %% Set figure position
         % fig1.Position   = [1.0000    0.0370    1.0000    0.8917];
-        ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
-        ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
-        ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
-        ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
-        % ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
-        % ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
-        % ax3.Position    = [0.5190    0.4185    0.3801    0.1817];
-        % ax4.Position    = [0.5190    0.1100    0.3801    0.1817];
+        % 2023/10/09: 3/2 subplot (BSH Screensize)
+        % ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
+        % ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
+        % ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
+        % ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
+      % 2023/10/09: 3/5 subplot (BSH Screensize)
+        % ax1.Position    =  [0.1300    0.1100    0.4262    0.8150];
+        % ax2.Position    =  [0.6184    0.7093    0.2866    0.2157];
+        % ax3.Position    =  [0.6184    0.4096    0.2866    0.2157];
+        % ax4.Position    =  [0.6184    0.1100    0.2866    0.2157];
+        % LuFI screensize
+        ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
+        ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
+        ax3.Position    = [0.5190    0.4185    0.3801    0.1817];
+        ax4.Position    = [0.5190    0.1100    0.3801    0.1817];
 
         %% Set infobox
+        pause(0.5)
         [~] = plt_infoBox(ax1,input);
+        % 
+        % ax2.PlotBoxAspectRatioMode  = 'auto';
+        % ax2.DataAspectRatioMode     = 'auto';
+        % ax2.PlotBoxAspectRatio      = [4.171428571428572,1,1];
+        % ax2.DataAspectRatio         = [1.318493150684931,2,1];
 end
 
 

@@ -13,9 +13,10 @@ function [lonInput,latInput,varInputScaledFinal,fig1] = plt_seastateModule(input
 %% :::::::::| Figure Properties |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 %% BSH screensize
 % bshNorm = [0.0015625   0.0027778     0.99688     0.97639];
-% bshPix  = [5     5  2552  1406];
-% bshCM   = [0.105833     0.105833      67.5217      37.2004];
-% 
+% bshPixOld  = [5     5  2552  1406]; % Wilms Monitor
+% bshCMOld   = [0.105833     0.105833      67.5217      37.2004];
+bshPix    = [5     5  1016   734];
+bshCM     = [0.105833     0.105833      26.8817      19.4204];
 %% Screensize LuFI
 % lufiPix = [1          41        1920         963];
 lufiCM  = [0    1.0583   50.8000   25.4794];
@@ -28,7 +29,7 @@ fig1                                = figure('visible','off');
 set(fig1,'units','centimeters','outerposition',lufiCM)
 pause(0.01)
 
-% % Set figure units to pixels
+% Set figure units to pixels
 % fig1.Units                          = 'pixels';
 % fig1.Position                       = bshPix;
 % % Get figSize in 'pixels'
@@ -36,8 +37,9 @@ pause(0.01)
 % % Get monitor proportion (width/height)
 % figProp                             = figSize(3) / figSize(4);
 % % Ideal proportion (dev environment)
-% propIdeal                           = 1.829;
-% % If figProp is not between 1.9290 and 1.9292, adjust proportions!
+% % propIdeal                           = 1.829;
+% propIdeal                           = 1.9938;
+% % If figProp is not between 99% - 101% of propIdeal, adjust proportions!
 % if ~(figProp > 0.99*propIdeal && figProp < 1.01*propIdeal)
 %     figSize(3) = figSize(4) * propIdeal;
 % end
