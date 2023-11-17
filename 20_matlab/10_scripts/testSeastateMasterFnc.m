@@ -4,7 +4,7 @@ clear,clc,close all
 restoredefaultpath
 
 % for ti = 24:0.5:72
-for ti = 28
+for ti = 24
 
 dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");
 headerPath          = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}");
@@ -19,7 +19,7 @@ cmPath              = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibl
 seastateVars2Eval   = char("{'VHM0'}");
 minQF               = "1";
 wamModel2Eval       = 'cwam';
-wamVars             = char("{'sign_whight'}");
+wamVars             = char("{'sign_whight'}"); 
 % site2Imp            = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'WES', 'NOR', 'NOO','BO1'}");
 
 if strcmp(wamModel2Eval,'cwam')
@@ -53,14 +53,14 @@ cmName              = char("{'lipari'}");
 cmStatsName         = char("{'bam'}");
 cmFlip              = 'flip';
 gridType            = 'on';
-fsAxis              = "18";                 % Font size axes object
-fsSites             = "15";                 % Font size site text
-fsTitle             = "40";                 % Font size title
-siteMarkerSize      = "50";                 % Marker size for site indication
-% fsAxis              = "14";                 % Font size axes object
-% fsSites             = "14";                 % Font size site text
-% fsTitle             = "20";                 % Font size title
+% fsAxis              = "18";                 % Font size axes object
+% fsSites             = "15";                 % Font size site text
+% fsTitle             = "40";                 % Font size title
 % siteMarkerSize      = "50";                 % Marker size for site indication
+fsAxis              = "11";                 % Font size axes object
+fsSites             = "12";                 % Font size site text
+fsTitle             = "13";                 % Font size title
+siteMarkerSize      = "75";                 % Marker size for site indication
 timeShift           = string(ti);
 
 %% execution

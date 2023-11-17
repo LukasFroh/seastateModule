@@ -1,4 +1,4 @@
-function ax = plt_spatialPlot(ax,input,cmDeep,lonInput,latInput,varInput,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType)
+function ax = plt_spatialPlot(ax,input,cmDeep,lonInput,latInput,varInput,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType)
 
 %% Adjust lat/lon boundaries
 lonStep                 = 0.5;
@@ -64,6 +64,7 @@ ax.YAxis.TickLabelInterpreter = 'latex';
 ax.XLabel.String        = 'Longitude';
 ax.YLabel.String        = 'Latitude';
 ax.TickDir              = 'both';
+ax.Box                  = 'on';
 
 % Set colormap
 % colormap(cmDeep)
@@ -74,8 +75,10 @@ hOut                            = contourfnu(lonInput,latInput,varInput,cfLevels
 hOut.hc.Label.FontSize          = fsAxis;
 hOut.hc.Label.Interpreter       = 'latex';
 hOut.hc.TickLabelInterpreter    = 'latex';
-hOut.hc.Label.String            = 'Signicant Wave Height $H_s$ [m]';
+hOut.hc.Label.String            = 'Significant Wave Height $H_s$ [m]';
 hOut.h.LineStyle                = ':';
+% Set Colorbar location to bottom outside
+hOut.hc.Location                = 'southoutside';
 lat_lon_proportions(ax)
 % LineWdith for coastlines and plot frame
 lw                              = 1;
