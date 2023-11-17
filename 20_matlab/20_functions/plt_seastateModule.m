@@ -22,8 +22,8 @@ bshCM     = [0.105833     0.105833      26.8817      19.4204];
 lufiCM  = [0    1.0583   50.8000   25.4794];
 
 % Open figure and suppress graphical output
-% fig1                                = figure('visible','off');
-fig1                                = figure('visible','on');
+fig1                                = figure('visible','off');
+% fig1                                = figure('visible','on');
 % Maximize figure
 % set(gcf,'units','normalized','outerposition',[0 0 1 1])
 set(fig1,'units','centimeters','outerposition',bshCM)
