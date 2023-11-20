@@ -175,10 +175,9 @@ disp(['Parameter range: <', cbType, '>'])
 % Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType> 
 [lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,statType,cbType,gridType,paths.cmPath,cmName,cmStatsName,cmFlip);
 
-% Safe figure
+% Save figure
 figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];
 exportgraphics(gcf,fullfile(paths.figPath,figName),'Resolution',figRes)
-
 
 %% :::::::::| Save output |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Export adjusted spatial data
