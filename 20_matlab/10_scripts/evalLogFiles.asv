@@ -8,8 +8,13 @@
 %   - Figure 1: Data availability matrix: Shows data availability in [%] for sites (defined in batch script) based on multiple defined time thresholds (Duration between Execution time and lates timestep in insida data)
 %   - Figure 2: Heatmap depicting the temporal evolvement of the Time differences to most recent timestep in insida data. 
 %   - Figure 3: Heatmap for specific time tresholds. Green for timesteps with available data within limits, red for no available data.
-%   - Figure 4: Timeseries of Duration to mostRecentTime in one figure with subplot for each site, respectively. Define therefore Cellstring for all sites that should be investigated
+%   - Figure 4: Define 
+
+
 %  ###########################################################################################################################
+
+
+
 
 clear
 clc
