@@ -61,10 +61,17 @@ bools.boolRadacSingle   = true;
 
 % Current date and time
 tNow                    = datetime('now','TimeZone','UTC');
+% Downshift current time to nearest half hour at XX:15 or XX:45, whichever is closer
 tNowShifted             = dateshift(tNow,'start','hour');
-if minute(tNow) > 30
-    tNowShifted         = tNowShifted + minutes(30);
+
+if minute(tNow) < 15
+    tNowShifted         = tNowShifted - minutes(15);
+elseif minute(tNow) >= 15 && minute(tNow) < 45
+    tNowShifted         = tNowShifted + minutes(15);
+elseif minute(tNow) >= 45
+    tNowShifted         = tNowShifted + minutes(45);
 end
+
 % Evaluate at mid of measurement time window. DWR meas. duration 30min --> Substract 15 min (Radac is available every 1 min and can be chosen for this time as well)
 tNowShifted             = tNowShifted - minutes(15);
 
