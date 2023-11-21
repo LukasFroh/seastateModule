@@ -32,29 +32,28 @@ addpath(genpath(fncPath))
 
 % ++++++++ Figure Bools ++++++++
 % Which plots should be created and saved? Choose between true/false or 1/0
-boolFig1    = 1;   % Data availability matrix
+boolFig1        = 1;   % Data availability matrix
 
-boolFig2    = 1;   % Temporal evolvement heatmap
-maxTimeDelta = 300; % Choose upper limit (in minutes) for time delta for heatmap visualization
+boolFig2        = 1;   % Temporal evolvement heatmap
 
-boolFig3    = 1;   % Temporal evolvement with threshold
+boolFig3        = 1;   % Temporal evolvement with threshold
+maxTimeDelta    = 600; % Choose upper limit (in minutes) for time delta for heatmap visualization for Fig2 & Fig3
 
-boolFig4    = 1;   % Time series for chosen sites
+boolFig4        = 1;   % Time series for chosen sites
 
-boolSaveFig = 1;   % Export figures?
+
+boolSaveFig     = 1;   % Export figures?
 
 
 % Choose sites that should be considered for Figure 4 (as cellstring)
-fig4ChosenSites = {'ELB','FN1','FN3'};
+fig4ChosenSites = {'ELB','FN1','FN3','AV0','BUD'};
 
 % ++++++++ Figure Settings ++++++++
-% Load colormaps
-load vik.mat
-load bilbao.mat
 % Fontsize
 FS = 24;
 % Amount colors Colormap
 nColors = 10;
+
 
 %% :::::::::| Read and extract log-file information |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 warning off
@@ -221,6 +220,12 @@ if boolFig2
     hStr.Colorbar.TickLabels    = round(hStr.Colorbar.Ticks,2);
     hStr.Colorbar.Label.String  = '$T_{Execution}$ -- $T_{VHM0~(latest)}~ [min]$';
     hStr.Colorbar.Label.Interpreter = 'latex';
+    % Deactive cell grid if more than X timesteps needs to be colorized
+    gridThresh                  = 50;
+    if length(time2evalVec) > gridThresh
+        h.GridVisible = 'off';
+    end
+
     clim([deltaTicks(1),deltaTicks(end)])
     ax                          = gca;
     ax.FontSize                 = FS;
@@ -236,96 +241,100 @@ if boolFig2
 
 end
 
-%% :::::::::| Plot heatmaps |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%% :::::::::| Figure 3: Temporal evolvement heatmap (only available/not available) |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+if boolFig3
 
-varNames = timeDelta.Properties.VariableNames;
-deltaIdx = contains(varNames,'Delta');
-deltaNames = varNames(deltaIdx);
-siteNames = strtok(deltaNames,'_');
-time2evalVec = timeDelta.time2Eval;
+    % Search string for parameter names (Delta Execution time - mostRecentTime)
+    searchStr       = 'Delta2ExecTime';
+    % Idx for each var matching search string
+    matchingIdx     = find( cellfun(@(name) ~isempty(regexp(name, searchStr, 'once')), varNames) );
+    % Identify site names
+    siteNames       = strtok(varNames(matchingIdx),'_');
+    % Initialize counter 
+    countDeltaMtx   = 0;
+    % Colormap with only 2 colors
+    cm2Colors       = linspecer(2,'sequential');
 
-countDeltaMtx = 0;
+    % Loop to create matrix containing delta2ExecTime vars as rows for each site
+    for j = matchingIdx
+        countDeltaMtx = countDeltaMtx + 1;
+        delta2ExecRowMtx(countDeltaMtx,:) = timeDelta.(varNames{j});
+    end
 
-% colormap containing only red and green
-cmRG = linspecer(2,'sequential');
+    % Set color threshold to preDefinedMaxTimeDelta
+    colorThresh = maxTimeDelta;
 
-
-for j = 2:2:numel(deltaNames)
-    countDeltaMtx = countDeltaMtx + 1;
-    deltaMtx(countDeltaMtx,:) = timeDelta.(deltaNames{j});
-end
-
-maxDelta = max(abs(deltaMtx),[],'all');
-% maxDelta = 120;
-
-if maxDelta <= 1000
-    maxDeltaRounded = ceil(maxDelta / 100) * 100;
-elseif maxDelta > 1000
-    maxDeltaRounded = ceil(maxDelta / 1000) * 1000;
-end
-
-% maxDeltaRounded = 120;
-deltaTicks = linspace(0,maxDeltaRounded,11);
-
-cmAdj = flipud(bilbao(round(linspace(1,256,nColors)),:));
-
-figure(1),clf
-
-h = heatmap(deltaMtx,'YDisplayLabels',siteNames(2:2:end));
-h.Title = ['Delta2ExecutionTime ' startTime ' - ' endTime ];
-h.Interpreter = 'latex';
-hStr = struct(h);
-hStr.Colorbar.Ticks = deltaTicks;
-hStr.Colorbar.TickLabels = round(hStr.Colorbar.Ticks,2);
-hStr.Colorbar.Label.String = 'Time delta in minutes';
-ax = gca;
-ax.FontSize = FS;
-showTickIdx = round(linspace(1,numel(time2evalVec),21));
-showtickCell = repmat({''},1,numel(time2evalVec));
-% showtickCell(showTickIdx) = {''};
-showtickCell(showTickIdx) = arrayfun(@(c) datestr(c,'mm/dd HH:MM'),time2evalVec(showTickIdx),'UniformOutput',false);
-h.XDisplayLabels = showtickCell;
-colormap(cmAdj)
-
-
-
-timeIn = datestr(time2evalVec(1),'yyyymmdd_HHMM');
-timeOut = datestr(time2evalVec(end),'yyyymmdd_HHMM');
-exportFileName = strcat(timeIn,'_',timeOut,'logfileHeatmap.png');
-exportgraphics(gcf,fullfile(figurePath,exportFileName))
-
-%% :::::::::| Plot Availability threshold heatmap |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-if 0
-    colorThresh = 180;
-    colormap(cmRG)
+    % Set colorbar ticks
+    deltaTicks = linspace(0,colorThresh*2,3);
+    % Create colormap based on sequential linspecer
+    % Open figure
+    figure(3),clf
+    % Create heatmap and adjust settings
+    h                           = heatmap(delta2ExecRowMtx,'YDisplayLabels',siteNames);
+    h.Title                     = ['Temporal evolvement of data availability  (' startTime ' - ' endTime ')'];
+    h.Interpreter               = 'latex';
+    h.Colormap                  = cm2Colors;
+    hStr                        = struct(h);
+    hStr.Colorbar.Label.String  = '$T_{Execution}$ -- $T_{VHM0~(latest)}~ [min]$';
+    hStr.Colorbar.Label.Interpreter = 'latex';
     clim([0,colorThresh*2])
     hStr.Colorbar.Ticks = [0,colorThresh,deltaTicks(end)];
     hStr.Colorbar.TickLabels = round(hStr.Colorbar.Ticks,2);
-    h.Title = ['Availability for timeshift = ' num2str(colorThresh) 'min between ' startTime ' - ' endTime ];
 
-    timeIn = datestr(time2evalVec(1),'yyyymmdd_HHMM');
-    timeOut = datestr(time2evalVec(end),'yyyymmdd_HHMM');
-    exportFileName = strcat(timeIn,'_',timeOut,'_AvailabilityThreshold_',num2str(colorThresh),'min.png');
-    exportgraphics(gcf,fullfile(figurePath,exportFileName))
-end
-%% :::::::::| Plot FN1/FN3/ELB history |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-idx2Eval = [12,15,18];
-siteNames2Eval = {'ELB','FN1','FN3'};
-figure(5),clf
-tiledlayout('flow')
-% hold on
-for jj=1:numel(idx2Eval)
-    nexttile
-    plot(timeDelta.execTime,timeDelta{:,idx2Eval(jj)},'DisplayName',siteNames2Eval{jj})
-    ylabel('Time2MostRecentFile [min]')
-    title(siteNames2Eval{jj})
-    ylim([0,300])
+    % Deactive cell grid if more than X timesteps needs to be colorized
+    gridThresh                  = 50;
+    if length(time2evalVec) > gridThresh
+        h.GridVisible = 'off';
+    end
+
+    clim([deltaTicks(1),deltaTicks(end)])
+    ax                          = gca;
+    ax.FontSize                 = FS;
+    showTickIdx                 = round(linspace(1,numel(time2evalVec),21));
+    showtickCell                = repmat({''},1,numel(time2evalVec));
+    showtickCell(showTickIdx)   = arrayfun(@(c) datestr(c,'mm/dd HH:MM'),time2evalVec(showTickIdx),'UniformOutput',false);
+    h.XDisplayLabels            = showtickCell;
+
+    if boolSaveFig
+        exportgraphics(gcf,fullfile(figurePath,['TemporalEvolvement_2Colors_',startTime,'_',endTime,'.png']))
+    end
+
 end
 
-if 1
-    exportgraphics(gcf,fullfile(figurePath,['timeHistoryAvailability_',startTime,'_',endTime,'.png']))
+%% :::::::::| Figure 4: Time series for chosen sites |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+if boolFig2
+
+    % <fig4ChosenSites> is predefined parameter
+    % Search string for parameter names (Delta Execution time - mostRecentTime)
+    searchStr       = 'Delta2ExecTime';
+    % Idx for each var matching search string
+    matchingIdx     = find( cellfun(@(name) ~isempty(regexp(name, searchStr, 'once')), varNames) );
+    % Identify site names
+    siteNames       = strtok(varNames(matchingIdx),'_');
+    % Find index of chosen sites
+    chosenSiteIdx   = find(ismember(siteNames,fig4ChosenSites));
+
+    figure(4)
+    tiledlayout('flow')
+    for ci = 1:numel(chosenSiteIdx)
+        nexttile
+        currIdx     = matchingIdx(chosenSiteIdx(ci));
+        currSite    = siteNames{chosenSiteIdx(ci)};
+        ax          = gca;
+        ax.FontSize = FS;
+        plot(timeDelta.execTime,timeDelta{:,currIdx},'DisplayName',currSite,'LineWidth',1.5)
+        ax.Title.String = currSite;
+        ax.YLabel.String = 'delta2ExecTime [min]';
+        ax.YLim     = ([0,maxTimeDelta]);
+
+    end
+    
+    if boolSaveFig
+        exportgraphics(gcf,fullfile(figurePath,['TimeSeries_ChosenSites_',startTime,'_',endTime,'.png']))
+    end
+
 end
+
+%% ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 warning on
-
-% clearvars -except timeDelta
