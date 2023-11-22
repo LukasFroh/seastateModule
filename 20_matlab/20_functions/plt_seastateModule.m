@@ -389,11 +389,47 @@ switch plotType
         %% Set infobox
         pause(0.5)
         [~] = plt_infoBox(ax1,input);
-        % 
-        % ax2.PlotBoxAspectRatioMode  = 'auto';
-        % ax2.DataAspectRatioMode     = 'auto';
-        % ax2.PlotBoxAspectRatio      = [4.171428571428572,1,1];
-        % ax2.DataAspectRatio         = [1.318493150684931,2,1];
+        
+        
+        %% Infoboxes with warnings in case deviations are too large or mandatory sites/area are missing
+
+        % If any one deviation is higher than threshold, create warning box
+        if any(abs(siteDeltasPercentages) > input.warningThresh)
+            [~] = plt_highDeviationWarningBox(ax1,input,input.warningThresh);
+        end
+        
+        % If no data is available for either (FN1,NO1,AV0) or (FN3,BUD) or (NOO,LTH,HEO,ELB)
+        % Define elemantary site groups, from which data from at least one site must be available. Otherwise create warning infobox
+        elemSites1 = {'FN1','NO1','AV0'};
+        elemSites2 = {'FN3','BUD'};
+        elemSites3 = {'NOO','LTH','HEO','ELB'};
+        
+        % Cell containing all elemSite cells
+        elemSites   = {elemSites1,elemSites2,elemSites3};
+        % Initialize counter
+        elemCounter = 0;
+        % Initialize missingVec indicating missing information. One value (1 / 0) for each group, 1 indicates no data
+        missingVec  = zeros(numel(elemSites),0);
+
+        % Loop over all cells in elemSites
+        for eSi = 1:numel(elemSites)
+            % Increase counter
+            elemCounter             = elemCounter + 1;
+            % Index whether current elemSites is in validSiteNames cellstring
+            [eS_Bool,eS_Idx]        = ismember(elemSites{eSi},validSiteNames);
+            % currES                  = elemSites{eSi}(eS_Bool);
+            % Scale data for current group
+            currGroupScales         = cellfun( @(a) a.scale, siteCell(eS_Idx),'UniformOutput',true);
+            % Add information to missingVec
+            missingVec(elemCounter) = all( isnan(currGroupScales) );
+
+        end
+
+        % If any missingVec entry is true=1, create warning in the axes height 60-80%
+        if any(missingVec)
+            [~] = plt_missingCrucialSitesWarningBox(ax1,input);
+        end
+
 end
 
 
