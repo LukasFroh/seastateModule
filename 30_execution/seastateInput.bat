@@ -4,23 +4,23 @@ echo off
 :::::::::::::: Set Paths ::::::::::::::::::::
 :: Paths must be specified in the format {'...'}
 :: Path to insitu files
-SET p1={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}
+SET p1={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_ftpBSH_sync\'}
 :: Path to Header files
-Set p2={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}
+Set p2={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\10_headerFiles\'}
 :: Path to GSHHG files
-SET p3={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\20_coastlineFiles\'}
+SET p3={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\20_coastlineFiles\'}
 :: Path to wam directory. Directory contains two folders: <\cwam> containing all cwam .nc-files & <\ewam> containing all ewam .nc-files
 SET p4={'D:\OpenRAVE_DWD_WAM_Forecast\'}
 :: Path to siteOverview .xlsx
-SET p5={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\30_siteOverview\'}
+SET p5={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\30_siteOverview\'}
 :: Path to log folder
 SET p6={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\10_logs'}
 :: Path to figure folder
-SET p7={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\20_figures'}
+SET p7={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\20_figures'}
 :: Path to exportData folder
-SET p8={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}
+SET p8={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\30_data'}
 :: Path to colormap folder
-SET p9={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps'}
+SET p9={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\40_colormaps'}
 
 :::::::::::::: Insitu settings ::::::::::::::::::::
 :: Define sites that should be considered as cellstring (Matlab format). This input is initially recorded as 'char' in Matlab and converted to a cellstring in the Matlab function
@@ -81,7 +81,7 @@ SET f2=adjInfo
 :: Choose type for visualizing absolute/relative deviation. Choose between <'heatmap'> and <'barplot'>
 SET f3=heatmap
 :: Choose figure resolution (dpi)
-SET f4=150
+SET f4=300
 :: Choose figure type (only Image, vector output not yet included)
 SET f5=.png
 :: Visualisation of lat/lon grid. Choose between <on> and <off>
@@ -93,13 +93,13 @@ Set f8={'bam'}
 :: Flip colormap order upside down? Choose between <flip> and <noFlip>
 SET f9=flip
 :: Set general fontsize of axes object (ticks, ticklabel, x- & y-label)
-Set f10=18
+Set f10=11
 :: Set fontsize for site text at each location in plot, respectively
-Set f11=15
+Set f11=12
 :: Set fontsize for plot title (date)
-Set f12=40
+Set f12=13
 :: Set markerSize for site indication
-Set f13=50
+Set f13=75
 
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
