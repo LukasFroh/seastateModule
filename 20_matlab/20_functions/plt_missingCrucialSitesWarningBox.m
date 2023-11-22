@@ -1,18 +1,17 @@
-function a = plt_highDeviationWarningBox(ax,input,thresh)
+function a = plt_missingCrucialSitesWarningBox(ax,input)
 
 % Position: left, bottom, width, height
 unit        = 'normalized';
 ax.Units    = unit;
 
 legFS       = input.fsAxis;
-% str2Plot    = {['Warning! At least one rel. deviation is above ' num2str(thresh) '\%.'], ['This may be due to erroneous insitu or WAM values'], ['and can lead to an incorrect visualization.']};
-str2Plot    = {['Warning! At least one rel. deviation is above ' num2str(thresh) '\%. This may be due to erroneous insitu or WAM values and can lead to an incorrect visualization.']};
+str2Plot    = {['Warning! Data for crucial sites not available. This may result in incorrect spatial insitu adjustments.']};
 % Get actual position of axes with plotboxpos function
 pos         = arrayfun(@plotboxpos, ax, 'uni', 0);
 dim         = cellfun(@(x) x.*[1 1 1 1], pos, 'uni',0);
 
 % Dimensions for top 20% height of the axes
-dim{:}(2)   = dim{:}(2) + dim{:}(4) - 0.2*dim{:}(4);
+dim{:}(2)   = dim{:}(2) + dim{:}(4) - 0.4*dim{:}(4);
 dim{:}(4)   = 0.2*dim{:}(4);
 
 % Plot Warning
