@@ -54,8 +54,8 @@ input.siteMarkerSize    = str2double(siteMarkerSize);           % Marker size fo
 
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;
-bools.boolDwrHIW        = true;
-bools.boolDwrGPS        = true;
+bools.boolDwrHIW        = false;
+bools.boolDwrGPS        = false;
 bools.boolRadac         = true;
 bools.boolRadacSingle   = true;
 
@@ -82,6 +82,8 @@ input.time2Eval         = tNowShifted;
 input.timeThresh        = 120;
 input.interpMethod      = 'linear';
 input.timeNow           = tNow;
+% Set time threshold, from which warning for too high relative deviations are shown (in [%]);
+input.warningThresh     = 150;
 
 %% :::::::::| Initialize log file |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 logFileName             = strcat(datestr(tNowShifted,'yyyy_mm_dd_HH_MM_SS'),'_log.out');
