@@ -1,8 +1,8 @@
-function ax = plt_siteDeltasRelative(backGroundColor,cm,fsAxis,validSiteNames,sitePercentages,yLims,plotType)
+function ax = plt_siteDeltasRelative(backGroundColor,cm,fsAxis,fsTitle,validSiteNames,sitePercentages,yLims,plotType)
 
 %% ------ Colormap settings -----
 nColors                                         = 11;
-fsTitle                                         = fsAxis + 5;
+% fsTitle                                         = fsAxis + 5;
 cmAdj                                           = cm(round(linspace(1,size(cm,1),nColors)),:);
 % Grid color barplot
 gridColor                                       = [0,0,0];
@@ -26,9 +26,10 @@ if strcmpi(plotType,'heatmap')
     h.CellLabelFormat                               = '%.2f';
     % h.Title                                         = 'Relative Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
     h.Title                                         =  ['Relative Deviation: $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
+    warning off
+    set(struct(h).Axes.Title,'FontSize',fsTitle)
 
     %% ------ Axes settings ------
-    warning off
     axs                                             = struct(gca);
     warning on
     axs.Colorbar.Limits                             = yLims;
@@ -38,7 +39,7 @@ if strcmpi(plotType,'heatmap')
     axs.NodeChildren(3).Title.Interpreter           = 'latex';
     axs.NodeChildren(2).TickLabelInterpreter        = 'latex';
     axs.NodeChildren(1).TickLabelInterpreter        = 'latex';
-    axs.Axes.Title.FontSize                         = fsAxis + 5;
+    axs.Axes.Title.FontSize                         = fsTitle;
     clim(yLims)
 
     pause(0.01)

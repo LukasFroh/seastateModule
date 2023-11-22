@@ -12,7 +12,7 @@ startWidth  = figWidth*0.51;
 finWidth    = figWidth - startWidth;
 wamModel    = upper(input.wamModel2Eval);
 timeCreated = input.timeNow;
-legFS       = input.fsSites;
+legFS       = input.fsAxis - 2;
 str2Plot    = {['Insitu-data-adjusted ' wamModel ' Forecast'], ['Generated at ' datestr(timeCreated,'yyyy-mm-dd HH:MM') ' (UTC)']};
 % Get actual position of axes with plotboxpos function
 pos         = arrayfun(@plotboxpos, ax, 'uni', 0);

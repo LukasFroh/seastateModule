@@ -122,6 +122,7 @@ for ii = 1:numel(input.site2imp)
         else
             data(ii).timeMostRecent = data(ii).(cS).('hisCleaned').Time(end);
         end
+        
         % For radac and radacSingle
     else
 

@@ -3,23 +3,23 @@
 clear,clc,close all
 restoredefaultpath
 
-% for ti = 24:0.5:72
-for ti = 28
+% for ti = 24:0.5:32
+for ti = 24
 
-dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_dataTest\'}");
-headerPath          = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\10_headerFiles\'}");
-coastlinePath       = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\seegangsmodul\10_inputFiles\20_coastlineFiles\'}");
+dataPath            = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_ftpBSH_sync\'}");
+headerPath          = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\10_headerFiles\'}");
+coastlinePath       = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\20_coastlineFiles\'}");
 wamDataPath         = char("{'D:\OpenRAVE_DWD_WAM_Forecast\'}");
-siteOverviewPath    = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\30_siteOverview\'}");
-logPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\10_logs'}");
-figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\20_figures'}");
+siteOverviewPath    = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\30_siteOverview\'}");
+logPath             = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\10_logs'}");
+figPath             = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\20_figures'}");
 % figPath             = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\40_testFigures'}");
-expDataPath         = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\30_data'}");
-cmPath              = char("{'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\10_inputFiles\40_colormaps'}");
+expDataPath         = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\30_data'}");
+cmPath              = char("{'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\40_colormaps'}");
 seastateVars2Eval   = char("{'VHM0'}");
 minQF               = "1";
 wamModel2Eval       = 'cwam';
-wamVars             = char("{'sign_whight'}");
+wamVars             = char("{'sign_whight'}"); 
 % site2Imp            = char("{'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'WES', 'NOR', 'NOO','BO1'}");
 
 if strcmp(wamModel2Eval,'cwam')
@@ -47,25 +47,25 @@ interpLineLength    = "1";
 cbType              = 'fixed';
 pltType             = 'adjInfo';
 statType            = 'heatmap';
-figRes              = "150";
+figRes              = "300";
 figType             = '.png';
 cmName              = char("{'lipari'}");
 cmStatsName         = char("{'bam'}");
 cmFlip              = 'flip';
 gridType            = 'on';
-fsAxis              = "18";                 % Font size axes object
-fsSites             = "15";                 % Font size site text
-fsTitle             = "40";                 % Font size title
-siteMarkerSize      = "50";                 % Marker size for site indication
-% fsAxis              = "14";                 % Font size axes object
-% fsSites             = "14";                 % Font size site text
-% fsTitle             = "20";                 % Font size title
+% fsAxis              = "18";                 % Font size axes object
+% fsSites             = "15";                 % Font size site text
+% fsTitle             = "40";                 % Font size title
 % siteMarkerSize      = "50";                 % Marker size for site indication
+fsAxis              = "11";                 % Font size axes object
+fsSites             = "12";                 % Font size site text
+fsTitle             = "13";                 % Font size title
+siteMarkerSize      = "75";                 % Marker size for site indication
 timeShift           = string(ti);
 
 %% execution
 % Add path to functions
-addpath(genpath('C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\20_matlab'))
+addpath(genpath('C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\20_matlab'))
 
 % Execution of master function
 seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, siteOverviewPath, logPath, figPath, expDataPath, cmPath, ... % Path input

@@ -1,9 +1,9 @@
-function ax = plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars)
+function ax = plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,insituVars,wamVars)
 
 %% ------ Identify Hs limits for y-axis -----
 maxVar  = max([insituVars,wamVars]);
 nTicks  = 5;
-fsTitle = fsAxis + 5;
+% fsTitle = fsAxis + 5;
 
 
 if maxVar < 1
@@ -48,6 +48,7 @@ ax.TickDir                                  = 'none';
 ax.Title.String                             = 'Measured / Forecasted Wave Height $H_s$ [m]';
 ax.Title.Interpreter                        = 'latex';
 ax.Title.FontSize                           = fsTitle;
+ax.Box                                      = 'on';
 
 %% ------ Barplot: Loop over every site  -----
 for j = 1:numel(validSiteNames)

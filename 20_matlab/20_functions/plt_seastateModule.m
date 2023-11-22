@@ -26,7 +26,7 @@ fig1                                = figure('visible','off');
 % fig1                                = figure('visible','on');
 % Maximize figure
 % set(gcf,'units','normalized','outerposition',[0 0 1 1])
-set(fig1,'units','centimeters','outerposition',lufiCM)
+set(fig1,'units','centimeters','outerposition',bshCM)
 pause(0.01)
 
 % Set figure units to pixels
@@ -38,7 +38,7 @@ pause(0.01)
 % figProp                             = figSize(3) / figSize(4);
 % % Ideal proportion (dev environment)
 % % propIdeal                           = 1.829;
-% propIdeal                           = 1.9938;
+% propIdeal                            = 1.9938;
 % % If figProp is not between 99% - 101% of propIdeal, adjust proportions!
 % if ~(figProp > 0.99*propIdeal && figProp < 1.01*propIdeal)
 %     figSize(3) = figSize(4) * propIdeal;
@@ -262,7 +262,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title([upper(input.wamModel2Eval) ' | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -273,7 +273,7 @@ switch plotType
         nexttile
         hold on
         ax2 = gca;
-        ax2 = plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        ax2 = plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -286,7 +286,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title([upper(input.wamModel2Eval) ' | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
         %% --------- Adjusted  ----------------------------------------------------------------------------------------------------------
@@ -294,7 +294,7 @@ switch plotType
         hold on
         ax2 = gca;
         % Spatial plot
-        plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax2,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         % Set title
         title(['Adj. | ' datestr(input.time2Eval,'yyyy-mm-dd HH:MM')],'FontSize',fsTitle)
 
@@ -305,7 +305,7 @@ switch plotType
         hold on
         ax1 = gca;
         % Spatial plot
-        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         % Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorWAM,fsAxis)
         % Set title
@@ -319,10 +319,12 @@ switch plotType
         % nexttile([3 1])
         subplot(3,2,[1,5])
         % subplot(3,5,[1,13])
+        % subplot(3,6,[1,16])
+        % subplot(3,7,[1,18])
         hold on
         ax1 = gca;
         %% Spatial plot
-        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,cbTicks,fsAxis,coastColor,edgeColor,gridType);
+        plt_spatialPlot(ax1,input,cmFin,lonInput,latInput,varInputScaledFinal,cfLevels,GSHHG,fsAxis,coastColor,edgeColor,gridType);
         %% Plot site indication
         plt_plotSites(siteData,validSitesIdx,siteMarkerSize,textColorInsitu,siteTextColorNoData,fsSites,siteScales)
         %% Set title
@@ -334,51 +336,100 @@ switch plotType
         % nexttile
         subplot(3,2,2)
         % subplot(3,5,[4,5])
-        plt_insituWam_barPlot(backGroundColor,fsAxis,validSiteNames,insituVars,wamVars);
+        % subplot(3,6,[5,6])
+        % subplot(3,7,[5,7])
+        plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,insituVars,wamVars);
         ax2             = gca;
         %% Absolute Differences
         cmDeltas        = cmStats;
         % nexttile
         subplot(3,2,4)
         % subplot(3,5,[9,10])
+        % subplot(3,6,[11,12])
+        % subplot(3,7,[12,14])
         % Y-Limits 
         yLims           = [-0.5,0.5];
-        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltas,yLims,statType);
+        plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,fsTitle,validSiteNames,siteDeltas,yLims,statType);
         ax3             = gca;
         %% Relative Differences
         yLimsPerc       = yLims*100;
         % nexttile    
         subplot(3,2,6)
         % subplot(3,5,[14,15])
-        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
+        % subplot(3,6,[17,18])
+        % subplot(3,7,[19,21])
+        plt_siteDeltasRelative(backGroundColor,cmDeltas,fsAxis,fsTitle,validSiteNames,siteDeltasPercentages,yLimsPerc,statType);
         ax4             = gca;
 
         %% Set figure position
         % fig1.Position   = [1.0000    0.0370    1.0000    0.8917];
         % 2023/10/09: 3/2 subplot (BSH Screensize)
-        % ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
-        % ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
-        % ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
-        % ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
+      %   ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
+      %   ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
+      %   ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
+      %   ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
       % 2023/10/09: 3/5 subplot (BSH Screensize)
-        % ax1.Position    =  [0.1300    0.1100    0.4262    0.8150];
-        % ax2.Position    =  [0.6184    0.7093    0.2866    0.2157];
-        % ax3.Position    =  [0.6184    0.4096    0.2866    0.2157];
-        % ax4.Position    =  [0.6184    0.1100    0.2866    0.2157];
+      %   ax1.Position    =  [0.1300    0.1100    0.4262    0.8150];
+      %   ax2.Position    =  [0.6184    0.7093    0.2866    0.2157];
+      %   ax3.Position    =  [0.6184    0.4096    0.2866    0.2157];
+      %   ax4.Position    =  [0.6184    0.1100    0.2866    0.2157];
         % LuFI screensize
-        ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
-        ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
-        ax3.Position    = [0.5190    0.4185    0.3801    0.1817];
-        ax4.Position    = [0.5190    0.1100    0.3801    0.1817];
+        % Settings 17.11.
+        % Top right plot Oberkante: 0.9079
+        ax1.Position = [0.1460    0.2537    0.3360    0.6542];
+        ax2.Position = [0.5703    0.7220    0.3295    0.1859];
+        ax3.Position = [0.5703    0.4224    0.3295    0.1859];
+        ax4.Position = [0.5703    0.1228    0.3295    0.1859];
+
+        % ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
+        % ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
+        % ax3.Position    = [0.5190    0.4185    0.3801    0.1817];
+        % ax4.Position    = [0.5190    0.1100    0.3801    0.1817];
 
         %% Set infobox
         pause(0.5)
         [~] = plt_infoBox(ax1,input);
-        % 
-        % ax2.PlotBoxAspectRatioMode  = 'auto';
-        % ax2.DataAspectRatioMode     = 'auto';
-        % ax2.PlotBoxAspectRatio      = [4.171428571428572,1,1];
-        % ax2.DataAspectRatio         = [1.318493150684931,2,1];
+        
+        
+        %% Infoboxes with warnings in case deviations are too large or mandatory sites/area are missing
+
+        % If any one deviation is higher than threshold, create warning box
+        if any(abs(siteDeltasPercentages) > input.warningThresh)
+            [~] = plt_highDeviationWarningBox(ax1,input,input.warningThresh);
+        end
+        
+        % If no data is available for either (FN1,NO1,AV0) or (FN3,BUD) or (NOO,LTH,HEO,ELB)
+        % Define elemantary site groups, from which data from at least one site must be available. Otherwise create warning infobox
+        elemSites1 = {'FN1','NO1','AV0'};
+        elemSites2 = {'FN3','BUD'};
+        elemSites3 = {'NOO','LTH','HEO','ELB'};
+        
+        % Cell containing all elemSite cells
+        elemSites   = {elemSites1,elemSites2,elemSites3};
+        % Initialize counter
+        elemCounter = 0;
+        % Initialize missingVec indicating missing information. One value (1 / 0) for each group, 1 indicates no data
+        missingVec  = zeros(numel(elemSites),0);
+
+        % Loop over all cells in elemSites
+        for eSi = 1:numel(elemSites)
+            % Increase counter
+            elemCounter             = elemCounter + 1;
+            % Index whether current elemSites is in validSiteNames cellstring
+            [eS_Bool,eS_Idx]        = ismember(elemSites{eSi},validSiteNames);
+            % currES                  = elemSites{eSi}(eS_Bool);
+            % Scale data for current group
+            currGroupScales         = cellfun( @(a) a.scale, siteCell(eS_Idx),'UniformOutput',true);
+            % Add information to missingVec
+            missingVec(elemCounter) = all( isnan(currGroupScales) );
+
+        end
+
+        % If any missingVec entry is true=1, create warning in the axes height 60-80%
+        if any(missingVec)
+            [~] = plt_missingCrucialSitesWarningBox(ax1,input);
+        end
+
 end
 
 
