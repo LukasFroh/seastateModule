@@ -11,7 +11,9 @@ str2Plot    = {['Warning! At least one rel. deviation is above ' num2str(thresh)
 pos         = arrayfun(@plotboxpos, ax, 'uni', 0);
 dim         = cellfun(@(x) x.*[1 1 1 1], pos, 'uni',0);
 
-% Dimensions for top 20% height of the axes
+% Identify position based on warnBoolVec
+% This warning infobox has priority vs plt_missingCrucialSitesWarningBox --> No if / else condition needed
+% Dimensions always top 20% height of the axes
 dim{:}(2)   = dim{:}(2) + dim{:}(4) - 0.2*dim{:}(4);
 dim{:}(4)   = 0.2*dim{:}(4);
 
