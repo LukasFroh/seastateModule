@@ -201,6 +201,9 @@ for sci = 1:numel(insituVars)
         insituColors(sci,:) = cmFin(end,:);
     else
         cfIdx = currInsituIdx(1);
+        if cfIdx > size(cmFin,1)
+            cfIdx = size(cmFin,1);
+        end
         insituColors(sci,:) = cmFin(cfIdx,:);
     end
     % Wam
@@ -208,6 +211,9 @@ for sci = 1:numel(insituVars)
         wamColors(sci,:) = cmFin(end,:);
     else
         cfIdx = currWamIdx(1);
+        if cfIdx > size(cmFin,1)
+            cfIdx = size(cmFin,1);
+        end
         wamColors(sci,:) = cmFin(cfIdx,:);
     end
 end
@@ -392,12 +398,9 @@ switch plotType
         
         
         %% Infoboxes with warnings in case deviations are too large or mandatory sites/area are missing
+        % Initialize warning bool vector (2 entries for deviation and missing crucial sites)
+        warnBoolVec = zeros(2,1);
 
-        % If any one deviation is higher than threshold, create warning box
-        if any(abs(siteDeltasPercentages) > input.warningThresh)
-            [~] = plt_highDeviationWarningBox(ax1,input,input.warningThresh);
-        end
-        
         % If no data is available for either (FN1,NO1,AV0) or (FN3,BUD) or (NOO,LTH,HEO,ELB)
         % Define elemantary site groups, from which data from at least one site must be available. Otherwise create warning infobox
         elemSites1 = {'FN1','NO1','AV0'};
@@ -425,10 +428,26 @@ switch plotType
 
         end
 
-        % If any missingVec entry is true=1, create warning in the axes height 60-80%
-        if any(missingVec)
-            [~] = plt_missingCrucialSitesWarningBox(ax1,input);
+        % Set first entry for high deviation to true
+        if any(abs(siteDeltasPercentages) > input.warningThresh)      
+            warnBoolVec(1) = 1;
         end
+        % Set second entry for missing sites to true
+        if any(missingVec)
+            warnBoolVec(2) = 1;
+        end
+
+        %% Plot warning boxes
+        % For too high deviations
+        if any(missingVec)
+            [~] = plt_missingCrucialSitesWarningBox(ax1,input,warnBoolVec);
+        end
+        % For missing crucial sites
+        if any(abs(siteDeltasPercentages) > input.warningThresh)      
+            [~] = plt_highDeviationWarningBox(ax1,input,input.warningThresh,warnBoolVec);
+        end
+        
+
 
 end
 
