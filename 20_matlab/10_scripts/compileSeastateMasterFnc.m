@@ -9,7 +9,7 @@ clc
 close all
 
 %% :::::::::| \/\/\/ Mandatory input below \/\/\/ |:::::::::::::::::::::::::::::::::::::::::::::::::::::::
-% Base path
+% Base path (Path to repository)
 basePath    = '...';
 % File name of output-file (*.exe)
 outputName  = 'seastateModule_v1_6';
