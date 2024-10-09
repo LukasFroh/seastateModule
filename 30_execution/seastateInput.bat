@@ -1,26 +1,30 @@
 :: %%%%%%%% Input file for seastate Module
 echo off
 
+:::::::::::::: Dummy mode ::::::::::::::::::::
+:: Set the variable to 1 to enable Dummy Mode, or to 0 to disable it. In dummy mode, always the same point in time will be evaluated. 
+SET d1=0
+
 :::::::::::::: Set Paths ::::::::::::::::::::
 :: Paths must be specified in the format {'...'}
 :: Path to insitu files
-SET p1={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\30_Daten\01_ftpBSH_sync\'}
+SET p1={'...'}
 :: Path to Header files
-Set p2={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\10_headerFiles\'}
+Set p2={'...\10_inputFiles\10_headerFiles\'}
 :: Path to GSHHG files
-SET p3={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\20_coastlineFiles\'}
+SET p3={'...\10_inputFiles\20_coastlineFiles\'}
 :: Path to wam directory. Directory contains two folders: <\cwam> containing all cwam .nc-files & <\ewam> containing all ewam .nc-files
-SET p4={'D:\OpenRAVE_DWD_WAM_Forecast\'}
+SET p4={'...'}
 :: Path to siteOverview .xlsx
-SET p5={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\30_siteOverview\'}
+SET p5={'...\10_inputFiles\30_siteOverview\'}
 :: Path to log folder
-SET p6={'C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\output_Seegangsmodul\10_logs'}
+SET p6={'...\output\10_logs'}
 :: Path to figure folder
-SET p7={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\20_figures'}
+SET p7={'...\output\20_figures'}
 :: Path to exportData folder
-SET p8={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule_Output\30_data'}
+SET p8={'...\output\30_data'}
 :: Path to colormap folder
-SET p9={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seastateModule\10_inputFiles\40_colormaps'}
+SET p9={'...\10_inputFiles\40_colormaps'}
 
 :::::::::::::: Insitu settings ::::::::::::::::::::
 :: Define sites that should be considered as cellstring (Matlab format). This input is initially recorded as 'char' in Matlab and converted to a cellstring in the Matlab function
@@ -28,13 +32,13 @@ SET p9={'C:\Users\LuFI_LF\OneDrive\LuFI\04_Projekte\03_OpenRAVE\45_Github\seasta
 :: All sites:
 :: SET i1={'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'WES', 'NOR', 'NOO','BO1'}
 :: CWAM default:
-SET i1={'AV0', 'BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO'}
+SET i1={'AV0', 'BUD', 'ELB', 'FN1', 'FN3', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO'}
 :: EWAM default:
 :: SET i1={'AV0', 'DBU','BUD', 'ELB', 'FN1', 'FN3', 'HEL', 'HEO', 'LTH', 'NO1', 'NOR', 'NOO','BO1'}
 :: Which insitu seaste variable should be imported (as Cellstring, see above, default: 'VHM0')
 SET i2={'VHM0'}
-:: Minimum final quality flag for insitu seastate data (Default: 1)
-SET i3=1
+:: Minimum final quality flag for insitu seastate data (Default: 2)
+SET i3=2
 :: Specify WAM dataset. Choose between <cwam> and <ewam>
 SET i4=cwam
 :: Set wam variables that should be imported (Cellstring). Choose between {'energy_per','mean_wave_dir','sea_dir','sea_mean_per','sea_peak_per','sea_whight','sign_whight','swell_dir','swell_mean_per','swell_peak_per','swell_whight','wind_dir','wind_speed'}
@@ -64,7 +68,7 @@ SET i11=240
 :: Mapping Toolbox available? SET i12={'gshhs_f.b'}
 SET i12={'GSHHG.mat'}
 
-:::::::::::::: Spatial settings ::::::::::::::::::::
+:::::::::::::: Scale settings ::::::::::::::::::::
 :: Hs insitu parameter name
 Set s1={'VHM0'}
 :: Hs wam parameter name
@@ -100,13 +104,22 @@ Set f11=12
 Set f12=13
 :: Set markerSize for site indication
 Set f13=75
+:: Choose if additional figure with higher resolution for small Hs should be created and exported (1 for yes, 0 for no)
+Set f14=1
+:: Define upper limit for high resolution colormap (white2green). Default: 1.5
+Set f15=1.5
 
+:::::::::::::: Export settings ::::::::::::::::::::
+:: Export figure(s) to specified folder p7? (1 for yes, 0 for no)
+SET e1=1
+:: Export data (grid data for latitude, longitude, adjusted variable) as .mat file to folder specified folder p8? (1 for yes, 0 for no)
+SET e2=1
+:: Export data (grid data for latitude, longitude, adjusted variable) as .zip file to folder specified folder p8? (1 for yes, 0 for no)
+SET e3=1
 
 :::::::::::::: LuFI testing ::::::::::::::::::::
 :: Manual time shift of the time to be evaluated in the past (in hours). Matlab variable is defined as hours as double.
 :: Leave default value "0" for normal use
 SET l1="24" 
 
-
-:: cd C:\Users\LuFI_LF\seadrive_root\froehlin\Meine Bibliotheken\GitLab\Seegangsmodul\30_execution
-.\seastateModule_v1_3.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%f11%" "%f12%" "%f13%" "%l1%" > batchLog.txt
+.\seastateModule_v1_6.exe "%p1%" "%p2%" "%p3%" "%p4%" "%p5%" "%p6%" "%p7%" "%p8%" "%p9%" "%i1%" "%i2%" "%i3%" "%i4%" "%i5%" "%i6%" "%i7%" "%i8%" "%i9%" "%i10%" "%i11%" "%i12%" "%s1%" "%s2%" "%s3%" "%f1%" "%f2%" "%f3%" "%f4%" "%f5%" "%f6%" "%f7%" "%f8%" "%f9%" "%f10%" "%f11%" "%f12%" "%f13%" "%f14%" "%f15%" "%l1%" "%d1%" "%e1%" "%e2%" "%e3%"> batchLog.txt

@@ -60,16 +60,20 @@ smoothFactor                        = 0.05;
 fig1.Color                          = [1,1,1];
 edgeColor                           = [0,0,0];
 coastColor                          = [0.65, 0.65, 0.65];
-siteTextColorA                      = [35,132,67]/255;
+siteTextColorA                      = [0,0,0];
+siteTextColorB                      = [1,1,1];
+siteTextColorNoDataA                = [0.25,0.25,0.25];
+siteTextColorNoDataB                = [0.75,0.75,0.75];
+% siteTextColorA                      = [35,132,67]/255;
+% siteTextColorB                      = [166,217,106]/255;
+% siteTextColorNoDataA                = [0.4,0.4,0.4];
+% siteTextColorNoDataB                = [0.8,0.8,0.8];
 % siteTextColorA                      = [166,217,106]/255;
 % siteTextColorA                      = [0,0,0];
 % siteTextColorA                      = [178,24,43]/255;
 % siteTextColorB                      = [1,1,1];
-siteTextColorB                      = [166,217,106]/255;
-siteTextColorNoDataA                = [0.4,0.4,0.4];
-siteTextColorNoDataB                = [0.8,0.8,0.8];
 siteMarkerSize                      = input.siteMarkerSize;
-% Fontsize axis 
+% Fontsize axis
 fsAxis                              = input.fsAxis;
 % Fontsize site text
 fsSites                             = input.fsSites;
@@ -100,7 +104,6 @@ wamVars                             = [wamVarsInit{:}];
 % Delta and Scale values
 siteDeltas                          = cellfun( @(site) site.delta,siteCell(validSitesIdx));
 siteScales                          = cellfun( @(site) site.scale,siteCell(validSitesIdx));
-siteDeltasRel                       = cellfun( @(site) 1-site.scale^-1,siteCell(validSitesIdx));
 siteDeltasPercentages               = cellfun( @(site) (1-site.scale^-1)*100,siteCell(validSitesIdx));
 
 %% Prepare plotting data
@@ -147,46 +150,96 @@ if strcmpi(cbType,'auto')
         nStep                       = 1;
         nLevels                     = maxVar*(nStep^-1)+1;
     end
-    % Ticks for colorbar axis
-    cbTicks                         = 0:nStep:maxVar;
     % Set levels for contour plot
     cfLevels                        = linspace(0,maxVar,nLevels);
 
-   %% For 'fixed' or no input
+    %% For 'fixed' or no input
 else
-    % Set levels for contour plot
-    cfLevels                        = [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.5, 5.0, 6.5, 8.0, 10];
-    % Ticks for colorbar axis
-    cbTicks                         = cfLevels;
-    nLevels                         = length(cfLevels);
-end
 
-%% Colormap settings
-% Import "scientific colormap" from Crameri et al. (2020), https://www.fabiocrameri.ch/colourmaps/
-% or use colormaps from cmocean toolbox http://dx.doi.org/10.5670/oceanog.2016.66
+    if input.addFig == 0
+        % Set levels for contour plot
+        cfLevels                        = [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.5, 5.0, 6.5, 8.0, 10];
+        % Ticks for colorbar axis
+        nLevels                         = length(cfLevels);
 
-% Names of sequential cm of cmOcean toolbox
-cmOceanSequentialNames = {'thermal','haline','solar','ice','gray','oxy','deep','dense','algae','matter','turbid','speed','amp','tempo','rain'};
+        %% Colormap settings
+        % Import "scientific colormap" from Crameri et al. (2020), https://www.fabiocrameri.ch/colourmaps/
+        % or use colormaps from cmocean toolbox http://dx.doi.org/10.5670/oceanog.2016.66
 
-% cmocean toolbox
-if ismember(cmName,cmOceanSequentialNames)
-    % Define Colormap settings
-    cmInit                          = cmocean(cmName);
-    % cmDeepInit                          = cmocean('rain');
+        % Names of sequential cm of cmOcean toolbox
+        cmOceanSequentialNames = {'thermal','haline','solar','ice','gray','oxy','deep','dense','algae','matter','turbid','speed','amp','tempo','rain'};
+
+        % cmocean toolbox
+        if ismember(cmName,cmOceanSequentialNames)
+            % Define Colormap settings
+            cmInit                          = cmocean(cmName);
+            % cmDeepInit                          = cmocean('rain');
 
 
-    % Scientific colormaps
-else
-    cmStruct                        = load(fullfile(cmPath,[cmName '.mat']));
-    cmFN                            = fieldnames(cmStruct);
-    cmInit                          = cmStruct.(cmFN{1});
-end
+            % Scientific colormaps
+        else
+            cmStruct                        = load(fullfile(cmPath,[cmName '.mat']));
+            cmFN                            = fieldnames(cmStruct);
+            cmInit                          = cmStruct.(cmFN{1});
+        end
 
-% Final colormap
-cmFin                               = cmInit( round(linspace(1, size(cmInit,1), nLevels-1)), : );
-% Flip colormap?
-if strcmpi(cmFlip,'flip')
-    cmFin                           = flipud(cmFin);
+        % Final colormap
+        cmFin                               = cmInit( round(linspace(1, size(cmInit,1), nLevels-1)), : );
+        % Flip colormap?
+        if strcmpi(cmFlip,'flip')
+            cmFin                           = flipud(cmFin);
+        end
+
+    elseif input.boolHighResCM && input.addFig
+
+        %% 1. Colormap levels
+        % upper limit
+        uL = input.highResUpLimit;
+        if uL > 0.5 && uL < 3
+            cf1Levels = [0, 0.5:0.25:uL];
+        else
+            error('Upper Hs limit for figure with refined CM must be between 0.5m and 3m!')
+        end
+
+        % Amount of color levels for cf1
+        n1Levels                    = length(cf1Levels);
+
+        %% 2. Colormap levels
+        % Discretize levels between 0.5 and 2.5 with x=0.5, >2.5 with nonlinear scale
+        if uL > 0.5 && uL < 2.5
+            cf2Levels               = [uL+0.5:0.5:2.5, 3.5, 5, 6.5, 8, 10];
+        elseif uL >= 2.5
+            cf2Levels               = [3.5, 5, 6.5, 8, 10];
+        end
+        % Amount of color levels for cf2
+        n2Levels                    = length(cf2Levels);
+
+        %% Colormap color vectors
+        % 1. CM: White -> Green (manual defined with help from www.colorbrewer2.org)
+        cm1init                         = [255,255,229; 247,252,185; 217,240,163; 173,221,142; 120,198,121; 65,171,93; 35,132,67; 0,104,55] / 255;
+        % Interpolate to levels
+        % levels - 1, since only colors between 0 and uL are considered
+        cm1                             = interp1(cm1init, linspace(1,size(cm1init,1),n1Levels-1));
+
+        % 2. CM
+        % Colormap name
+        cmName                          = 'lipariAdj';
+        cm2Struct                       = load(fullfile(cmPath,[cmName '.mat']));
+        cm2FN                           = fieldnames(cm2Struct);
+        cm2init                         = cm2Struct.(cm2FN{1});
+        % Interpolate to levels
+        % levels not -1,  since color directly after uL has to be considered
+        cm2                             = interp1(cm2init, linspace(1,size(cm2init,1),n2Levels));
+
+        % Final levels vector
+        cfLevels                        = [cf1Levels, cf2Levels];
+        % Final colormap matrix
+        cmFin                           = [cm1;cm2];
+
+    else
+        error(['Wrong input for boolHighResCM: <' num2str(input.boolHighResCM) '>! Must either be 0 or 1.'])
+    end
+
 end
 
 % Identify site colors
@@ -227,6 +280,13 @@ cmStats         = cmStatsStruct.(cmStatsFN{1});
 [sitesWam, sitesInsitu, nearIdxWAM, nearIdxInsitu] = deal( zeros(length(validSitesIdx),1) );
 [textColorWAM,textColorInsitu,siteTextColorNoData] = deal( zeros(length(validSitesIdx),3) );
 
+% Identification of threshold for different site color based on colormap type
+if input.addFig
+    threshSiteCol = n1Levels-1;
+else
+    threshSiteCol = round(numel(cfLevels)/3);
+end
+
 for si = 1:length(validSitesIdx)
     % Identify parameter values for sites (WAM & insitu)
     sitesWam(si) = siteData(validSitesIdx(si)).extractedWAMData.(var2ScaleWam{:});
@@ -237,18 +297,18 @@ for si = 1:length(validSitesIdx)
     [~,nearIdxInsitu(si)] = min(abs(cfLevels - sitesInsitu(si)));
 
     % Set text color for first half of colormap to black and for second half to white
-    if nearIdxWAM(si) > round(numel(cfLevels)/3)
+    if nearIdxWAM(si) > threshSiteCol
         textColorWAM(si,:) = siteTextColorB;
         % NoData color based on wam, since no insitu data to be ordered
         siteTextColorNoData(si,:) = siteTextColorNoDataB;
-    elseif nearIdxWAM(si) <= round(numel(cfLevels)/3)
+    elseif nearIdxWAM(si) <= threshSiteCol
         textColorWAM(si,:) = siteTextColorA;
         siteTextColorNoData(si,:) = siteTextColorNoDataA;
     end
 
-    if nearIdxInsitu(si) > round(numel(cfLevels)/3)
+    if nearIdxInsitu(si) > threshSiteCol
         textColorInsitu(si,:) = siteTextColorB;
-    elseif nearIdxInsitu(si) <= round(numel(cfLevels)/3)
+    elseif nearIdxInsitu(si) <= threshSiteCol
         textColorInsitu(si,:) = siteTextColorA;
     end
 
@@ -344,7 +404,7 @@ switch plotType
         % subplot(3,5,[4,5])
         % subplot(3,6,[5,6])
         % subplot(3,7,[5,7])
-        plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,insituVars,wamVars);
+        plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,input.wamModel2Eval,insituVars,wamVars);
         ax2             = gca;
         %% Absolute Differences
         cmDeltas        = cmStats;
@@ -353,13 +413,13 @@ switch plotType
         % subplot(3,5,[9,10])
         % subplot(3,6,[11,12])
         % subplot(3,7,[12,14])
-        % Y-Limits 
+        % Y-Limits
         yLims           = [-0.5,0.5];
         plt_siteDeltasAbsolute(backGroundColor,cmDeltas,fsAxis,fsTitle,validSiteNames,siteDeltas,yLims,statType);
         ax3             = gca;
         %% Relative Differences
         yLimsPerc       = yLims*100;
-        % nexttile    
+        % nexttile
         subplot(3,2,6)
         % subplot(3,5,[14,15])
         % subplot(3,6,[17,18])
@@ -370,15 +430,15 @@ switch plotType
         %% Set figure position
         % fig1.Position   = [1.0000    0.0370    1.0000    0.8917];
         % 2023/10/09: 3/2 subplot (BSH Screensize)
-      %   ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
-      %   ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
-      %   ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
-      %   ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
-      % 2023/10/09: 3/5 subplot (BSH Screensize)
-      %   ax1.Position    =  [0.1300    0.1100    0.4262    0.8150];
-      %   ax2.Position    =  [0.6184    0.7093    0.2866    0.2157];
-      %   ax3.Position    =  [0.6184    0.4096    0.2866    0.2157];
-      %   ax4.Position    =  [0.6184    0.1100    0.2866    0.2157];
+        %   ax1.Position    =  [0.1300    0.1100    0.3115    0.8150];
+        %   ax2.Position    =  [0.5703    0.7093    0.3347    0.1975];
+        %   ax3.Position    =  [0.5703    0.4096    0.3347    0.1975];
+        %   ax4.Position    =  [0.5703    0.1100    0.3347    0.1975];
+        % 2023/10/09: 3/5 subplot (BSH Screensize)
+        %   ax1.Position    =  [0.1300    0.1100    0.4262    0.8150];
+        %   ax2.Position    =  [0.6184    0.7093    0.2866    0.2157];
+        %   ax3.Position    =  [0.6184    0.4096    0.2866    0.2157];
+        %   ax4.Position    =  [0.6184    0.1100    0.2866    0.2157];
         % LuFI screensize
         % Settings 17.11.
         % Top right plot Oberkante: 0.9079
@@ -386,6 +446,9 @@ switch plotType
         ax2.Position = [0.5703    0.7220    0.3295    0.1859];
         ax3.Position = [0.5703    0.4224    0.3295    0.1859];
         ax4.Position = [0.5703    0.1228    0.3295    0.1859];
+
+        % Adjust horizontal start of Barplot legend (1% of total axes width)
+        ax2.Legend.Position(1) = ax2.Position(1) + ax2.Position(3) + 0.01*ax2.Position(3);
 
         % ax1.Position    = [0.0986    0.1100    0.3218    0.7986];
         % ax2.Position    = [0.5190    0.7269    0.3801    0.1817];
@@ -395,8 +458,8 @@ switch plotType
         %% Set infobox
         pause(0.5)
         [~] = plt_infoBox(ax1,input);
-        
-        
+
+
         %% Infoboxes with warnings in case deviations are too large or mandatory sites/area are missing
         % Initialize warning bool vector (2 entries for deviation and missing crucial sites)
         warnBoolVec = zeros(2,1);
@@ -404,11 +467,12 @@ switch plotType
         % If no data is available for either (FN1,NO1,AV0) or (FN3,BUD) or (NOO,LTH,HEO,ELB)
         % Define elemantary site groups, from which data from at least one site must be available. Otherwise create warning infobox
         elemSites1 = {'FN1','NO1','AV0'};
-        elemSites2 = {'FN3','BUD'};
-        elemSites3 = {'NOO','LTH','HEO','ELB'};
-        
+        elemSites2 = {'FN3'};
+        elemSites3 = {'BUD'};
+        elemSites4 = {'NOO','LTH','HEO','ELB'};
+
         % Cell containing all elemSite cells
-        elemSites   = {elemSites1,elemSites2,elemSites3};
+        elemSites   = {elemSites1,elemSites2,elemSites3,elemSites4};
         % Initialize counter
         elemCounter = 0;
         % Initialize missingVec indicating missing information. One value (1 / 0) for each group, 1 indicates no data
@@ -429,7 +493,7 @@ switch plotType
         end
 
         % Set first entry for high deviation to true
-        if any(abs(siteDeltasPercentages) > input.warningThresh)      
+        if any(abs(siteDeltasPercentages) > input.warningThresh)
             warnBoolVec(1) = 1;
         end
         % Set second entry for missing sites to true
@@ -438,17 +502,15 @@ switch plotType
         end
 
         %% Plot warning boxes
-        % For too high deviations
+        % For missing crucial sites
         if any(missingVec)
             [~] = plt_missingCrucialSitesWarningBox(ax1,input,warnBoolVec);
         end
-        % For missing crucial sites
-        if any(abs(siteDeltasPercentages) > input.warningThresh)      
-            [~] = plt_highDeviationWarningBox(ax1,input,input.warningThresh,warnBoolVec);
+        % For too high deviations
+        if any(abs(siteDeltasPercentages) > input.warningThresh)
+            [~] = plt_highDeviationWarningBox(ax1,input,validSiteNames,siteDeltasPercentages);
         end
         
-
-
 end
 
 

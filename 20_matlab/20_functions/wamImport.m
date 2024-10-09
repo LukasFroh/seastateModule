@@ -42,7 +42,7 @@ if numel(files2Exlude) == numel(fileList)
 end
 
 % First entry of CWAM files (0-1 & 12-13 o'clock) are empty. Check if dateIn is in this range
-if hour(dateIn) >= 0 && hour(dateIn) <= 1 || hour(dateIn) >= 12 && hour(dateIn) <= 13
+if hour(dateIn) >= 0 && hour(dateIn) <= 1 && numel(fileList) > 1 || hour(dateIn) >= 12 && hour(dateIn) <= 13 && numel(fileList) > 1
 
     % Consider one more past file
     AdjFileIdxII                                                = find([fileList(:).fileTimeNum] < dateIn );
@@ -161,7 +161,7 @@ gridData.evalLat                                          = evalLatVec;
 [gridData.wamLatGrid, gridData.wamLonGrid, gridData.wamTimeNumGrid] = ...
     meshgrid(gridData.wamLat, gridData.wamLon, gridData.wamTimeNum);
 
-[gridData.evalLatGrid,gridData.evalLonGrid, gridData.evalTimeGrid]                              = ...
+[gridData.evalLatGrid,gridData.evalLonGrid, gridData.evalTimeGrid]  = ...
     meshgrid(evalLatVec, evalLonVec, gridData.evalTimeNum);
 
 

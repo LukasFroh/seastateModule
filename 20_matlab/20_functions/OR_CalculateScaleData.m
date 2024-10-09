@@ -1,4 +1,4 @@
-function siteData = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleLive,var2ScaleWam)
+function siteData = OR_CalculateScaleData(siteData,input,interpLineLength,var2ScaleLive,var2ScaleWam)
 
 
 % SiteNames
@@ -40,6 +40,16 @@ for i = 1:numel(siteNames)
 
     % Current site
     currSite                                            = siteNames{i};
+    % Current wam parameter value
+    currParWam                                          = siteData(i).extractedWAMData.(wamVar);
+    % Current insitu parameter value
+    currParInsitu                                       = siteData(i).finalLiveData.(liveVar);
+   
+    % Replace insitu values of zero with NaN. Probably false measurements and zero lead to Inf values when dividing by 0 for scaling calculation
+    if currParInsitu == 0
+        currParInsitu                                   = nan;
+        siteData(i).finalLiveData.(liveVar)             = nan;
+    end
 
     % Create new scale struct
     siteData(i).scaleData                               = struct;
@@ -48,48 +58,21 @@ for i = 1:numel(siteNames)
     siteData(i).scaleData.wamVar                        = wamVar;
 
     % Calculate scale and absolute delta
-    siteData(i).scaleData.scale                         = siteData(i).finalLiveData.(liveVar) ./ siteData(i).extractedWAMData.(wamVar);
-    siteData(i).scaleData.delta                         = siteData(i).finalLiveData.(liveVar) - siteData(i).extractedWAMData.(wamVar);
+    siteData(i).scaleData.scale                         = currParInsitu ./ currParWam;
+    siteData(i).scaleData.delta                         = currParInsitu - currParWam;
 
     % Create cellstring containing all sites for connection lines
     siteData(i).scaleData.connectionSites               = siteNames;
 
     %% _______________- Manual connection site exlusion-____________________________________________________________________________________________
-    switch currSite
-        case 'FN3'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'WES','LTH','HEO','ELB','NOR','HEL'}));
-        case 'BUD'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','ELB','NOR','HEL'}));
-        case 'WES'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','ELB','FN1','NO1','AV0','HEL','NOR'}));
-        case 'NOO'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'ELB','NOR','HEL'}));
-        case 'LTH'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','ELB','NOR','FN3'}));
-        case 'HEO'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','FN3','FN1','NO1','AV0','AVF','NOR'}));
-        case 'HEL'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'NOO','WES','FN3','BUD','DBU','NOR'}));
-        case 'ELB'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','LTH','WES','FN3','ELB','NOO'}));
-        case 'NOR'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'DBU','LTH','BUD','FN1','AV0','AVF','NO1','HEO','BUH','FN3','NOO','WES','HEL'}));
-        case 'NO1'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'WES','HEO','NOR'}));
-        case 'AV0'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'WES','HEO','NOR'}));
-        case 'AVF'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'WES','HEO','NOR'}));
-        case 'FN1'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'BUH','WES','HEO','NOR'}));
-        case 'DBU'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'BUH','ELB','LTH','BUD','HEL','HEO','NO1','WES','NOR','HEL'}));
-        case 'BO1'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'BUH','ELB','LTH','BUD','HEL','HEO','NO1','WES','NOR','HEL'}));
-        case 'BUH'
-            siteData(i).scaleData.excludeSitesIDX       = find(ismember(siteNames,{currSite,'NOR','FN3','HEL','LTH','ELB'}));
-    end
+    
+    % Identify current site idx in siteconnection table/Array
+    [~,idx] = ismember(currSite,input.siteConnectionsTable.Properties.VariableNames);
 
+    % Identify idx of all 0 in siteConnectionArray as excludeSitesIDX
+    siteData(i).scaleData.excludeSitesIDX = find(input.siteConnectionsArray(idx,:) == 0);
+
+    
     % Create empty array in case variable missingIdx does not exist
     if ~exist('missingIdx','var')
         missingIdx = [];

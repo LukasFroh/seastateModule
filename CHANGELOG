@@ -1,0 +1,117 @@
+**Version 1.5 (2024-04-24)**
+
+_New Features:_
+- Added dummy mode for testing purposes at a fixed point in time (2024-03-22 21:45:00). Dummy mode can be activated/deactivated by switching boolean either 
+in batch-file or testSastateMasterFnc.m between 1 (true) and 0 (false). Therefore a new directory ...\50_dummyData was created, where forecast and insitu files 
+for chosen date a saved. This data is also available via GitLab/GitHub and make the module assessable for externals.
+- Implemented export booleans for figures and data export (zipped .csv & .mat)
+
+_Data import:_
+- BSH stations are gradually being upgraded to new Datawell software _Waves5_. HIS & GPS output will then have timestamps describing the begin of the measuring period instead of describing the end of measuring period (prior version). A new if-condition is implemented in the seastateModule which checks, whether the input data is processed with the new or old Datawell software. The timestamp for both versions is then adjusted to the middle of the measuring period afterwards. 
+
+_Batch:_
+- Added the variable _d1_ for activating/deactivating the dummy mode
+- Added variables _e1_, _e2_, _e3_ (Export Booleans) 
+- Created batch-file for dummyMode (predefined path endings)
+
+_Scripts:_
+- Optimization of compilation script _compileSeastateFnc.m_: Only base path and output filename (.exe) mandatory. Also .txt cleanup afterwards implemented
+ 
+ 
+**Version 1.4 (2024-03-19)**
+
+_Bug fixes:_
+- Fixed issue with function _plt_highDeviationWarningBox.m_
+- Insitu Hs values of "0" will be replaced with "nan" to avoid Inf values for scaling and relative deviation (fnc: OR_CalculateScaleData)
+- Fixed issue with min qf consideration (fnc: imp_cleanQFdata)
+
+_Visualization:_
+- Legend for Insitu/WAM barplot (top-right) shows now either CWAM or EWAM and not only WAM, based on which model is used
+- "Blanking" for rel. deviation heamtap occured, if any deviation was > 100%. Now all rel. deviations are rounded to integers and a precision of 0 (digits after decimal point) is set.
+- Site names (that exceeds rel. deviation threshold) are now also shown in warning box
+- Added second optional figure output with higher colormap resolution for specified Hs range. Range is defined in Batch file.
+
+_Batch:_
+- Added two parameters (f14 & f15) that define whether high resolution cm figure is created or not and the corresponding upper limit for the Hs range. 
+
+
+**Version 1.3 (2023-10-11)**
+
+_Bug fixes:_
+- Adjusted identification of evaluation time time2Eval
+
+_Log File:_
+- Finalized evalLogFiles script for data availability evaluation (Output of 4 plots possible)
+
+_Data import:_
+- Deactivated HIW & GPS import (not needed for VHM0 insitu-adjustments)
+
+_Visualization:_
+- Changed figure size to fixed position in centimeters:  [0    1.0583   50.8000   25.4794]
+- Changed interpreter for heatmaps to latex
+- Changed CellLabelFormat for heatmaps to %.2f to always show 2 decimal digits. Uniform fontsize for all cells is not possible because of non writable scaling. Deviations >+-10 (or 100 for NOR) can lead to different fontSizes between heatmaps.
+- Added lineWidth property lw in spatialPlot. New creation of box around spatialPlot (xline and yline at limits). lw also determines linewidth for coastlines
+- Changed contour line style for contourf plot to dottet line (':')
+- Moved colorbar to 'southotside'. BSH 4/3 format lead to automatic scaling issues. Figure will now automatically be set to BSH default size and due to horizontally aranged colorbar the map can be better postioned compared to the subplots on the right hand side.
+- Added functions for two warning infoboxes, if deviation between WAM-Insitu is too high or when crucial site data is missing
+
+_Scripts:_
+- Added function plotboxpos to identify actual axes positions for infoBox
+
+
+**Version 1.2 (2023-09-20)**
+
+_Data import:_
+- There were still some issues with the wamImport function. Rewrote the code and added a new approach how to split and concatenate netCDF data.
+
+
+_Visualization:_
+- Different site text colors based on Hs. For Hs<4m: dark green ([35,132,67]/255), for Hs>4m: light green ([166,217,106]/255). For missing data [0.4,0.4,0.4] and [0.8,0.8,0.8], respectively.
+- Set fixed (normalized) positions for all 4 subplots (seastate left, insitu/wam bar plot top right, abs. deviation mid right, rel. deviation bottom right)
+- Set latex as default font interpreter for all axes
+- New lower/upper Case convention: Each word start with upper Case letter 
+- Infobox: Changed text to "Insitu-data-adjusted ..."
+
+_Scripts:_
+- Added function plotboxpos to identify actual axes positions for infoBox
+ 
+
+**Version 1.1 (2023-09-07)**
+
+_Bug fixes:_
+- fixed wamImport Bug _"Error using ncread
+Expected count to be positive."_ by implementing if-condition to increase timecount to 1 in case its 0.
+- Fixed bug where timesteps between two wam files (around ~1 am/pm) lead to an error
+
+
+_Log File:_
+- Display UTC time 
+- Display which sensor is used for each site
+- Display mostRecentTime for each site
+- Minor changes to layout
+
+_Data import:_
+- Timestamp for all insitu files describing mid of measuring time window. HIS and GPS data from dwr are timeshifted by -15min.
+- Time2eval is now additionally timeshifted by 15min to match adjusted dwr timestamps
+- If no data is available for insitu sites, set NaT as mostRecentTime. In log-file will be displayed "no data available" for these sites.
+
+
+_Visualization:_
+- Added scientific colormaps (https://www.fabiocrameri.ch/colourmaps/) and option to flip colormaps upside down. New Default: lipari (flipped)
+- removed circles 'o' for site location
+- New default site indication color: Green. Grey if no data is available.
+- Added small infobox with creation time and title "Insitu adjusted XWAM Forecast."
+- White Background for Barplots and Black/Grey bars for insitu/wam data
+- Lighter gray for coastal areas
+- Grey site indication if no data is available
+- yLimits for Hs barplot based on max value. Different intervals possible ([0,1], [0,2], [0,4], [0,6], [0,8], [0,10])
+
+_Batch:_
+- Added f7,f8 to choose colormaps for spatial seastate plot and statistics
+- Added f9 to flip colormap for spatial plot
+- Added f10,f11,f12 to set fontsize for axes, site indication and title (date)
+- Added f3 to choose between heatmap/barplot for statistics visualization 
+
+_Scripts:_
+- New Script for log file evaluation: _evalLogFiles.m_
+ 

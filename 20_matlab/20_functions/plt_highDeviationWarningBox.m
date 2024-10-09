@@ -1,12 +1,37 @@
-function a = plt_highDeviationWarningBox(ax,input,thresh)
+function a = plt_highDeviationWarningBox(ax,input,siteNames,deviations)
 
 % Position: left, bottom, width, height
 unit        = 'normalized';
 ax.Units    = unit;
 
+% Fontsize
 legFS       = input.fsAxis;
-% str2Plot    = {['Warning! At least one rel. deviation is above ' num2str(thresh) '\%.'], ['This may be due to erroneous insitu or WAM values'], ['and can lead to an incorrect visualization.']};
-str2Plot    = {['Warning! At least one rel. deviation is above ' num2str(thresh) '\%. This may be due to erroneous insitu or WAM values and can lead to an incorrect visualization.']};
+% Warning threshold
+thresh      = input.warningThresh;
+% Identify which sites exceed deviation threshold
+excdIdx     = abs(deviations) > thresh;
+excdSiteNames = {siteNames{excdIdx}};
+
+% Create final error string and include site name that exceeds threshold
+if numel(excdSiteNames) < 2
+    excdPltString = excdSiteNames{:};
+else
+    for i = 1:numel(excdSiteNames)
+
+        if i == 1
+            excdPltString = excdSiteNames{i};
+        else
+            excdPltString = strcat([excdPltString,' / ',excdSiteNames{i}]);
+        end
+    end
+end
+
+% Add '<' and '>' to string
+excdPltString = strcat('$<$',excdPltString,'$>$');
+
+% Final warning string
+str2Plot = {['Warning! Rel. deviation of following sites exceeds threshold (' num2str(thresh) '\%): ', excdPltString, newline, 'This may be due to erroneous insitu or ', upper(input.wamModel2Eval) ,' values and can lead to an incorrect visualization.']};
+
 % Get actual position of axes with plotboxpos function
 pos         = arrayfun(@plotboxpos, ax, 'uni', 0);
 dim         = cellfun(@(x) x.*[1 1 1 1], pos, 'uni',0);

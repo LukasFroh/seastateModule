@@ -100,7 +100,7 @@ finalSensorStructName   = 'finalSensorTT';
 % Name of final timetable containing all interpolated metOcean data
 finalTTName             = 'finalLiveData';
 % Priority DWR > RADAC > RADAC_Single for final timetable
-data = imp_convertAllInsituData2OneTable(data,finalSensorStructName,finalTTName);
+data = imp_convertAllInsituData2OneTable(input,data,finalSensorStructName,finalTTName);
 
 for ii = 1:numel(input.site2imp)
     % Chosen Sensor
@@ -124,7 +124,7 @@ for ii = 1:numel(input.site2imp)
         end
         
         % For radac and radacSingle
-    else
+    elseif strcmpi(cS,'radac') || strcmpi(cS,'radacSingle')
 
         % If no data is imported, set timeMostRecent to not a time NaT
         if isempty(data(ii).(cS).('cleaned'))
@@ -140,6 +140,11 @@ for ii = 1:numel(input.site2imp)
         else
             data(ii).timeMostRecent = data(ii).(cS).('cleaned').Time(end);
         end
+
+    else
+        % Set timeMostRecent to not a time NaT
+        data(ii).timeMostRecent     = datetime(NaT,"TimeZone","UTC");
+
     end
 
 end

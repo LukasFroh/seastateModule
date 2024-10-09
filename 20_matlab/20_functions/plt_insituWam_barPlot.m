@@ -1,4 +1,4 @@
-function ax = plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,insituVars,wamVars)
+function ax = plt_insituWam_barPlot(backGroundColor,fsAxis,fsTitle,validSiteNames,wamModel,insituVars,wamVars)
 
 %% ------ Identify Hs limits for y-axis -----
 maxVar  = max([insituVars,wamVars]);
@@ -82,7 +82,7 @@ bpLeg(1).LineWidth                          = lwBar;
 bpLeg(2).FaceColor                          = bp(2).FaceColor;
 bpLeg(2).EdgeColor                          = bp(2).EdgeColor;
 bpLeg(2).LineWidth                          = lwBar;
-leg1                                        = legend(ax,bpLeg(1:2),{'Insitu','WAM'});
+leg1                                        = legend(ax,bpLeg(1:2),{'Insitu',upper(wamModel)});
 leg1.TextColor                              = gridColor;
 leg1.Color                                  = backGroundColor;
 leg1.LineWidth                              = 1;

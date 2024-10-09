@@ -13,7 +13,8 @@ edgeColor                                       = [0,0,0];
 
 if strcmpi(plotType,'heatmap')
     %% ------ Heatmap ------
-    h                                               = heatmap(round(sitePercentages,2));
+    % Round values to integers (round(~,0)) to avoid "blanking" of cells due to too large strings and thus not showing anything
+    h                                               = heatmap(round(sitePercentages,0));
     h.Colormap                                      = cmAdj;
     h.FontSize                                      = fsAxis;
     h.XDisplayLabels                                = validSiteNames;
@@ -22,8 +23,8 @@ if strcmpi(plotType,'heatmap')
     if ~verLessThan('matlab', '9.15')
         h.Interpreter                               = 'latex';
     end
-    % CellLabel Format with width of 6 signs
-    h.CellLabelFormat                               = '%.2f';
+    % CellLabel Format Precision of 0 (Number of digits to the right of decimal point), see "blanking" above
+    h.CellLabelFormat                               = '%.0f';
     % h.Title                                         = 'Relative Deviation $\Delta$Hs = $Hs_{insitu}$ - $Hs_{wam}$ [m]';
     h.Title                                         =  ['Relative Deviation: $(1-\frac{Hs_{WAM}}{Hs_{insitu}})*100$ [$\%$]'];
     warning off

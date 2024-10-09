@@ -39,7 +39,10 @@ for i = 1:numel(loopingVars)
     end
 
     % Find entries that are not equal to accepted quality flags (AcceptedFQF)
-    errorIDX        = ~any( inputTimetable.(currVarFQFname) == AcceptedFQF , 2);
+    % errorIDX        = ~any( inputTimetable.(currVarFQFname) == AcceptedFQF , 2);
+
+    % Find entries that are above accepted quality flag (AcceptedFQF)
+    errorIDX        = inputTimetable.(currVarFQFname) > AcceptedFQF;
 
     % Set entries with errorIDX to nan
     outputTimetable{errorIDX, currVarIdx:currFQFidx} = nan;

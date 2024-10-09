@@ -6,6 +6,7 @@ ax.Units    = unit;
 
 legFS       = input.fsAxis;
 str2Plot    = {['Warning! Data for crucial sites not available. This may result in incorrect spatial insitu adjustments.']};
+
 % Get actual position of axes with plotboxpos function
 pos         = arrayfun(@plotboxpos, ax, 'uni', 0);
 dim         = cellfun(@(x) x.*[1 1 1 1], pos, 'uni',0);

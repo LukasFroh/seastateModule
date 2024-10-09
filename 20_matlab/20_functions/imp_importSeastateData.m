@@ -83,17 +83,31 @@ importTable.Time                    = [];
 importTimeTable                     = table2timetable(importTable,'RowTimes',timeDateTime);
 importTimeTable.Time.TimeZone       = 'UTC';
 
-
+%% DWR Data, a distinction must be made between old (pre 04/2024) and new versions (processed with wave5).
+% dwr Data processed with wave5 have timestamps describing beginning of measuring period for his/hiw/gps
+% dwr Data processed with prior tool have timestamps decribing beginning of measuring period for hiw and end of period for his/gps
 % Timeshift for dwrHIS datasets
 if exist('headerField','var') &&  strcmp(headerField,'DWR_HISHeader')
-    importTimeTable.Time.Minute      = 30 * floor(importTimeTable.Time.Minute / 30);
-    importTimeTable.Time             = importTimeTable.Time - duration([00 15 00]);
+    % For TS: Beginning of measuring period --> Add 15 min for TS in mid of period
+    if all( or( importTimeTable.Time.Minute == 00, importTimeTable.Time.Minute == 30 ) )
+        importTimeTable.Time         = importTimeTable.Time + duration([00 15 00]);
+    % For TS: End of measuring period --> Substract 15 min for TS in mid of period
+    else
+        importTimeTable.Time.Minute  = 30 * floor(importTimeTable.Time.Minute / 30);
+        importTimeTable.Time         = importTimeTable.Time - duration([00 15 00]);
+    end
 end
 
 % Timeshift for dwrGPS datasets
 if exist('headerField','var') &&  strcmp(headerField,'DWR_GPSHeader')
-    importTimeTable.Time.Minute      = 30 * floor(importTimeTable.Time.Minute / 30);
-    importTimeTable.Time             = importTimeTable.Time - duration([00 15 00]);
+    % For TS: Beginning of measuring period --> Add 15 min for TS in mid of period
+    if all( or( importTimeTable.Time.Minute == 00, importTimeTable.Time.Minute == 30 ) )
+        importTimeTable.Time         = importTimeTable.Time + duration([00 15 00]);
+    % For TS: End of measuring period --> Substract 15 min for TS in mid of period
+    else
+        importTimeTable.Time.Minute  = 30 * floor(importTimeTable.Time.Minute / 30);
+        importTimeTable.Time         = importTimeTable.Time - duration([00 15 00]);
+    end
 end
 
 % Timeshift for dwrHIW datasets

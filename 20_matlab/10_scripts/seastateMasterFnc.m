@@ -10,8 +10,10 @@ function seastateMasterFnc(dataPath, headerPath, coastlinePath, wamDataPath, sit
     latLimMin, latLimMax, lonLimMin, lonLimMax, rasterSizeLat, rasterSizeLon, ...               % Spatial settings
     gshhgInputFile, ...                                                                         % Coastline settings
     var2ScaleInsitu, var2ScaleWam, interpLineLength, ...                                        % Scale settings
-    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, siteMarkerSize, ...   % Plot settings
-    timeShift )                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
+    cbType, pltType, statType, figRes, figType, gridType, cmName, cmStatsName, cmFlip, fsAxis, fsSites, fsTitle, siteMarkerSize, boolHighResCM,  highResUpLimit, ...   % Plot settings
+    timeShift, ...                                                                                 % Manual time shift in hours as double (only for LuFI testing purposes)
+    dummyBool, ...                                                                                  % Activate/Deactivate dummy mode
+    exportFigBool, exportDataMatBool, exportDataZipBool)                                        % Booleans whether figures/data should be saved / exported
 
 tic
 
@@ -40,6 +42,8 @@ input.rasterSize        = [str2double(rasterSizeLon),str2double(rasterSizeLat)];
 % Wessel, P., & Smith, W. H. F. (1996). A global, self-consistent, hierarchical, high-resolution shoreline database. In Journal of Geophysical Research: Solid Earth (Vol. 101, Issue B4, pp. 8741–8743). American Geophysical Union (AGU). https://doi.org/10.1029/96jb00104
 eval(['var2ScaleInsitu  =' var2ScaleInsitu ';'])
 eval(['var2ScaleWam  =' var2ScaleWam ';'])
+input.var2ScaleInsitu   = var2ScaleInsitu;
+input.var2ScaleWam      = var2ScaleWam;
 % eval(['interpLineLength =' interpLineLength ';'])
 interpLineLength        = str2double(interpLineLength);
 eval(['GSHHG.filename = char(' gshhgInputFile ');'])
@@ -52,6 +56,15 @@ input.fsSites           = str2double(fsSites);                  % Font size site
 input.fsTitle           = str2double(fsTitle);                  % Font size title
 input.siteMarkerSize    = str2double(siteMarkerSize);           % Marker size for site indication
 
+input.boolHighResCM     = str2double(boolHighResCM);            % Additional figure?
+input.highResUpLimit    = str2double(highResUpLimit);
+
+input.dummyBool         = str2double(dummyBool);                % Dummy Mode for evaluating a specified point in time
+
+input.exportFigBool     = str2double(exportFigBool);            % Export figures?
+input.exportDataMatBool = str2double(exportDataMatBool);        % Export data as .mat file?
+input.exportDataZipBool = str2double(exportDataZipBool);        % Export data as zipped .csv file?
+
 % Which insitu data should be imported and considered? Choose between <true> and <false>
 bools.boolDwrHIS        = true;
 bools.boolDwrHIW        = false;
@@ -59,12 +72,21 @@ bools.boolDwrGPS        = false;
 bools.boolRadac         = true;
 bools.boolRadacSingle   = true;
 
+% If dummy mode is activated, calculated adjusted timestep for dummy date 2024-03-22 21:45:00
+if input.dummyBool
+    dateDummy   = datetime(2024,03,22,21,45,00,'TimeZone','UTC');
+    dateNow     = datetime('now','TimeZone','UTC');
+    timeShift   = hours(dateNow - dateDummy) - hours(duration(0,5,0));
+end
+
 % Current date and time
 tNow                    = datetime('now','TimeZone','UTC');
 % Manual adjustment (newest files only up to 23:59 of day before)
 tNowAdjusted            = tNow - hours(timeShift);
 % Round time to nearest half hour at XX:15 or XX:45, whichever is closer
 tNowShifted             = dateshift(tNowAdjusted,'start','hour');
+
+
 % Evaluate at mid of measurement time window. DWR meas. duration 30min --> Either XX:15 or XX:45 (Radac is available every 1 min and can be chosen for this time as well)
 if minute(tNowAdjusted) < 15
     tNowShifted         = tNowShifted - minutes(15);
@@ -96,6 +118,9 @@ input.siteOverviewInit  = readtable(fullfile(paths.siteOverviewPath,'siteOvervie
 input.validSiteIdx      = ismember(input.siteOverviewInit.name,input.site2imp);
 input.siteOverview      = input.siteOverviewInit(input.validSiteIdx,:);
 
+% Import information regarding site connection from siteConnections.xlsx
+[input.siteConnectionsArray, input.siteConnectionsTable] = imp_importSiteConnections(paths.siteOverviewPath,input.siteOverview);
+% Import in-situ site data
 siteData                = imp_importMasterFunc(paths,input,bools);
 
 % Check most recent file times
@@ -164,7 +189,7 @@ end
 
 %% :::::::::| Calculate scale data |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Calculate scale data for each site and connection lines with interpolated scale values
-siteData            = OR_CalculateScaleData(siteData,interpLineLength,var2ScaleInsitu,var2ScaleWam);
+siteData            = OR_CalculateScaleData(siteData,input, interpLineLength,var2ScaleInsitu,var2ScaleWam);
 % Calculate scale matrix for whole area
 spatialData         = OR_CalculateScaleMatrix(spatialData,siteData,GSHHG);
 % Create scaled griddata for chosen variable
@@ -178,12 +203,32 @@ disp(['Statistic type: <', statType '>'])
 disp(['Parameter range: <', cbType, '>'])
 
 
-% Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType> 
+% Plot Seastate map. Output based on plot type <pltType> and colorbar scaling <cbType>
+% Additional parameter for cm identification
+input.addFig    = 0;
 [lonGrid,latGrid,adjVarGrid,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,statType,cbType,gridType,paths.cmPath,cmName,cmStatsName,cmFlip);
 
 % Save figure
-figName = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];
-exportgraphics(gcf,fullfile(paths.figPath,figName),'Resolution',figRes)
+if input.exportFigBool
+    figName             = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_', pltType, figType];
+    exportgraphics(gcf,fullfile(paths.figPath,figName),'Resolution',figRes)
+end
+
+% If bool for additional high resolution CM figure is true
+if input.boolHighResCM
+
+    % Additional parameter, so that plt_seastateModule knows that initial figure was already created
+    input.addFig    = 1;
+
+    % Plot additional seastate map consting out of two different colormaps. One cm with high resolution for significant wave heights relevant for offshore operations and another cm for Hs > highResUpLimit
+    [~,~,~,~] = plt_seastateModule(input,GSHHG,spatialData,siteData,pltType,statType,cbType,gridType,paths.cmPath,cmName,cmStatsName,cmFlip);
+
+    % Save figure
+    if input.exportFigBool
+        figName         = [datestr(input.time2Eval,'yyyymmdd_HHMM'), '_seastate_CMrefined_', pltType, figType];
+        exportgraphics(gcf,fullfile(paths.figPath,figName),'Resolution',figRes)
+    end
+end
 
 %% :::::::::| Save output |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 % Export adjusted spatial data
@@ -192,15 +237,45 @@ expData.lonGrid     = lonGrid;
 expData.latGrid     = latGrid;
 expData.adjVarGrid  = adjVarGrid;
 % Filename for export .mat file
-expFileName         = [datestr(input.time2Eval,'yyyymmdd_HHMM'),'_data.mat'];
-save(fullfile(paths.expDataPath,expFileName),"expData")
+timeStr             = datestr(input.time2Eval,'yyyymmdd_HHMM');
+timeZone            = input.time2Eval.TimeZone;
 
-disp([newline 'File <', expFileName, '> exported.'])
+%% --- Export data as .csv ---
+if input.exportDataZipBool
+    expFileNames        = {fullfile(paths.expDataPath,[timeStr, '_latGrid','.csv']),fullfile(paths.expDataPath,[timeStr, '_lonGrid','.csv']),fullfile(paths.expDataPath,[timeStr, '_data','.csv'])};
+    % Export latGrid, lonGrid and adjVarGrid as zipped csv
+    writematrix(latGrid,expFileNames{1})
+    writematrix(lonGrid,expFileNames{2})
+    writematrix(adjVarGrid,expFileNames{3})
 
+    % Create zip file and delete initial csv files afterwards
+    expZipFileName      = ['data_',timeStr,'_',timeZone,'.zip'];
+    % zip files defined above
+    zip(fullfile(paths.expDataPath,expZipFileName),expFileNames)
+    % Delete csv files
+    for di = 1:length(expFileNames)
+        delete(expFileNames{di});
+    end
+
+    disp([newline 'File <', expZipFileName, '> exported.'])
+end
+
+%% --- Export data as .mat ---
+if input.exportDataMatBool
+    % Filename for export .mat file
+    expMatFileName      = ['data_',timeStr,'_',timeZone,'.mat'];
+    save(fullfile(paths.expDataPath,expMatFileName),"expData")
+    disp(['File <', expMatFileName, '> exported.'])
+end
+
+%% :::::::::| End & Clean up |::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+% Close all figures
 close all
 
 % Stop time tracking
-disp(['Execution time: ' num2str(round(toc,2)) 's.'])
+disp([newline 'Execution time: ' num2str(round(toc,2)) 's.'])
 
+% Stop diary function
 diary off
 
+end
